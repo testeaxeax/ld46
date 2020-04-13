@@ -1,0 +1,11 @@
+language: java
+branches:
+  except:
+  - gh-pages
+jdk:
+- openjdk8
+before_install:
+- export TERM=dumb
+- export DISPLAY=:99.0
+- export JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+script: ./gradlew build --info
