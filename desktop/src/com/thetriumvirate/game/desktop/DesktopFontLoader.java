@@ -29,14 +29,14 @@ public final class DesktopFontLoader implements FontLoader {
 		game.assetmanager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
 		param.size = font_size;
 		param.color = color;
-		loaderparam.fontFileName = "desktop/" + assetpath + "-" + font_size + "-" + color + ".ttf";
+		loaderparam.fontFileName = "desktop/" + assetpath + ".ttf";
 		loaderparam.fontParameters = param;
 		
 		if(sync) {
-			return game.assetmanager.syncGet(assetpath + "-" + font_size + "-" + color, BitmapFont.class, loaderparam);
+			return game.assetmanager.syncGet(assetpath + "-" + font_size + "-" + color + ".ttf", BitmapFont.class, loaderparam);
 		}
 		
-		game.assetmanager.load(assetpath + "-" + font_size + "-" + color, BitmapFont.class, loaderparam);
+		game.assetmanager.load(assetpath + "-" + font_size + "-" + color + ".ttf", BitmapFont.class, loaderparam);
 		return null;
 	}
 	
@@ -77,7 +77,7 @@ public final class DesktopFontLoader implements FontLoader {
 	
 	@Override
 	public void unload(String assetpath, int font_size, Color color) {
-		game.assetmanager.unload(assetpath + "-" + font_size + "-" + color);
+		game.assetmanager.unload(assetpath + "-" + font_size + "-" + color + ".ttf");
 	}
 	
 	@Override
@@ -97,7 +97,7 @@ public final class DesktopFontLoader implements FontLoader {
 	
 	@Override
 	public BitmapFont get(String assetpath, int font_size, Color color) {
-		return game.assetmanager.get(assetpath + "-" + font_size + "-" + color);
+		return game.assetmanager.get(assetpath + "-" + font_size + "-" + color + ".ttf");
 	}
 	
 	@Override
