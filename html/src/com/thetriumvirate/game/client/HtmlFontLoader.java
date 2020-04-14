@@ -22,7 +22,12 @@ public class HtmlFontLoader implements FontLoader {
 	@Override
 	public BitmapFont load(String assetpath, int font_size, Color color, boolean sync) {
 		if(sync) {
-			return game.assetmanager.syncGet("html/" + assetpath + "-" + color + ".fnt", BitmapFont.class);
+			float scaleXY;
+			BitmapFont font = game.assetmanager.syncGet("html/" + assetpath + "-" + color + ".fnt", BitmapFont.class);
+			// Trying to scale Bitmap to correct fontsize
+			scaleXY = (font_size / font.getAscent()) * 0.4f;
+			font.getData().setScale(scaleXY);
+			return font;
 		}
 		game.assetmanager.load("html/" + assetpath + "-" + color + ".fnt", BitmapFont.class);
 		return null;
@@ -92,7 +97,7 @@ public class HtmlFontLoader implements FontLoader {
 		float scaleXY;
 		
 		BitmapFont font = game.assetmanager.get("html/" + assetpath + "-" + color + ".fnt", BitmapFont.class);
-		scaleXY = font_size / font.getLineHeight();
+		scaleXY = (font_size / font.getAscent()) * 0.4f;
 		font.getData().setScale(scaleXY);
 		return font;
 	}
