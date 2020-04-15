@@ -17,7 +17,7 @@ public final class SplashScreen implements Screen {
 	// SplashScreen will be displayed for at least 5 seconds
 	private static final int MIN_SHOWTIME = 5000;
 	// Resource paths
-	private static final String RES_SPLASH = "graphics/splash.jpg";
+	private static final String RES_SPLASH = "graphics/splash-test.png";
 
 	private final Main game;
 	private final OrthographicCamera cam;
@@ -73,6 +73,8 @@ public final class SplashScreen implements Screen {
 		if (TimeUtils.timeSinceMillis(showtime) >= MIN_SHOWTIME && game.assetmanager.update()) {
 			// TODO Replace ScreenTemplate with actual game/menu screen
 			//game.screenmanager.set(new ScreenTemplate(game), false);
+			// TODO Remove the following line and this comment (Only necessary for SplashScreen testing)
+			Gdx.app.exit();
 		}
 	}
 
