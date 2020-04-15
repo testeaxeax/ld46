@@ -63,6 +63,7 @@ task dist(dependsOn: [clean, compileGwt]) {
         copy {
             from "war"
             into "build/dist"
+            exclude "**/desktop/**"
         }
     }
 }

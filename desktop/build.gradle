@@ -6,12 +6,12 @@ sourceSets {
     main {
         java {
             srcDirs = [ "src/" ]
-            exclude "**/ScreenTemplate.java"
-        }
-        
+        } 
+       
         resources {
             srcDirs = ["../core/assets"]
             exclude "**/.gitkeep"
+            exclude "**/html/**"
         }
     }
 }
