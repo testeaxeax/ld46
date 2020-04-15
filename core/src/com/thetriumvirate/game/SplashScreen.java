@@ -17,7 +17,7 @@ public final class SplashScreen implements Screen {
 	// SplashScreen will be displayed for at least 5 seconds
 	private static final int MIN_SHOWTIME = 5000;
 	// Resource paths
-	private static final String RES_SPLASH = "graphics/splash-test.png";
+	private static final String RES_SPLASH = "graphics/splash-test.jpg";
 
 	private final Main game;
 	private final OrthographicCamera cam;
