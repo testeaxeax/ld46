@@ -15,3 +15,4 @@ Import into Eclipse:
  6. Click on Finish
 
 Automatically generated builds are available at https://testeaxeax.github.io/ld46/auto/
+You may need to refresh the index page and HTML version of the game in your browser to get the most recent version.
