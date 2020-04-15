@@ -20,7 +20,7 @@ public class Main extends Game {
 	public static final Color DEFAULT_FONT_COLOR = Color.WHITE;
 	// DO NOT append suffix, for example "fonts/replaceme" instead of "fonts/replaceme.ttf"
 	// TODO Set default font
-	public static final String RES_DEFAULT_FONT = "fonts/replaceme";
+	public static final String RES_DEFAULT_FONT = "fonts/OpenSans-SemiBold";
 	public static final Random RAND = new Random();
 	
 	// Window ratio
