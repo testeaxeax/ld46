@@ -8,4 +8,7 @@ before_install:
 - export TERM=dumb
 - export DISPLAY=:99.0
 - export JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-script: ./gradlew build --info
+script: "./.automation/build.sh"
+env:
+  matrix:
+    secure: kWlgIHP8+CKHkmsM5KiS4eMEhdvdjHKd8K96BHyFHXVxc/F3/s7OzOtmxyGz/NQqFHztLrt0gnKcRV6NiGVILuQobhEFH9C7u9tr1jJemeAAk2d+ac2Cr6m7JWoJ9OXjBpeX2wrSeAIb7Mz6xb2jv+vZknBwwUIhdYcv2IONIZFTTkYjAy8imJ8FkW2fm8tEgRNmy5tg42pjo7+lN/VysSjGPPpE0Kv9h8PUnz2pTFOkOsx/F9BTVYCDLHBDkji7LUM1xRCGKSQz3/4uUyXx4IGlbj6cz/e3JJh18KDmbAWgCtiXPhbjzOJLwu2CoJosuU1G/sAELHlTj0E75ChALfYImvRPbGn3adacHUKpKIGK2a4ZaeJ9+qOEaGUgeDLpuIe4kTm5hAFFtSQtlyItUuS3kx1r4iRs5Iw67XtsvxedJEKpK6LCXmQlStPtRfW9TToNYLfR1j3fu0J+79098IquKeCO8KRebH7yCVwJGWd5fV2TBh9VZba1BdYgKbUaKAPbngP17GkaJFRGaWnQkqRs/NrscNCo02uS4Xu3LRGuDe/ocNqmmRTEyd5jRV3youRl/XvNQtzfmQHB+fSvxWYzvb4JG0sTxIBOChFXAv9M2KjHz4ZR9rYFnZzewl56JkIl1vvsy6gMCipONdxabCQYd3XtR0TfqFjo3nKWENM=

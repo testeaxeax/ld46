@@ -13,3 +13,5 @@ Import into Eclipse:
  4. Select "Existing Gradle Project" in the "Gradle" Folder
  5. Select the root directory of the project
  6. Click on Finish
+
+Automatically generated builds are available at https://testeaxeax.github.io/ld46/auto/
