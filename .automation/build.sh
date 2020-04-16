@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "This is a test!";
-
 # Deployment key setup
 openssl aes-256-cbc -k "$travis_key_password" -d -md sha1 -a -in ./.automation/automation.enc -out ../key;
 echo "Host github.com" > ~/.ssh/config;
@@ -15,7 +13,20 @@ if ! ./gradlew dist; then
   exit -1;
 fi
 
-if ! (mv ./desktop/build/libs/desktop-1.0.jar ../ && mv ./html/build/dist ../html && git checkout --orphan gh-pages && git reset --hard && git clean -d -f -x && git pull origin gh-pages && (rm -r "./auto/html/$TRAVIS_BRANCH" || true) && (rm -r "./auto/desktop/$TRAVIS_BRANCH" || true) && mkdir "./auto/desktop/$TRAVIS_BRANCH" && mv ../desktop-1.0.jar "./auto/desktop/$TRAVIS_BRANCH" && mv ../html "./auto/html/$TRAVIS_BRANCH" && BRANCHES=$(ls ./auto/desktop) && echo "<html><table>" > ./auto/index.html && (for i in $BRANCHES; do echo "<tr><td>$i</td><td><a href=\"desktop/$i/desktop-1.0.jar\">Desktop</a></td><td><a href=\"html/$i/\">html</a></td></tr>" >> ./auto/index.html; done;) && echo "</table></html>" >> ./auto/index.html && git add -A && git commit -a --amend --no-edit && git push -f origin gh-pages); then
-  echo "Git error";
+if ! (mv ./desktop/build/libs/desktop-1.0.jar ../ && mv ./html/build/dist ../html && git checkout --orphan gh-pages && git reset --hard && git clean -d -f -x && git pull origin gh-pages && (rm -r "./auto/html/$TRAVIS_BRANCH" || true) && (rm -r "./auto/desktop/$TRAVIS_BRANCH" || true) && mkdir "./auto/desktop/$TRAVIS_BRANCH" && mv ../desktop-1.0.jar "./auto/desktop/$TRAVIS_BRANCH" && mv ../html "./auto/html/$TRAVIS_BRANCH" && BRANCHES=$(ls ./auto/desktop) && echo "<html><table>" > ./auto/index.html && (for i in $BRANCHES; do echo "<tr><td>$i</td><td><a href=\"desktop/$i/desktop-1.0.jar\">Desktop</a></td><td><a href=\"html/$i/\">html</a></td></tr>" >> ./auto/index.html; done;) && echo "</table></html>" >> ./auto/index.html && git add -A && git commit -a -m "Automatic commit"); then
+  echo "Git error 1";
   exit -1;
 fi
+
+
+
+until (git push origin gh-pages); do
+  echo "Push failed. Trying again in 10s.";
+  sleep 10;
+  git merge --abort;
+  git pull origin gh-pages;
+  if ! (BRANCHES=$(ls ./auto/desktop) && echo "<html><table>" > ./auto/index.html && (for i in $BRANCHES; do echo "<tr><td>$i</td><td><a href=\"desktop/$i/desktop-1.0.jar\">Desktop</a></td><td><a href=\"html/$i/\">html</a></td></tr>" >> ./auto/index.html; done;) && echo "</table></html>" >> ./auto/index.html && git add -A && git commit -a -m "Automatic commit"); then
+    echo "Git error 2";
+    exit -1;
+  fi
+done
