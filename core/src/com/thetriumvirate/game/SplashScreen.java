@@ -51,6 +51,7 @@ public final class SplashScreen implements Screen {
 		// prefetch needs to be called for every screen other than SplashScreen
 		// prefetch loads all game resources asynchronously while SplashScreen is displayed
 		// For example: ScreenTemplate.prefetch(game);
+		GameScreen.prefetch(game);
 		
 		showtime = TimeUtils.millis();
 	}

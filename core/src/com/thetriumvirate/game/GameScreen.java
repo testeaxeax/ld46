@@ -1,10 +1,11 @@
 package com.thetriumvirate.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 
 public final class GameScreen implements Screen {
 	
@@ -19,8 +20,11 @@ public final class GameScreen implements Screen {
 	
 	// Declare resource variables below
 	// For example: private final Texture testTexture;
-
 	
+	private Tap tap;
+	private WateringCan wateringCan;
+	private final TemperatureController temperatureController;
+	private final Shutter shutter;
 	
 	public GameScreen(Main game) {
 		// Initialize essentials
@@ -31,12 +35,24 @@ public final class GameScreen implements Screen {
 		game.spritebatch.setProjectionMatrix(cam.combined);
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		
+		InputMultiplexer inputmultiplexer = new InputMultiplexer();
+
+		this.tap = new Tap(game);
+		inputmultiplexer.addProcessor(this.tap);
+		
+		this.wateringCan = new WateringCan(game, this.tap);
+		inputmultiplexer.addProcessor(this.wateringCan);
+		
+		this.temperatureController = new TemperatureController(this, 1);
+		// TODO generiere shutter sinnvoll
+		this.shutter = new Shutter(this, new Vector2(22,22), new Vector2(44,44));
+		
+		Gdx.input.setInputProcessor(inputmultiplexer);
+		
 		// Initialize resource variables below
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
 		
-		
 		// Do everything else below
-		
 	}
 	
 	// Load all resources for this screen in prefetch !!!
@@ -44,7 +60,13 @@ public final class GameScreen implements Screen {
 	// or			game.fontloader.load(RES_SOMETHING_FONT);
 	// Unload all resources in dispose !!!
 	public static void prefetch(Main game) {
+
 		Plant.prefetch(game);
+		Shutter.prefetch(game);
+		TemperatureController.prefetch(game);
+		Tap.prefetch(game);
+		WateringCan.prefetch(game);
+
 	}
 	
 	// Unload all resources for this screen
@@ -52,7 +74,10 @@ public final class GameScreen implements Screen {
 	// For fonts: game.fontmanager.unload(RES_SOMETHING_FONT);
 	@Override
 	public void dispose() {
-		
+		this.wateringCan.unload();
+		this.tap.unload();
+		// TODO
+		this.shutter.dispose();
 	}
 
 	@Override
@@ -61,13 +86,26 @@ public final class GameScreen implements Screen {
 	}
 	
 	public void update(float delta) {
-		
+		this.wateringCan.update(delta);
+		this.temperatureController.update(delta);
+		// TODO
+		this.shutter.update(delta);
 	}
 
 	@Override
 	public void render(float delta) {
 		update(delta);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		game.spritebatch.begin();
+		
+		this.tap.render(game.spritebatch);
+		this.wateringCan.render(game.spritebatch);
+		this.temperatureController.render(game.spritebatch);
+		// TODO
+		this.shutter.render(game.spritebatch);
+		
+		game.spritebatch.end();
 	}
 	
 	@Override
