@@ -37,8 +37,12 @@ public final class GameScreen implements Screen {
 		
 		InputMultiplexer inputmultiplexer = new InputMultiplexer();
 
-		this.tap = new Tap(game, inputmultiplexer);
-		this.wateringCan = new WateringCan(game, this.tap, inputmultiplexer);
+		this.tap = new Tap(game);
+		inputmultiplexer.addProcessor(this.tap);
+		
+		this.wateringCan = new WateringCan(game, this.tap);
+		inputmultiplexer.addProcessor(this.wateringCan);
+		
 		this.temperatureController = new TemperatureController(this, 1);
 		// TODO generiere shutter sinnvoll
 		this.shutter = new Shutter(this, new Vector2(22,22), new Vector2(44,44));
@@ -76,7 +80,7 @@ public final class GameScreen implements Screen {
 	}
 	
 	public void update(float delta) {
-		this.wateringCan.update();
+		this.wateringCan.update(delta);
 		this.temperatureController.update(delta);
 		// TODO
 		this.shutter.update(delta);
