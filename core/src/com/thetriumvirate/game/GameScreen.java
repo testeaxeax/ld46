@@ -46,7 +46,7 @@ public final class GameScreen implements Screen {
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
 		cam.update();
 		game.spritebatch.setProjectionMatrix(cam.combined);
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(1, 1, 1, 1);
 		
 		InputMultiplexer inputmultiplexer = new InputMultiplexer();
 
@@ -164,7 +164,7 @@ public final class GameScreen implements Screen {
 		this.temperatureController.render(game.spritebatch);
 		
 		for(Plant p : this.plants)
-			p.render(game.spritebatch);
+			p.render(game.spritebatch, delta);
 		
 		this.wateringCan.render(game.spritebatch);
 		
