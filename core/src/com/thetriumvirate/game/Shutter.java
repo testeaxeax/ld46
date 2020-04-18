@@ -14,8 +14,8 @@ public class Shutter extends InputAdapter {
 	private static final int MAX_OFFSET = 100;
 	private static final int OFFSET_SPEED_CLOSING = 40;
 	private static final int OFFSET_SPEED_OPENING = 10;
-	private static final int WIDTH = 100;
-	private static final int HEIGHT = 500;
+	private static final int WIDTH = 128;
+	private static final int HEIGHT = 512;
 	private static final int BUTTON_WIDTH = 50;
 	private static final int BUTTON_HEIGHT = 50;
 	private static final int OPENING_STEPS = 5;
