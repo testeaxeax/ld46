@@ -82,6 +82,7 @@ public class Plant {
 		if(growing)growth += delta * GROWTH_PER_SEC;
 		
 		waterlevel -= waterlossPerSec * delta;
+		if(waterlevel <= MIN_WATERLEVEL)waterlevel = MIN_WATERLEVEL;
 		
 		decay = MAX_DECAY - waterlevel;
 		
@@ -110,7 +111,7 @@ public class Plant {
 		spritebatch.draw(plantpot_texture, pot_pos.x, pot_pos.y, POT_WIDTH, POT_HEIGHT);
 		
 		spritebatch.draw(this.getTextureRegion(), plant_pos.x, plant_pos.y, SPRITEWIDTH, SPRITEHEIGHT);
-		spritebatch.draw(this.gamescreen.tex_debugrect, this.boundingBox.x, this.boundingBox.y, this.boundingBox.width, this.boundingBox.height);
+		//spritebatch.draw(this.gamescreen.tex_debugrect, this.boundingBox.x, this.boundingBox.y, this.boundingBox.width, this.boundingBox.height);
 	}
 	
 	
@@ -164,6 +165,10 @@ public class Plant {
 	
 	public boolean isFullyGrown() {
 		return fullyGrown;
+	}
+	
+	public boolean isDecayed() {
+		return (decay >= MAX_DECAY);
 	}
 	
 	public TextureRegion getTextureRegion() {
