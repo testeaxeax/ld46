@@ -152,6 +152,10 @@ public class Shutter extends InputAdapter {
 		return ((offset / MAX_OFFSET) * BRIGHTNESS_FACTOR);
 	}
 	
+	public float getPercentage() {
+		return offset / MAX_OFFSET;
+	}
+	
 	public static int getWidth() {return WIDTH;}
 	public static int getHeight() {return HEIGHT;}
 	public static int getButtonWidth() {return BUTTON_WIDTH;}
