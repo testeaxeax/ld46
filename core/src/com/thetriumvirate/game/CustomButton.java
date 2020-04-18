@@ -16,6 +16,8 @@ public class CustomButton extends InputAdapter{
 	private static final String RES_BTN_RELEASED = "graphics/btn_released.png";
 	private static final String RES_BTN_PRESSED = "graphics/btn_pressed.png";
 	
+	private static final int BUTTON_FONTSIZE = 10;
+	
 	
 	private Main game;
 	
@@ -66,8 +68,7 @@ public class CustomButton extends InputAdapter{
 	
 	private void initBtnText(String btn_text) {
 		layout = new GlyphLayout();
-		font = game.fontloader.load(true);
-		font.getData().setScale(0.4f);
+		font = game.fontloader.get(Main.RES_DEFAULT_FONT, BUTTON_FONTSIZE);
 		layout.setText(font, btn_text, Color.BLACK, width, Align.center, false);
 	}
 	
@@ -119,14 +120,25 @@ public class CustomButton extends InputAdapter{
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_BTN_PRESSED, Texture.class);
 		game.assetmanager.load(RES_BTN_RELEASED, Texture.class);
+		game.fontloader.load(Main.RES_DEFAULT_FONT, BUTTON_FONTSIZE);
 	}
 	
 	public void dispose() {
 		game.assetmanager.unload(RES_BTN_PRESSED);
 		game.assetmanager.unload(RES_BTN_RELEASED);
+		game.fontloader.unload(Main.RES_DEFAULT_FONT, BUTTON_FONTSIZE);;
 	}
 	
 	public Texture getTexture() {
 		return this.pressed ? this.btn_pressed_texture : this.btn_released_texture;
+	}
+	
+	public boolean getClicked() {
+		return this.clicked;
+	}
+	
+	public void reset() {
+		this.clicked = false;
+		
 	}
 }
