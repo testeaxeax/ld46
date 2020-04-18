@@ -36,6 +36,8 @@ public final class GameScreen implements Screen {
 
 	private final List<Plant> plants;
 
+
+
 	
 	public GameScreen(Main game) {
 		// Initialize essentials
@@ -128,6 +130,8 @@ public final class GameScreen implements Screen {
 		// last thing to be updated should be the plants
 		for(Plant p : this.plants)
 			p.update(delta);
+		
+		checkIfGameOver();
 	}
 
 	@Override
@@ -150,6 +154,30 @@ public final class GameScreen implements Screen {
 		this.wateringCan.render(game.spritebatch);
 		
 		game.spritebatch.end();
+	}
+	
+	
+	private void checkIfGameOver() {
+		//check if one plant is dead or all plants blossom
+		
+		for(Plant p :this.plants) {
+			if(p.isDecayed()) {
+				game.screenmanager.set(new GameOverScreen(game, false), true);//game lost; keeping assets for replay
+				break;
+			}
+		}
+		
+		boolean allBlossom = true;
+		for(Plant p : this.plants) {
+			if(!p.isFullyGrown()) {
+				allBlossom = false;
+				break;
+			}
+		}
+		if(allBlossom) {
+			game.screenmanager.set(new GameOverScreen(game, true), true);//game is won; keeping assets for replay
+		}
+		
 	}
 	
 	@Override
