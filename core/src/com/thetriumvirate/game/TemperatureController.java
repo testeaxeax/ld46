@@ -17,6 +17,8 @@ public class TemperatureController extends InputAdapter {
 	private static final Vector2 POSITION = new Vector2(10, 10);
 	private static final int WIDTH = 10;
 	private static final int HEIGHT = 10;
+	private static final int TEMP_LOSS_PER_SECOND = 1;
+	private static final int TEMP_INCREASE_PER_SECOND = 1;
 	
 	private final GameScreen gamescreen;
 	private final Main game;
@@ -30,11 +32,12 @@ public class TemperatureController extends InputAdapter {
 	private int currentTemp;
 	private STATE state;
 	
-	public TemperatureController(GameScreen gamescreen, int tempLossPerSecond, int tempIncreasePerSecond) {
+	public TemperatureController(GameScreen gamescreen, int difficulty) {
 		this.gamescreen = gamescreen;
 		game = gamescreen.getGame();
-		this.tempLossPerSecond = tempLossPerSecond;
-		this.tempIncreasePerSecond = tempIncreasePerSecond;
+		// TODO We may need to change this
+		this.tempLossPerSecond = TEMP_INCREASE_PER_SECOND * difficulty;
+		this.tempIncreasePerSecond = TEMP_INCREASE_PER_SECOND * difficulty;
 		currentTemp = INIT_TEMP;
 		state = STATE.OFF;
 		
@@ -48,6 +51,11 @@ public class TemperatureController extends InputAdapter {
 		game.assetmanager.load(RES_SWITCH_OFF, Texture.class);
 	}
 	
+	public void dispose() {
+		game.assetmanager.unload(RES_SWITCH_OFF);
+		game.assetmanager.unload(RES_SWITCH_ON);
+	}
+	
 	public void update(float delta) {
 		currentTemp -= delta * tempLossPerSecond;
 		if(state == state.ON) {
@@ -56,6 +64,7 @@ public class TemperatureController extends InputAdapter {
 		if(currentTemp < MIN_TEMP) {currentTemp = MIN_TEMP;}
 		else if (currentTemp > MAX_TEMP) {currentTemp = MAX_TEMP;}
 	}
+	
 	public void render(SpriteBatch spritebatch) {
 		if(state == STATE.OFF) {
 			spritebatch.draw(switch_off_texture, POSITION.x, POSITION.y, WIDTH, HEIGHT);
