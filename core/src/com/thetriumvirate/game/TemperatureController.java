@@ -14,9 +14,9 @@ public class TemperatureController extends InputAdapter {
 	private static final int MIN_TEMP = 0;
 	private static final int MAX_TEMP = 100;
 	private static final int INIT_TEMP = 20;
-	private static final Vector2 POSITION = new Vector2(10, 10);
-	private static final int WIDTH = 10;
-	private static final int HEIGHT = 10;
+	private static final Vector2 POSITION = new Vector2(30, 50);
+	private static final int WIDTH = 40;
+	private static final int HEIGHT = 40;
 	private static final int TEMP_LOSS_PER_SECOND = 1;
 	private static final int TEMP_INCREASE_PER_SECOND = 1;
 	
