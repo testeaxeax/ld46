@@ -116,12 +116,12 @@ public class WateringCan extends InputAdapter{
 	}
 	
 	public void render(SpriteBatch sb) {
-		sb.begin();
+//		sb.begin();
 		if(this.wateringPlants)
 			sb.draw(tex_can, this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
 		else
 			sb.draw(tex_can_standing, this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
-		sb.end();
+//		sb.end();
 	}
 
 	@Override

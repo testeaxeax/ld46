@@ -39,7 +39,7 @@ public class Tap extends InputAdapter {
 	}
 
 	public void render(SpriteBatch sb) {
-		sb.begin();
+//		sb.begin();
 		sb.draw(tex_plank, this.pos_x, this.pos_y, PLANK_WIDTH, PLANK_HEIGHT);
 
 		if (this.waterRunning)
@@ -47,7 +47,7 @@ public class Tap extends InputAdapter {
 		else
 			sb.draw(tex_tap, this.pos_x + TAP_OFFSET_X, this.pos_y + TAP_OFFSET_Y, TAP_WIDTH, TAP_HEIGHT);
 
-		game.spritebatch.end();
+//		game.spritebatch.end();
 	}
 
 	public void setWaterRunning(boolean running) {
