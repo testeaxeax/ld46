@@ -36,6 +36,7 @@ public class Shutter extends InputAdapter {
 		game = gameScreen.getGame();
 		state = STATE.OPEN;
 		this.position = startPosition.cpy();
+		this.startPosition = startPosition.cpy();
 		offset = 0;
 		this.buttonPosition = buttonPosition.cpy();
 		
