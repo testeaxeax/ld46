@@ -149,6 +149,8 @@ public class WateringCan extends InputAdapter{
 	}
 	
 	public void render(SpriteBatch sb) {
+		// TODO: add sprinkling animation
+		
 //		sb.begin();
 //		if(this.wateringPlants)
 //			sb.draw(tex_can, this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
