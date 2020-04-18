@@ -33,7 +33,9 @@ public final class GameScreen implements Screen {
 	private final TemperatureController temperatureController;
 	private final Shutter shutter;
 	
+
 	private final List<Plant> plants;
+
 	
 	public GameScreen(Main game) {
 		// Initialize essentials
@@ -63,6 +65,8 @@ public final class GameScreen implements Screen {
 		
 		for(int i = 0; i < 3; i++)
 			this.plants.add(new Plant(this, i));
+		
+		
 		
 		
 		Gdx.input.setInputProcessor(inputmultiplexer);
@@ -121,6 +125,7 @@ public final class GameScreen implements Screen {
 		// TODO
 		this.shutter.update(delta);
 		
+
 		// last thing to be updated should be the plants
 		for(Plant p : this.plants)
 			p.update(delta);
@@ -133,10 +138,12 @@ public final class GameScreen implements Screen {
 		
 		game.spritebatch.begin();
 		
-		this.tap.render(game.spritebatch);
-		this.temperatureController.render(game.spritebatch);
 		// TODO
 		this.shutter.render(game.spritebatch);
+		
+		this.tap.render(game.spritebatch);
+		this.wateringCan.render(game.spritebatch);
+		this.temperatureController.render(game.spritebatch);
 		
 		for(Plant p : this.plants)
 			p.render(game.spritebatch);
