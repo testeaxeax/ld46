@@ -120,7 +120,7 @@ public class Plant {
 				plant_sprites[i][j] = new TextureRegion(plantsprites_texture, SPRITEWIDTH*i, SPRITEHEIGHT*j, SPRITEWIDTH, SPRITEHEIGHT);
 			}
 		}*/
-		//lol, wenn mna erst danach liest dass man für den foo oben einfach auch ne Methode hätte...
+		//lol, wenn mna erst danach liest dass man fÃ¼r den foo oben einfach auch ne Methode hÃ¤tte...
 		plant_sprites = TextureRegion.split(plantsprites_texture, SPRITEWIDTH, SPRITEHEIGHT);
 	}
 	
@@ -147,6 +147,7 @@ public class Plant {
 	
 	public void dispose() {
 		game.assetmanager.unload(RES_PLANTPOT);
+		game.assetmanager.unload(RES_PLANTSPRITES);
 	}
 
 	//Getters
