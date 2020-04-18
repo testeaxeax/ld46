@@ -1,10 +1,14 @@
 package com.thetriumvirate.game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 public final class GameScreen implements Screen {
@@ -14,6 +18,9 @@ public final class GameScreen implements Screen {
 	
 	// Declare resource paths below
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
+
+	private static final String RES_DEBUG_RECT = "graphics/debugrec.png";
+	public final Texture tex_debugrect;
 	
 	private final Main game;
 	private final OrthographicCamera cam;
@@ -25,6 +32,8 @@ public final class GameScreen implements Screen {
 	private WateringCan wateringCan;
 	private final TemperatureController temperatureController;
 	private final Shutter shutter;
+	
+	private final List<Plant> plants;
 	
 	public GameScreen(Main game) {
 		// Initialize essentials
@@ -40,7 +49,7 @@ public final class GameScreen implements Screen {
 		this.tap = new Tap(game);
 		inputmultiplexer.addProcessor(this.tap);
 		
-		this.wateringCan = new WateringCan(game, this.tap);
+		this.wateringCan = new WateringCan(this, this.tap);
 		inputmultiplexer.addProcessor(this.wateringCan);
 		
 		this.temperatureController = new TemperatureController(this, 1);
@@ -49,10 +58,18 @@ public final class GameScreen implements Screen {
 		this.shutter = new Shutter(this, new Vector2(22,22), new Vector2(44,44));
 		inputmultiplexer.addProcessor(this.shutter);
 		
+		
+		this.plants = new ArrayList<Plant>();
+		
+		for(int i = 0; i < 3; i++)
+			this.plants.add(new Plant(this, i));
+		
+		
 		Gdx.input.setInputProcessor(inputmultiplexer);
 		
 		// Initialize resource variables below
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
+		this.tex_debugrect = this.game.assetmanager.get(RES_DEBUG_RECT, Texture.class);
 		
 		// Do everything else below
 	}
@@ -62,7 +79,8 @@ public final class GameScreen implements Screen {
 	// or			game.fontloader.load(RES_SOMETHING_FONT);
 	// Unload all resources in dispose !!!
 	public static void prefetch(Main game) {
-
+		game.assetmanager.load(GameScreen.RES_DEBUG_RECT, Texture.class);
+		
 		Plant.prefetch(game);
 		Shutter.prefetch(game);
 		TemperatureController.prefetch(game);
@@ -76,11 +94,20 @@ public final class GameScreen implements Screen {
 	// For fonts: game.fontmanager.unload(RES_SOMETHING_FONT);
 	@Override
 	public void dispose() {
-		this.wateringCan.unload();
-		this.tap.unload();
+		game.fontloader.unload(RES_DEBUG_RECT);
+		
+		this.wateringCan.dispose();
+		this.tap.dispose();
 		this.temperatureController.dispose();
 		// TODO
 		this.shutter.dispose();
+		this.temperatureController.dispose();
+		
+		// TODO: unsch�n
+		if(this.plants != null && this.plants.size() > 0)
+			this.plants.get(0).dispose();
+		else 
+			new Plant(this, 0).dispose();
 	}
 
 	@Override
@@ -93,6 +120,10 @@ public final class GameScreen implements Screen {
 		this.temperatureController.update(delta);
 		// TODO
 		this.shutter.update(delta);
+		
+		// last thing to be updated should be the plants
+		for(Plant p : this.plants)
+			p.update(delta);
 	}
 
 	@Override
@@ -103,10 +134,14 @@ public final class GameScreen implements Screen {
 		game.spritebatch.begin();
 		
 		this.tap.render(game.spritebatch);
-		this.wateringCan.render(game.spritebatch);
 		this.temperatureController.render(game.spritebatch);
 		// TODO
 		this.shutter.render(game.spritebatch);
+		
+		for(Plant p : this.plants)
+			p.render(game.spritebatch);
+		
+		this.wateringCan.render(game.spritebatch);
 		
 		game.spritebatch.end();
 	}
@@ -129,6 +164,10 @@ public final class GameScreen implements Screen {
 	@Override
 	public void hide() {
 		
+	}
+	
+	public List<Plant> getPlants(){
+		return this.plants;
 	}
 	
 	public Main getGame() {

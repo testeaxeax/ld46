@@ -59,7 +59,7 @@ public final class SplashScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		checkprogress();
-		String text = "Progress: " + game.assetmanager.getProgress() * 100 + '%';
+		String text = "Progress: " + (int) (game.assetmanager.getProgress() * 100) + '%';
 		layout.setText(font, text);
 		// Position for text
 		final Vector2 pos = new Vector2((CAM_WIDTH / 2) - (layout.width / 2), (CAM_HEIGHT / 4) - (layout.height / 2));
