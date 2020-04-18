@@ -61,6 +61,9 @@ public final class GameScreen implements Screen {
 	// Unload all resources in dispose !!!
 	public static void prefetch(Main game) {
 		Shutter.prefetch(game);
+		TemperatureController.prefetch(game);
+		Tap.prefetch(game);
+		WateringCan.prefetch(game);
 	}
 	
 	// Unload all resources for this screen
