@@ -53,6 +53,7 @@ public final class SplashScreen implements Screen {
 		// For example: ScreenTemplate.prefetch(game);
 		GameOverScreen.prefetch(game);
 		GameScreen.prefetch(game);
+		CreditsScreen.prefetch(game);
 		
 		showtime = TimeUtils.millis();
 	}
@@ -75,6 +76,7 @@ public final class SplashScreen implements Screen {
 		if (TimeUtils.timeSinceMillis(showtime) >= MIN_SHOWTIME && game.assetmanager.update()) {
 			// TODO Replace ScreenTemplate with actual game/menu screen
 			game.screenmanager.set(new GameScreen(game), false);
+			//game.screenmanager.push(new CreditsScreen(game));
 		}
 	}
 
