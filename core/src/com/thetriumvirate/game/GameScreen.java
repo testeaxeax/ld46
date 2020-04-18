@@ -94,11 +94,15 @@ public final class GameScreen implements Screen {
 		update(delta);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+		game.spritebatch.begin();
+		
 		this.tap.render(game.spritebatch);
 		this.wateringCan.render(game.spritebatch);
 		this.temperatureController.render(game.spritebatch);
 		// TODO
 		this.shutter.render(game.spritebatch);
+		
+		game.spritebatch.end();
 	}
 	
 	@Override

@@ -79,10 +79,10 @@ public class Shutter extends InputAdapter {
 	}
 	
 	public void render(SpriteBatch spriteBatch) {
-		spriteBatch.begin();
+//		spriteBatch.begin();
 		spriteBatch.draw(shutterTexture, position.x, position.y, WIDTH, HEIGHT);
 		spriteBatch.draw(buttonTexture, buttonPosition.x, buttonPosition.y, BUTTON_WIDTH, BUTTON_HEIGHT);
-		spriteBatch.end();
+//		spriteBatch.end();
 	}
 	
 	@Override
