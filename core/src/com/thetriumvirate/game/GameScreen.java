@@ -1,7 +1,6 @@
 package com.thetriumvirate.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -36,8 +35,8 @@ public final class GameScreen implements Screen {
 		
 		InputMultiplexer inputmultiplexer = new InputMultiplexer();
 
-		//this.tap = new Tap(game, inputmultiplexer);
-		//this.wateringCan = new WateringCan(game, this.tap, inputmultiplexer);
+		this.tap = new Tap(game, inputmultiplexer);
+		this.wateringCan = new WateringCan(game, this.tap, inputmultiplexer);
 		this.temperatureController = new TemperatureController(this, 1);
 		
 		Gdx.input.setInputProcessor(inputmultiplexer);
@@ -61,8 +60,8 @@ public final class GameScreen implements Screen {
 	// For fonts: game.fontmanager.unload(RES_SOMETHING_FONT);
 	@Override
 	public void dispose() {
-		//this.wateringCan.unloadTextures();
-		//this.tap.unloadTextures();
+		this.wateringCan.unload();
+		this.tap.unload();
 	}
 
 	@Override
@@ -71,8 +70,7 @@ public final class GameScreen implements Screen {
 	}
 	
 	public void update(float delta) {
-		// TODO Fix wateringCan
-		//this.wateringCan.update(mouseX, mouseY, Gdx.input.isButtonPressed(Input.Buttons.LEFT));
+		this.wateringCan.update();
 		this.temperatureController.update(delta);
 	}
 
@@ -81,8 +79,8 @@ public final class GameScreen implements Screen {
 		update(delta);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		//this.tap.draw();
-		//this.wateringCan.draw();
+		this.tap.render(game.spritebatch);
+		this.wateringCan.render(game.spritebatch);
 		this.temperatureController.render(game.spritebatch);
 	}
 	
