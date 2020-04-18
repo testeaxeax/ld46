@@ -89,4 +89,8 @@ public final class GameScreen implements Screen {
 	public void hide() {
 		
 	}
+	
+	public Main getGame() {
+		return this.game;
+	}
 }
