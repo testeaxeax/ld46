@@ -11,7 +11,8 @@ public class WateringCan extends InputAdapter{
 	// Resource paths
 	private static final String RES_CAN = "graphics/wateringcan.png";
 	private static final String RES_CAN_STANDING = "graphics/wateringcanstanding.png";
-	
+	private static final String RES_CAN_EMPTY = "graphics/canempty.png";
+	private static final String RES_CAN_FILLSTATES[] = {"graphics/canstate1.png", "graphics/canstate2.png", "graphics/canstate3.png", "graphics/canstate4.png", "graphics/canstate5.png"};
 
 	private static final int DRAW_WIDTH = 120;
 	private static final int DRAW_HEIGHT = 120;
@@ -19,7 +20,7 @@ public class WateringCan extends InputAdapter{
 	private boolean selected, wateringPlants;
 	
 	private final GameScreen game;
-	private final Texture tex_can, tex_can_standing;
+	private final Texture tex_can, tex_can_standing, tex_can_empty, tex_can_fillstates[];
 	private final Tap tap;
 	
 	private int pos_x, pos_y;
@@ -57,6 +58,11 @@ public class WateringCan extends InputAdapter{
 		this.tex_can = this.game.getGame().assetmanager.syncGet(RES_CAN, Texture.class);
 		this.tex_can_standing = this.game.getGame().assetmanager.syncGet(RES_CAN_STANDING, Texture.class);
 		
+		this.tex_can_empty = this.game.getGame().assetmanager.get(RES_CAN_EMPTY, Texture.class);
+		this.tex_can_fillstates = new Texture[RES_CAN_FILLSTATES.length];
+		
+		for(int i = 0; i < RES_CAN_FILLSTATES.length; i++)
+			this.tex_can_fillstates[i] = this.game.getGame().assetmanager.get(RES_CAN_FILLSTATES[i], Texture.class);
 	}
 	
 	public void update(float delta) {
@@ -72,7 +78,7 @@ public class WateringCan extends InputAdapter{
 		} else if(this.isSelected() && this.wateringPlants) {
 			// TODO DEBUGGING --> uncomment
 			
-			//this.fillState -= WATERING_SPEED * delta;
+			this.fillState -= WATERING_SPEED * delta;
 			
 			if(this.fillState < 0.0f) {
 				this.fillState = 0.0f;
@@ -143,17 +149,45 @@ public class WateringCan extends InputAdapter{
 	}
 	
 	public void render(SpriteBatch sb) {
+		// TODO: add sprinkling animation
+		
 //		sb.begin();
-		if(this.wateringPlants)
-			sb.draw(tex_can, this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
-		else
-			sb.draw(tex_can_standing, this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
+//		if(this.wateringPlants)
+//			sb.draw(tex_can, this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
+//		else {
+			//sb.draw(tex_can_standing, this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
+			
+			sb.draw(this.tex_can_empty, this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
+			
+			if(this.fillState > 0.0f) {
+				float fillPercentage = this.fillState / MAX_FILL;
+				
+				int selectedTexture = 0;
+				
+				if(this.fillState == MAX_FILL)
+					selectedTexture = 4;
+				else if(fillPercentage > 0.75f)
+					selectedTexture = 3;
+				else if(fillPercentage > 0.5f)
+					selectedTexture = 2;
+				else if(fillPercentage > 0.25f)
+					selectedTexture = 1;
+				
+				
+				sb.draw(this.tex_can_fillstates[selectedTexture], this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
+			}
+			
+//		}
 //		sb.end();
 		
 		Color c = new Color(sb.getColor());
 		
-		if(this.hasWateredThisTick)	
-			sb.setColor(0.0f, 0.0f, 0.0f, 1.0f);
+		if(this.fillState <= 0.0f)
+			sb.setColor(1.0f, 0.0f, 0.0f, 0.5f);
+		else if(this.hasWateredThisTick)
+			sb.setColor(0.0f, 0.0f, 1.0f, 0.5f);
+		else
+			sb.setColor(0.0f, 0.0f, 0.0f, 0.3f);
 		
 		sb.draw(this.game.tex_debugrect, this.canHead.x, this.canHead.y, this.canHead.width, this.canHead.height);
 		
@@ -210,10 +244,18 @@ public class WateringCan extends InputAdapter{
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_CAN, Texture.class);
 		game.assetmanager.load(RES_CAN_STANDING, Texture.class);
+		
+		game.assetmanager.load(RES_CAN_EMPTY, Texture.class);
+		for(String s : RES_CAN_FILLSTATES)
+			game.assetmanager.load(s, Texture.class);
 	}
 	
 	public void dispose() {
 		this.game.getGame().assetmanager.unload(RES_CAN);
 		this.game.getGame().assetmanager.unload(RES_CAN_STANDING);
+		
+		this.game.getGame().assetmanager.unload(RES_CAN_EMPTY);
+		for(String s : RES_CAN_FILLSTATES)
+			this.game.getGame().assetmanager.unload(s);
 	}
 }

@@ -107,9 +107,8 @@ public final class GameScreen implements Screen {
 		this.temperatureController.dispose();
 		// TODO
 		this.shutter.dispose();
-		this.temperatureController.dispose();
 		
-		// TODO: unsch�n
+		// TODO: unschoen
 		if(this.plants != null && this.plants.size() > 0)
 			this.plants.get(0).dispose();
 		else 
