@@ -64,7 +64,8 @@ public class TemperatureController extends InputAdapter {
 		if(currentTemp < MIN_TEMP) {currentTemp = MIN_TEMP;}
 		else if (currentTemp > MAX_TEMP) {currentTemp = MAX_TEMP;}
 	}
-	
+
+  
 	public void render(SpriteBatch spritebatch) {
 //		spritebatch.begin();
     
