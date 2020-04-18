@@ -55,7 +55,7 @@ public final class GameScreen implements Screen {
 		this.temperatureController = new TemperatureController(this, 1);
 		inputmultiplexer.addProcessor(this.temperatureController);
 		// TODO generiere shutter sinnvoll
-		this.shutter = new Shutter(this, new Vector2(22,22), new Vector2(44,44));
+		this.shutter = new Shutter(this, new Vector2(100,500), new Vector2(200,400));
 		inputmultiplexer.addProcessor(this.shutter);
 		
 		
