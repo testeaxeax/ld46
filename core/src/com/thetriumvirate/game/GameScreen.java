@@ -53,8 +53,10 @@ public final class GameScreen implements Screen {
 		inputmultiplexer.addProcessor(this.wateringCan);
 		
 		this.temperatureController = new TemperatureController(this, 1);
+		inputmultiplexer.addProcessor(this.temperatureController);
 		// TODO generiere shutter sinnvoll
 		this.shutter = new Shutter(this, new Vector2(22,22), new Vector2(44,44));
+		inputmultiplexer.addProcessor(this.shutter);
 		
 		
 		this.plants = new ArrayList<Plant>();
@@ -96,10 +98,12 @@ public final class GameScreen implements Screen {
 		
 		this.wateringCan.dispose();
 		this.tap.dispose();
+		this.temperatureController.dispose();
+		// TODO
 		this.shutter.dispose();
 		this.temperatureController.dispose();
 		
-		// TODO: unschön
+		// TODO: unschï¿½n
 		if(this.plants != null && this.plants.size() > 0)
 			this.plants.get(0).dispose();
 		else 
