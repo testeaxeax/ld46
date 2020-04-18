@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 
 public final class GameScreen implements Screen {
 	
@@ -23,6 +24,7 @@ public final class GameScreen implements Screen {
 	private Tap tap;
 	private WateringCan wateringCan;
 	private final TemperatureController temperatureController;
+	private final Shutter shutter;
 	
 	public GameScreen(Main game) {
 		// Initialize essentials
@@ -38,6 +40,8 @@ public final class GameScreen implements Screen {
 		this.tap = new Tap(game, inputmultiplexer);
 		this.wateringCan = new WateringCan(game, this.tap, inputmultiplexer);
 		this.temperatureController = new TemperatureController(this, 1);
+		// TODO generiere shutter sinnvoll
+		this.shutter = new Shutter(this, new Vector2(22,22), new Vector2(44,44));
 		
 		Gdx.input.setInputProcessor(inputmultiplexer);
 		
@@ -52,7 +56,7 @@ public final class GameScreen implements Screen {
 	// or			game.fontloader.load(RES_SOMETHING_FONT);
 	// Unload all resources in dispose !!!
 	public static void prefetch(Main game) {
-		
+		Shutter.prefetch(game);
 	}
 	
 	// Unload all resources for this screen
@@ -62,6 +66,8 @@ public final class GameScreen implements Screen {
 	public void dispose() {
 		this.wateringCan.unload();
 		this.tap.unload();
+		// TODO
+		this.shutter.dispose();
 	}
 
 	@Override
@@ -72,6 +78,8 @@ public final class GameScreen implements Screen {
 	public void update(float delta) {
 		this.wateringCan.update();
 		this.temperatureController.update(delta);
+		// TODO
+		this.shutter.update(delta);
 	}
 
 	@Override
@@ -82,6 +90,8 @@ public final class GameScreen implements Screen {
 		this.tap.render(game.spritebatch);
 		this.wateringCan.render(game.spritebatch);
 		this.temperatureController.render(game.spritebatch);
+		// TODO
+		this.shutter.render(game.spritebatch);
 	}
 	
 	@Override
