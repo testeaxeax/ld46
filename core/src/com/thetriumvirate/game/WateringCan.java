@@ -46,15 +46,6 @@ public class WateringCan extends InputAdapter{
 		return mousex >= this.pos_x && mousex <= (this.pos_x + DRAW_WIDTH) && mousey >= this.pos_y && mousey <= (this.pos_y + DRAW_HEIGHT);
 	}
 	
-	public boolean isSelected() {
-		return this.selected;
-	}
-	
-	public void unloadTextures() {
-		this.game.assetmanager.unload(RES_CAN);
-		this.game.assetmanager.unload(RES_CAN_STANDING);
-	}
-	
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		screenY = Main.WINDOW_HEIGHT - screenY;
@@ -138,5 +129,13 @@ public class WateringCan extends InputAdapter{
 		this.pos_x = this.tap.getDockX(DRAW_WIDTH);
 		this.pos_y = this.tap.getDockY();
 	}
-
+	
+	public boolean isSelected() {
+		return this.selected;
+	}
+	
+	public void unload() {
+		this.game.assetmanager.unload(RES_CAN);
+		this.game.assetmanager.unload(RES_CAN_STANDING);
+	}
 }

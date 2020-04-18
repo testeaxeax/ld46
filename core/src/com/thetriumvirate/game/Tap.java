@@ -73,8 +73,8 @@ public class Tap extends InputAdapter{
 	public int getDockY() {
 		return this.pos_y + PLANK_HEIGHT;
 	}
-	
-	public void unloadTextures() {
+
+	public void unload() {
 		this.game.assetmanager.unload(RES_TAP);
 		this.game.assetmanager.unload(RES_PLANK);
 		this.game.assetmanager.unload(RES_TAPRUNNING);

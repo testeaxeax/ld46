@@ -1,7 +1,6 @@
 package com.thetriumvirate.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -61,8 +60,8 @@ public final class GameScreen implements Screen {
 	// For fonts: game.fontmanager.unload(RES_SOMETHING_FONT);
 	@Override
 	public void dispose() {
-		this.wateringCan.unloadTextures();
-		this.tap.unloadTextures();
+		this.wateringCan.unload();
+		this.tap.unload();
 	}
 
 	@Override
