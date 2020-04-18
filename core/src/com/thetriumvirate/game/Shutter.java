@@ -11,12 +11,12 @@ public class Shutter extends InputAdapter {
 	private static final String RES_SHUTTER = "graphics/shutter.png";
 	private static final String RES_SHUTTER_BUTTON = "graphics/shutter-button.png";
 	
-	private static final int MAX_OFFSET = 30;
-	private static final int OFFSET_SPEED = 2;
-	private static final int WIDTH = 10;
-	private static final int HEIGHT = 10;
-	private static final int BUTTON_WIDTH = 5;
-	private static final int BUTTON_HEIGHT = 5;
+	private static final int MAX_OFFSET = 100;
+	private static final int OFFSET_SPEED = 10;
+	private static final int WIDTH = 100;
+	private static final int HEIGHT = 500;
+	private static final int BUTTON_WIDTH = 50;
+	private static final int BUTTON_HEIGHT = 50;
 	
 	private final GameScreen gameScreen;
 	private final Main game;
