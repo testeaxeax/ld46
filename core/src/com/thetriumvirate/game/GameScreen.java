@@ -98,16 +98,15 @@ public final class GameScreen implements Screen {
 	// For fonts: game.fontmanager.unload(RES_SOMETHING_FONT);
 	@Override
 	public void dispose() {
-		game.fontloader.unload(RES_DEBUG_RECT);
+		game.assetmanager.unload(RES_DEBUG_RECT);
 		
 		this.wateringCan.dispose();
 		this.tap.dispose();
 		this.temperatureController.dispose();
 		// TODO
 		this.shutter.dispose();
-		this.temperatureController.dispose();
 		
-		// TODO: unsch�n
+		// TODO: unschoen
 		if(this.plants != null && this.plants.size() > 0)
 			this.plants.get(0).dispose();
 		else 
