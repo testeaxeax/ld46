@@ -45,6 +45,7 @@ public class Shutter extends InputAdapter {
 		this.gameScreen = gameScreen;
 		game = gameScreen.getGame();
 		state = STATE.OPEN;
+		resetRandomClosing();
 		this.position = startPosition.cpy();
 		this.startPosition = startPosition.cpy();
 		offset = 0;
@@ -122,7 +123,7 @@ public class Shutter extends InputAdapter {
 				if(state == STATE.CLOSED) {
 					state = STATE.OPENING_ACTIVE;
 					nextOffset = MAX_OFFSET - NEXT_STAGE_OFFSET;
-					timeLeft = game.RAND.nextInt(MAX_RAND_CLOSE + 1 - MIN_RAND_CLOSE) + MIN_RAND_CLOSE;
+					resetRandomClosing();
 				}
 				else if(state == STATE.OPEN) {state = STATE.CLOSING;}
 				else if(state == STATE.OPENING_INACTIVE) {
@@ -132,6 +133,10 @@ public class Shutter extends InputAdapter {
 			}
 		}
 		return false;
+	}
+	
+	public void resetRandomClosing() {
+		timeLeft = Main.RAND.nextInt(MAX_RAND_CLOSE + 1 - MIN_RAND_CLOSE) + MIN_RAND_CLOSE;
 	}
 	
 	public void checkRandomClosing(float delta) {
