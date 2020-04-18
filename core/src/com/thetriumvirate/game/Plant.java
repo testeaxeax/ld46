@@ -78,6 +78,24 @@ public class Plant {
 		initPlantTextures();
 	}
 	
+	//Constructor for Plants to be used in Menuscrenn or Gameoverscreen. These plants are not intended to receive any update() calls
+	public Plant(GameScreen gamescreen, int posX, int posY, int growthStage, int decayStage) {
+		this.gamescreen = gamescreen;
+		game = gamescreen.getGame();
+		
+		pot_pos = new Vector2(posX, posY);
+		plant_pos = new Vector2(posX, posY + POT_HEIGHT - 4); // -4 offset so the plant is "inside the pot" bcs the pot overlaps over the plant; 
+		
+		this.boundingBox = new Rectangle(pot_pos.x, pot_pos.y, POT_WIDTH, POT_HEIGHT + SPRITEHEIGHT);
+		
+		
+		this.decayStage = decayStage;
+		this.growthStage = growthStage;
+		//init resources
+		plantpot_texture = game.assetmanager.syncGet(RES_PLANTPOT, Texture.class);
+		plantsprites_texture = game.assetmanager.syncGet(RES_PLANTSPRITES, Texture.class);
+		initPlantTextures();
+	}
 	
 	public void update(float delta) {
 		if(growing)growth += delta * GROWTH_PER_SEC;
