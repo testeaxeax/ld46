@@ -144,12 +144,6 @@ public final class GameScreen implements Screen {
 		this.tap.render(game.spritebatch);
 		this.wateringCan.render(game.spritebatch);
 		this.temperatureController.render(game.spritebatch);
-
-
-		this.tap.render(game.spritebatch);
-		this.temperatureController.render(game.spritebatch);
-		// TODO
-		this.shutter.render(game.spritebatch);
 		
 		for(Plant p : this.plants)
 			p.render(game.spritebatch);
