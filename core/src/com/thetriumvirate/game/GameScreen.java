@@ -23,6 +23,7 @@ public final class GameScreen implements Screen {
 	
 	private Tap tap;
 	private WateringCan wateringCan;
+	private final TemperatureController temperatureController;
 	
 	public GameScreen(Main game) {
 		// Initialize essentials
@@ -37,6 +38,7 @@ public final class GameScreen implements Screen {
 
 		this.tap = new Tap(game, inputmultiplexer);
 		this.wateringCan = new WateringCan(game, this.tap, inputmultiplexer);
+		this.temperatureController = new TemperatureController(this, 1);
 		
 		Gdx.input.setInputProcessor(inputmultiplexer);
 		
@@ -69,10 +71,8 @@ public final class GameScreen implements Screen {
 	}
 	
 	public void update(float delta) {
-		int mouseX = Gdx.input.getX();
-		int mouseY = Main.WINDOW_HEIGHT - Gdx.input.getY();
-		
 		this.wateringCan.update();
+		this.temperatureController.update(delta);
 	}
 
 	@Override
@@ -82,6 +82,7 @@ public final class GameScreen implements Screen {
 		
 		this.tap.render(game.spritebatch);
 		this.wateringCan.render(game.spritebatch);
+		this.temperatureController.render(game.spritebatch);
 	}
 	
 	@Override
