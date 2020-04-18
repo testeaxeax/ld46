@@ -1,5 +1,6 @@
 package com.thetriumvirate.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -82,6 +83,7 @@ public class Plant {
 		if(growing)growth += delta * GROWTH_PER_SEC;
 		
 		waterlevel -= waterlossPerSec * delta;
+		if(waterlevel <= MIN_WATERLEVEL)waterlevel = MIN_WATERLEVEL;
 		
 		decay = MAX_DECAY - waterlevel;
 		
@@ -110,7 +112,14 @@ public class Plant {
 		spritebatch.draw(plantpot_texture, pot_pos.x, pot_pos.y, POT_WIDTH, POT_HEIGHT);
 		
 		spritebatch.draw(this.getTextureRegion(), plant_pos.x, plant_pos.y, SPRITEWIDTH, SPRITEHEIGHT);
+
+		
+		Color before = new Color(spritebatch.getColor());
+		
+		spritebatch.setColor(0.0f, 1.0f, 0.0f, 0.5f);
 		spritebatch.draw(this.gamescreen.tex_debugrect, this.boundingBox.x, this.boundingBox.y, this.boundingBox.width, this.boundingBox.height);
+	
+		spritebatch.setColor(before);
 	}
 	
 	
@@ -164,6 +173,10 @@ public class Plant {
 	
 	public boolean isFullyGrown() {
 		return fullyGrown;
+	}
+	
+	public boolean isDecayed() {
+		return (decay >= MAX_DECAY);
 	}
 	
 	public TextureRegion getTextureRegion() {

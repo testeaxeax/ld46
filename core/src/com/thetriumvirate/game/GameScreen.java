@@ -108,7 +108,7 @@ public final class GameScreen implements Screen {
 	// For fonts: game.fontmanager.unload(RES_SOMETHING_FONT);
 	@Override
 	public void dispose() {
-		game.fontloader.unload(RES_DEBUG_RECT);
+		game.assetmanager.unload(RES_DEBUG_RECT);
 		
 		this.wateringCan.dispose();
 		this.tap.dispose();
@@ -116,7 +116,7 @@ public final class GameScreen implements Screen {
 		Shutter.dispose(game);
 		this.temperatureController.dispose();
 		
-		// TODO: unsch�n
+		// TODO: unschoen
 		if(this.plants != null && this.plants.size() > 0)
 			this.plants.get(0).dispose();
 		else 
@@ -147,6 +147,8 @@ public final class GameScreen implements Screen {
 		alpha /= shutters.size();
 		brightnessOverlayPixmap.setColor(0f, 0f, 0f, alpha);
 		brightnessOverlayPixmap.fill();
+
+                checkIfGameOver();
 	}
 
 	@Override
@@ -172,6 +174,29 @@ public final class GameScreen implements Screen {
 		game.spritebatch.draw(new Texture(brightnessOverlayPixmap), 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
 		
 		game.spritebatch.end();
+	}
+
+	private void checkIfGameOver() {
+		//check if one plant is dead or all plants blossom
+		
+		for(Plant p :this.plants) {
+			if(p.isDecayed()) {
+				game.screenmanager.set(new GameOverScreen(game, false), true);//game lost; keeping assets for replay
+				break;
+			}
+		}
+		
+		boolean allBlossom = true;
+		for(Plant p : this.plants) {
+			if(!p.isFullyGrown()) {
+				allBlossom = false;
+				break;
+			}
+		}
+		if(allBlossom) {
+			game.screenmanager.set(new GameOverScreen(game, true), true);//game is won; keeping assets for replay
+		}
+		
 	}
 	
 	@Override
