@@ -26,6 +26,7 @@ public final class GameScreen implements Screen {
 	private final TemperatureController temperatureController;
 	private final Shutter shutter;
 	
+	
 	public GameScreen(Main game) {
 		// Initialize essentials
 		this.game = game;
@@ -46,6 +47,8 @@ public final class GameScreen implements Screen {
 		this.temperatureController = new TemperatureController(this, 1);
 		// TODO generiere shutter sinnvoll
 		this.shutter = new Shutter(this, new Vector2(22,22), new Vector2(44,44));
+		
+		
 		
 		Gdx.input.setInputProcessor(inputmultiplexer);
 		
@@ -90,6 +93,7 @@ public final class GameScreen implements Screen {
 		this.temperatureController.update(delta);
 		// TODO
 		this.shutter.update(delta);
+		
 	}
 
 	@Override
@@ -99,12 +103,14 @@ public final class GameScreen implements Screen {
 		
 		game.spritebatch.begin();
 		
-		this.tap.render(game.spritebatch);
-		this.wateringCan.render(game.spritebatch);
-		this.temperatureController.render(game.spritebatch);
 		// TODO
 		this.shutter.render(game.spritebatch);
 		
+		this.tap.render(game.spritebatch);
+		this.wateringCan.render(game.spritebatch);
+		this.temperatureController.render(game.spritebatch);
+
+
 		game.spritebatch.end();
 	}
 	

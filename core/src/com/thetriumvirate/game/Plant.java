@@ -15,8 +15,8 @@ public class Plant {
 	
 	private static final int POT_POS_Y = 100;
 	private static final int POT_POS_X_OFFSET = 100;
-	private static final int POT_WIDTH = 32;
-	private static final int POT_HEIGHT = 32;
+	private static final int POT_WIDTH = 64;
+	private static final int POT_HEIGHT = 64;
 	private static final int SLOT_WIDTH = 100;
 	
 	//  MAX_GROWTH/GROWTH_PER_SEC is the lower bar of the levels duration in seconds
@@ -65,7 +65,7 @@ public class Plant {
 		game = gamescreen.getGame();
 		
 		pot_pos = new Vector2(POT_POS_X_OFFSET + posSlot * SLOT_WIDTH, POT_POS_Y);
-		plant_pos = pot_pos.add(0, POT_HEIGHT - 2); // -2 offset so the plant is "inside the pot" bcs the pot overlaps over the plant; 
+		plant_pos = new Vector2(pot_pos.x, pot_pos.y + POT_HEIGHT - 4); // -4 offset so the plant is "inside the pot" bcs the pot overlaps over the plant; 
 		
 		//init resources
 		plantpot_texture = game.assetmanager.syncGet(RES_PLANTPOT, Texture.class);
@@ -100,10 +100,12 @@ public class Plant {
 	
 	public void render(SpriteBatch spritebatch) {
 		//first render the plant
-		spritebatch.draw(getTextureRegion(), plant_pos.x, plant_pos.y, SPRITEWIDTH, SPRITEHEIGHT);
+		
 		
 		//secondly, render the pot
 		spritebatch.draw(plantpot_texture, pot_pos.x, pot_pos.y, POT_WIDTH, POT_HEIGHT);
+		
+		spritebatch.draw(this.getTextureRegion(), plant_pos.x, plant_pos.y, SPRITEWIDTH, SPRITEHEIGHT);
 	}
 	
 	
