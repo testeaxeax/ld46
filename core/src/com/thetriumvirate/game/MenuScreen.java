@@ -19,7 +19,6 @@ public final class MenuScreen implements Screen {
 	
 	// Declare resource variables below
 	// For example: private final Texture testTexture;
-
 	
 	
 	public MenuScreen(Main game) {

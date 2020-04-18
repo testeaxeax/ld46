@@ -44,7 +44,7 @@ public final class GameScreen implements Screen {
 	// or			game.fontloader.load(RES_SOMETHING_FONT);
 	// Unload all resources in dispose !!!
 	public static void prefetch(Main game) {
-		
+		Plant.prefetch(game);
 	}
 	
 	// Unload all resources for this screen
