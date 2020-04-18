@@ -8,6 +8,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
@@ -21,6 +22,7 @@ public final class GameScreen implements Screen {
 
 	private static final String RES_DEBUG_RECT = "graphics/debugrec.png";
 	public final Texture tex_debugrect;
+	public final Pixmap brightnessOverlayPixmap;
 	
 	private final Main game;
 	private final OrthographicCamera cam;
@@ -31,12 +33,10 @@ public final class GameScreen implements Screen {
 	private Tap tap;
 	private WateringCan wateringCan;
 	private final TemperatureController temperatureController;
-	private final Shutter shutter;
+	private final List<Shutter> shutters;
 	
 
 	private final List<Plant> plants;
-
-
 
 	
 	public GameScreen(Main game) {
@@ -58,9 +58,16 @@ public final class GameScreen implements Screen {
 		
 		this.temperatureController = new TemperatureController(this, 1);
 		inputmultiplexer.addProcessor(this.temperatureController);
-		// TODO generiere shutter sinnvoll
-		this.shutter = new Shutter(this, new Vector2(100,500), new Vector2(200,400));
-		inputmultiplexer.addProcessor(this.shutter);
+		
+		
+		shutters = new ArrayList<Shutter>();
+		for(int i = 0; i < 4; i++) {
+			Shutter shutter = new Shutter(this,
+					new Vector2(100 + Shutter.getWidth() * 2 * i, 500),
+					new Vector2(200 + Shutter.getWidth() * 2 * i,400));
+			this.shutters.add(shutter);
+			inputmultiplexer.addProcessor(shutter);
+		}
 		
 		
 		this.plants = new ArrayList<Plant>();
@@ -78,6 +85,7 @@ public final class GameScreen implements Screen {
 		this.tex_debugrect = this.game.assetmanager.get(RES_DEBUG_RECT, Texture.class);
 		
 		// Do everything else below
+		brightnessOverlayPixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
 	}
 	
 	// Load all resources for this screen in prefetch !!!
@@ -105,8 +113,8 @@ public final class GameScreen implements Screen {
 		this.wateringCan.dispose();
 		this.tap.dispose();
 		this.temperatureController.dispose();
-		// TODO
-		this.shutter.dispose();
+		Shutter.dispose(game);
+		this.temperatureController.dispose();
 		
 		// TODO: unschoen
 		if(this.plants != null && this.plants.size() > 0)
@@ -123,15 +131,24 @@ public final class GameScreen implements Screen {
 	public void update(float delta) {
 		this.wateringCan.update(delta);
 		this.temperatureController.update(delta);
-		// TODO
-		this.shutter.update(delta);
+		for(Shutter shutter : shutters) {
+			shutter.update(delta);
+		}
 		
 
 		// last thing to be updated should be the plants
 		for(Plant p : this.plants)
 			p.update(delta);
 		
-		checkIfGameOver();
+		float alpha = 0;
+		for(Shutter shutter : shutters) {
+			alpha += shutter.getBrightnessOverlayAlpha();
+		}
+		alpha /= shutters.size();
+		brightnessOverlayPixmap.setColor(0f, 0f, 0f, alpha);
+		brightnessOverlayPixmap.fill();
+
+                checkIfGameOver();
 	}
 
 	@Override
@@ -141,8 +158,9 @@ public final class GameScreen implements Screen {
 		
 		game.spritebatch.begin();
 		
-		// TODO
-		this.shutter.render(game.spritebatch);
+		for(Shutter shutter : shutters) {
+			shutter.render(game.spritebatch);
+		}
 		
 		this.tap.render(game.spritebatch);
 		this.wateringCan.render(game.spritebatch);
@@ -153,10 +171,11 @@ public final class GameScreen implements Screen {
 		
 		this.wateringCan.render(game.spritebatch);
 		
+		game.spritebatch.draw(new Texture(brightnessOverlayPixmap), 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
+		
 		game.spritebatch.end();
 	}
-	
-	
+
 	private void checkIfGameOver() {
 		//check if one plant is dead or all plants blossom
 		

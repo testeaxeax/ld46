@@ -23,6 +23,7 @@ public class Shutter extends InputAdapter {
 	// The range is inclusive at both ends
 	private static final int MIN_RAND_CLOSE = 10;
 	private static final int MAX_RAND_CLOSE = 20;
+	private static final float BRIGHTNESS_FACTOR = 0.4f;
 	
 	private final GameScreen gameScreen;
 	private final Main game;
@@ -59,7 +60,7 @@ public class Shutter extends InputAdapter {
 		game.assetmanager.load(RES_SHUTTER_BUTTON, Texture.class);
 	}
 	
-	public void dispose() {
+	public static void dispose(Main game) {
 		game.assetmanager.unload(RES_SHUTTER);
 		game.assetmanager.unload(RES_SHUTTER_BUTTON);
 	}
@@ -141,4 +142,13 @@ public class Shutter extends InputAdapter {
 			}
 		}
 	}
+	
+	public float getBrightnessOverlayAlpha() {
+		return ((offset / MAX_OFFSET) * BRIGHTNESS_FACTOR);
+	}
+	
+	public static int getWidth() {return WIDTH;}
+	public static int getHeight() {return HEIGHT;}
+	public static int getButtonWidth() {return BUTTON_WIDTH;}
+	public static int getButtonHeight() {return BUTTON_HEIGHT;}
 }
