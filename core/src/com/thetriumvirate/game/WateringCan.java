@@ -22,6 +22,16 @@ public class WateringCan extends InputAdapter{
 	
 	private int pos_x, pos_y;
 	
+	// min: 0 max: 1000 (ml?)
+	private float fillState;
+	
+	// max fill
+	private static final float MAX_FILL = 1000.0f;
+	// ein Refill dauert 1000 / 100 = 10 Sekunden
+	private static final float REFILL_SPEED = 100.0f;
+	
+	private static final float WATERING_SPEED = 60.0f;
+	
 	public WateringCan(final Main instance, final Tap myTap, InputMultiplexer inputmultiplexer) {
 		this.game = instance;
 		this.tap = myTap;
@@ -31,6 +41,9 @@ public class WateringCan extends InputAdapter{
 		this.selected = false;
 		this.wateringPlants = false;
 		
+		// start with empty can
+		this.fillState = 0.0f;
+		
 		this.pos_x = this.tap.getDockX(DRAW_WIDTH);
 		this.pos_y = this.tap.getDockY();
 		
@@ -38,8 +51,20 @@ public class WateringCan extends InputAdapter{
 		this.tex_can_standing = this.game.assetmanager.syncGet(RES_CAN_STANDING, Texture.class);
 	}
 	
-	public void update() {
-		
+	public void update(float delta) {
+		if(this.tap.isWaterRunning() && !this.isSelected()) {
+			this.fillState += REFILL_SPEED * delta;
+			
+			if(this.fillState > MAX_FILL)
+				this.fillState = MAX_FILL;
+		} else if(this.isSelected() && this.wateringPlants) {
+			this.fillState -= WATERING_SPEED * delta;
+			
+			if(this.fillState < 0.0f) {
+				this.fillState = 0.0f;
+				this.wateringPlants = false;
+			}
+		}
 	}
 	
 	public boolean checkClick(int mousex, int mousey) {
@@ -132,6 +157,11 @@ public class WateringCan extends InputAdapter{
 	
 	public boolean isSelected() {
 		return this.selected;
+	}
+	
+	public static void prefetch(Main game) {
+		game.assetmanager.load(RES_CAN, Texture.class);
+		game.assetmanager.load(RES_CAN_STANDING, Texture.class);
 	}
 	
 	public void unload() {
