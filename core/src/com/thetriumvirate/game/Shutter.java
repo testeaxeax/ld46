@@ -125,7 +125,6 @@ public class Shutter extends InputAdapter {
 					nextOffset = MAX_OFFSET - NEXT_STAGE_OFFSET;
 					resetRandomClosing();
 				}
-				else if(state == STATE.OPEN) {state = STATE.CLOSING;}
 				else if(state == STATE.OPENING_INACTIVE) {
 					state = STATE.OPENING_ACTIVE;
 				}
