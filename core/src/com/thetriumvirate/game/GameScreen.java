@@ -110,17 +110,11 @@ public final class GameScreen implements Screen {
 	public void dispose() {
 		game.assetmanager.unload(RES_DEBUG_RECT);
 		
-		this.wateringCan.dispose();
-		this.tap.dispose();
-		this.temperatureController.dispose();
+		WateringCan.dispose(game);
+		Tap.dispose(game);
+		TemperatureController.dispose(game);
 		Shutter.dispose(game);
-		this.temperatureController.dispose();
-		
-		// TODO: unschoen
-		if(this.plants != null && this.plants.size() > 0)
-			this.plants.get(0).dispose();
-		else 
-			new Plant(this, 0).dispose();
+		Plant.dispose(game);
 	}
 
 	@Override

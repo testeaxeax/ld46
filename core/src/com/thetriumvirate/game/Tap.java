@@ -78,10 +78,10 @@ public class Tap extends InputAdapter {
 		game.assetmanager.load(RES_PLANK, Texture.class);
 	}
 
-	public void dispose() {
-		this.game.assetmanager.unload(RES_TAP);
-		this.game.assetmanager.unload(RES_PLANK);
-		this.game.assetmanager.unload(RES_TAPRUNNING);
+	public static void dispose(Main game) {
+		game.assetmanager.unload(RES_TAP);
+		game.assetmanager.unload(RES_PLANK);
+		game.assetmanager.unload(RES_TAPRUNNING);
 	}
 
 	public boolean isWaterRunning() {

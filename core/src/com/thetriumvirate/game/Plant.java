@@ -179,7 +179,7 @@ public class Plant {
 		game.assetmanager.load(RES_PLANTSPRITES, Texture.class);
 	}
 	
-	public void dispose() {
+	public static void dispose(Main game) {
 		game.assetmanager.unload(RES_PLANTPOT);
 		game.assetmanager.unload(RES_PLANTSPRITES);
 	}
