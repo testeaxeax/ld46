@@ -59,8 +59,8 @@ public final class GameScreen implements Screen {
 	// For fonts: game.fontmanager.unload(RES_SOMETHING_FONT);
 	@Override
 	public void dispose() {
-		this.wateringCan.unloadTextures();
-		this.tap.unloadTextures();
+		//this.wateringCan.unloadTextures();
+		//this.tap.unloadTextures();
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public final class GameScreen implements Screen {
 		int mouseX = Gdx.input.getX();
 		int mouseY = Main.WINDOW_HEIGHT - Gdx.input.getY();
 		
-		this.wateringCan.update(mouseX, mouseY, Gdx.input.isButtonPressed(Input.Buttons.LEFT));
+		//this.wateringCan.update(mouseX, mouseY, Gdx.input.isButtonPressed(Input.Buttons.LEFT));
 	}
 
 	@Override
@@ -80,8 +80,8 @@ public final class GameScreen implements Screen {
 		update(delta);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		this.tap.draw();
-		this.wateringCan.draw();
+		//this.tap.draw();
+		//this.wateringCan.draw();
 	}
 	
 	@Override
