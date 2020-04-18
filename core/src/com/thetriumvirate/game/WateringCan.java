@@ -2,20 +2,23 @@ package com.thetriumvirate.game;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 public class WateringCan extends InputAdapter{
 	// Resource paths
 	private static final String RES_CAN = "graphics/wateringcan.png";
 	private static final String RES_CAN_STANDING = "graphics/wateringcanstanding.png";
+	
 
 	private static final int DRAW_WIDTH = 120;
 	private static final int DRAW_HEIGHT = 120;
 	
 	private boolean selected, wateringPlants;
 	
-	private final Main game;
+	private final GameScreen game;
 	private final Texture tex_can, tex_can_standing;
 	private final Tap tap;
 	
@@ -30,36 +33,59 @@ public class WateringCan extends InputAdapter{
 	private static final float REFILL_SPEED = 100.0f;
 	
 	private static final float WATERING_SPEED = 60.0f;
+
+	private static final int HEAD_SIZE = 45;
+	private static final int HEAD_OFFSET_Y = 10;
+	private Rectangle canHead;
+	private boolean hasWateredThisTick = false;
 	
-	public WateringCan(final Main instance, final Tap myTap) {
-		this.game = instance;
+	public WateringCan(final GameScreen gameScreen, final Tap myTap) {
+		this.game = gameScreen;
 		this.tap = myTap;
 		
 		this.selected = false;
 		this.wateringPlants = false;
 		
-		// start with empty can
-		this.fillState = 0.0f;
+		// start with full can
+		this.fillState = MAX_FILL;
 		
 		this.pos_x = this.tap.getDockX(DRAW_WIDTH);
 		this.pos_y = this.tap.getDockY();
 		
-		this.tex_can = this.game.assetmanager.syncGet(RES_CAN, Texture.class);
-		this.tex_can_standing = this.game.assetmanager.syncGet(RES_CAN_STANDING, Texture.class);
+		this.canHead = new Rectangle(this.pos_x, this.pos_y + HEAD_OFFSET_Y, HEAD_SIZE, HEAD_SIZE);
+		
+		this.tex_can = this.game.getGame().assetmanager.syncGet(RES_CAN, Texture.class);
+		this.tex_can_standing = this.game.getGame().assetmanager.syncGet(RES_CAN_STANDING, Texture.class);
+		
 	}
 	
 	public void update(float delta) {
+		this.canHead.setPosition(this.pos_x, this.pos_y + HEAD_OFFSET_Y);
+		
 		if(this.tap.isWaterRunning() && !this.isSelected()) {
 			this.fillState += REFILL_SPEED * delta;
 			
-			if(this.fillState > MAX_FILL)
+			if(this.fillState > MAX_FILL) {
 				this.fillState = MAX_FILL;
+				this.tap.setWaterRunning(false);
+			}
 		} else if(this.isSelected() && this.wateringPlants) {
-			this.fillState -= WATERING_SPEED * delta;
+			// TODO DEBUGGING --> uncomment
+			
+			//this.fillState -= WATERING_SPEED * delta;
 			
 			if(this.fillState < 0.0f) {
 				this.fillState = 0.0f;
 				this.wateringPlants = false;
+			} else {
+				// Check which plants are currently being watered(?)
+				
+				for(Plant p : this.game.getPlants()) {
+					if(p.getBoundingBox().overlaps(this.canHead)) {
+						p.addWater(WATERING_SPEED);
+						this.hasWateredThisTick = true;
+					}
+				}
 			}
 		}
 	}
@@ -107,7 +133,8 @@ public class WateringCan extends InputAdapter{
 				
 					return true;
 				} else {
-					this.wateringPlants = true;
+					if(this.fillState > 0.0f)
+						this.wateringPlants = true;
 				}
 			}
 		}
@@ -122,15 +149,39 @@ public class WateringCan extends InputAdapter{
 		else
 			sb.draw(tex_can_standing, this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
 //		sb.end();
+		
+		Color c = new Color(sb.getColor());
+		
+		if(this.hasWateredThisTick)	
+			sb.setColor(0.0f, 0.0f, 0.0f, 1.0f);
+		
+		sb.draw(this.game.tex_debugrect, this.canHead.x, this.canHead.y, this.canHead.width, this.canHead.height);
+		
+		sb.setColor(c);
+		this.hasWateredThisTick = false;
 	}
 
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		screenY = Main.WINDOW_HEIGHT - screenY;
+		
+		if(this.selected) {
+			this.pos_x = screenX - DRAW_WIDTH / 2;
+			this.pos_y = screenY - DRAW_HEIGHT / 2;
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
 		screenY = Main.WINDOW_HEIGHT - screenY;
 		
 		if(this.selected) {
-			this.pos_x = screenX;
-			this.pos_y = screenY;
+			this.pos_x = screenX - DRAW_WIDTH / 2;
+			this.pos_y = screenY - DRAW_HEIGHT / 2;
 			
 			return true;
 		}
@@ -161,8 +212,8 @@ public class WateringCan extends InputAdapter{
 		game.assetmanager.load(RES_CAN_STANDING, Texture.class);
 	}
 	
-	public void unload() {
-		this.game.assetmanager.unload(RES_CAN);
-		this.game.assetmanager.unload(RES_CAN_STANDING);
+	public void dispose() {
+		this.game.getGame().assetmanager.unload(RES_CAN);
+		this.game.getGame().assetmanager.unload(RES_CAN_STANDING);
 	}
 }

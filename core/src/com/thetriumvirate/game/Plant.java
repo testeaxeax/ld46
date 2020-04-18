@@ -3,6 +3,7 @@ package com.thetriumvirate.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Plant {
@@ -58,6 +59,7 @@ public class Plant {
 	private Vector2 pot_pos;
 	private Vector2 plant_pos;
 	
+	private Rectangle boundingBox;
 	
 	//posSlot: int from 0-7, or whatever fits on the screen
 	public Plant(GameScreen gamescreen, int posSlot) {
@@ -66,6 +68,8 @@ public class Plant {
 		
 		pot_pos = new Vector2(POT_POS_X_OFFSET + posSlot * SLOT_WIDTH, POT_POS_Y);
 		plant_pos = pot_pos.add(0, POT_HEIGHT - 2); // -2 offset so the plant is "inside the pot" bcs the pot overlaps over the plant; 
+		
+		this.boundingBox = new Rectangle(pot_pos.x, pot_pos.y, POT_WIDTH, POT_HEIGHT + SPRITEHEIGHT);
 		
 		//init resources
 		plantpot_texture = game.assetmanager.syncGet(RES_PLANTPOT, Texture.class);
@@ -104,6 +108,8 @@ public class Plant {
 		
 		//secondly, render the pot
 		spritebatch.draw(plantpot_texture, pot_pos.x, pot_pos.y, POT_WIDTH, POT_HEIGHT);
+		
+		spritebatch.draw(this.gamescreen.tex_debugrect, this.boundingBox.x, this.boundingBox.y, this.boundingBox.width, this.boundingBox.height);
 	}
 	
 	
@@ -171,5 +177,10 @@ public class Plant {
 	//Add an absolute amount of water
 	public void addWater(float waterAmount) {
 		this.waterlevel += waterAmount;
+	}
+
+
+	public Rectangle getBoundingBox() {
+		return this.boundingBox;
 	}
 }

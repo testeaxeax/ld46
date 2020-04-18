@@ -14,8 +14,8 @@ public class Tap extends InputAdapter {
 	private static final int PLANK_HEIGHT = 60;
 	private static final int TAP_WIDTH = 120;
 	private static final int TAP_HEIGHT = 120;
-	private static final int TAP_OFFSET_X = 0;
-	private static final int TAP_OFFSET_Y = 150;
+	private static final int TAP_OFFSET_X = PLANK_WIDTH / 2 - TAP_WIDTH / 4;
+	private static final int TAP_OFFSET_Y = 70;
 
 	private final Main game;
 	private final Texture tex_tap;
@@ -69,7 +69,7 @@ public class Tap extends InputAdapter {
 	}
 
 	public int getDockY() {
-		return this.pos_y + PLANK_HEIGHT;
+		return this.pos_y + PLANK_HEIGHT / 2;
 	}
 
 	public static void prefetch(Main game) {
@@ -78,7 +78,7 @@ public class Tap extends InputAdapter {
 		game.assetmanager.load(RES_PLANK, Texture.class);
 	}
 
-	public void unload() {
+	public void dispose() {
 		this.game.assetmanager.unload(RES_TAP);
 		this.game.assetmanager.unload(RES_PLANK);
 		this.game.assetmanager.unload(RES_TAPRUNNING);
