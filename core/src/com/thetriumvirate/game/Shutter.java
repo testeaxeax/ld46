@@ -25,8 +25,9 @@ public class Shutter extends InputAdapter {
 	
 	private STATE state;
 	private Vector2 position;
+	private Vector2 startPosition;
 	private Vector2 buttonPosition;
-	private int offset;
+	private float offset;
 	
 	enum STATE {OPEN, CLOSED, CLOSING, OPENING};
 	
@@ -63,18 +64,18 @@ public class Shutter extends InputAdapter {
 			position.set(position.x, position.y + deltaoffset);
 		}
 		
-		if(offset >= MAX_OFFSET) {
+		if(offset > MAX_OFFSET) {
 			state = STATE.CLOSED;
 		} else if(offset < 0) {
 			state = STATE.OPEN;
 		}
 		
 		if(state == STATE.OPEN) {
-			position.set(position.x, position.y + offset);
 			offset = 0;
+			position.set(position.x, startPosition.y);
 		} else if(state == STATE.CLOSED) {
 			offset = MAX_OFFSET;
-			position.set(position.x, position.y - offset);
+			position.set(position.x, startPosition.y - offset);
 		}
 	}
 	
