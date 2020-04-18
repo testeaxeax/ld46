@@ -88,7 +88,7 @@ public class TemperatureController extends InputAdapter {
 			return false;
 		}
 		
-		final int realY = screenY - Main.WINDOW_HEIGHT;
+		final int realY = Main.WINDOW_HEIGHT - screenY;
 		
 		if(POSITION.x < screenX && POSITION.x + WIDTH > screenX) {
 			if(POSITION.y < realY && POSITION.y + HEIGHT > realY) {

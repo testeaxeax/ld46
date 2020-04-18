@@ -25,8 +25,9 @@ public class Shutter extends InputAdapter {
 	
 	private STATE state;
 	private Vector2 position;
+	private Vector2 startPosition;
 	private Vector2 buttonPosition;
-	private int offset;
+	private float offset;
 	
 	enum STATE {OPEN, CLOSED, CLOSING, OPENING};
 	
@@ -35,6 +36,7 @@ public class Shutter extends InputAdapter {
 		game = gameScreen.getGame();
 		state = STATE.OPEN;
 		this.position = startPosition.cpy();
+		this.startPosition = startPosition.cpy();
 		offset = 0;
 		this.buttonPosition = buttonPosition.cpy();
 		
@@ -63,18 +65,18 @@ public class Shutter extends InputAdapter {
 			position.set(position.x, position.y + deltaoffset);
 		}
 		
-		if(offset >= MAX_OFFSET) {
+		if(offset > MAX_OFFSET) {
 			state = STATE.CLOSED;
 		} else if(offset < 0) {
 			state = STATE.OPEN;
 		}
 		
 		if(state == STATE.OPEN) {
-			position.set(position.x, position.y + offset);
 			offset = 0;
+			position.set(position.x, startPosition.y);
 		} else if(state == STATE.CLOSED) {
 			offset = MAX_OFFSET;
-			position.set(position.x, position.y - offset);
+			position.set(position.x, startPosition.y - offset);
 		}
 	}
 	
@@ -91,7 +93,7 @@ public class Shutter extends InputAdapter {
 			return false;
 		}
 		
-		final int realY = screenY - Main.WINDOW_HEIGHT;
+		final int realY = Main.WINDOW_HEIGHT - screenY;
 		
 		if(buttonPosition.x < screenX && buttonPosition.x + WIDTH > screenX) {
 			if(buttonPosition.y < realY && buttonPosition.y + HEIGHT > realY) {
