@@ -91,7 +91,7 @@ public class Shutter extends InputAdapter {
 			return false;
 		}
 		
-		final int realY = screenY - Main.WINDOW_HEIGHT;
+		final int realY = Main.WINDOW_HEIGHT - screenY;
 		
 		if(buttonPosition.x < screenX && buttonPosition.x + WIDTH > screenX) {
 			if(buttonPosition.y < realY && buttonPosition.y + HEIGHT > realY) {
