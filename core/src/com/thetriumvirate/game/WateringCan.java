@@ -2,7 +2,6 @@ package com.thetriumvirate.game;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -32,11 +31,9 @@ public class WateringCan extends InputAdapter{
 	
 	private static final float WATERING_SPEED = 60.0f;
 	
-	public WateringCan(final Main instance, final Tap myTap, InputMultiplexer inputmultiplexer) {
+	public WateringCan(final Main instance, final Tap myTap) {
 		this.game = instance;
 		this.tap = myTap;
-		
-		inputmultiplexer.addProcessor(this);
 		
 		this.selected = false;
 		this.wateringPlants = false;

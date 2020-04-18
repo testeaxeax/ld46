@@ -1,7 +1,6 @@
 package com.thetriumvirate.game;
 
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -26,10 +25,8 @@ public class Tap extends InputAdapter {
 	private int pos_x, pos_y;
 	private boolean waterRunning;
 
-	public Tap(final Main instance, InputMultiplexer inputmultiplexer) {
+	public Tap(final Main instance) {
 		this.game = instance;
-
-		inputmultiplexer.addProcessor(this);
 
 		this.waterRunning = false;
 		this.pos_x = 600;
