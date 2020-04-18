@@ -66,11 +66,15 @@ public class TemperatureController extends InputAdapter {
 	}
 	
 	public void render(SpriteBatch spritebatch) {
+		spritebatch.begin();
+		
 		if(state == STATE.OFF) {
 			spritebatch.draw(switch_off_texture, POSITION.x, POSITION.y, WIDTH, HEIGHT);
 		} else {
 			spritebatch.draw(switch_on_texture, POSITION.x, POSITION.y, WIDTH, HEIGHT);
 		}
+		
+		spritebatch.end();
 	}
 	
 	public Vector2 getPosition() {
