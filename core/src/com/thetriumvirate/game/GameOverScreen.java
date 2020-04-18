@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 
 public final class GameOverScreen implements Screen {
 	
@@ -21,7 +22,7 @@ public final class GameOverScreen implements Screen {
 	// Declare resource variables below
 	// For example: private final Texture testTexture;
 
-	
+	private CustomButton btnMenu;
 	
 	
 	private boolean gameWon = false;
@@ -40,8 +41,8 @@ public final class GameOverScreen implements Screen {
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
 		InputMultiplexer inputmultiplexer = new InputMultiplexer();
 		
-		
-		
+		this.btnMenu = new CustomButton(game, new Vector2(100, 100), "Main Menu");
+		inputmultiplexer.addProcessor(btnMenu);
 		
 		Gdx.input.setInputProcessor(inputmultiplexer);
 		// Do everything else below
@@ -56,7 +57,7 @@ public final class GameOverScreen implements Screen {
 	// or			game.fontloader.load(RES_SOMETHING_FONT);
 	// Unload all resources in dispose !!!
 	public static void prefetch(Main game) {
-		
+		CustomButton.prefetch(game);
 	}
 	
 	// Unload all resources for this screen
@@ -75,7 +76,13 @@ public final class GameOverScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	}
+		
+		game.spritebatch.begin();
+		
+		btnMenu.render(game.spritebatch);
+		
+		game.spritebatch.end();
+		}
 	
 	@Override
 	public void resize(int width, int height) {

@@ -31,9 +31,9 @@ public class WateringCan extends InputAdapter{
 	// max fill
 	private static final float MAX_FILL = 1000.0f;
 	// ein Refill dauert 1000 / 100 = 10 Sekunden
-	private static final float REFILL_SPEED = 200.0f;
+	private static final float REFILL_SPEED = 300.0f;
 	
-	private static final float WATERING_SPEED = 100.0f;
+	private static final float WATERING_SPEED = 150.0f;
 
 	private static final int HEAD_SIZE = 45;
 	private static final int HEAD_OFFSET_Y = 10;
