@@ -131,7 +131,8 @@ public final class GameScreen implements Screen {
 		for(Plant p : this.plants)
 			p.update(delta);
 		
-		checkIfGameOver();
+		//uncomment to enable getting a game over!
+		//checkIfGameOver();
 	}
 
 	@Override

@@ -2,13 +2,15 @@ package com.thetriumvirate.game;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 
-public class CumstomButton extends InputAdapter{
+public class CustomButton extends InputAdapter{
 
 	
 	private static final String RES_BTN_RELEASED = "graphics/btn_released.png";
@@ -29,7 +31,8 @@ public class CumstomButton extends InputAdapter{
 	private boolean pressed = false;
 	private boolean clicked = false;
 	
-	public void CustomButton(Main game, Vector2 pos, String btn_text) {
+	
+	public CustomButton(Main game, Vector2 pos, String btn_text) {
 		this.game = game;
 		this.pos = pos;
 		this.btn_text = btn_text;
@@ -45,7 +48,7 @@ public class CumstomButton extends InputAdapter{
 	
 	
 	//apply custom textures
-	public void CustomButton(Main game, Vector2 pos, Texture tex_pressed, Texture tex_released, String btn_text) {
+	public CustomButton(Main game, Vector2 pos, Texture tex_pressed, Texture tex_released, String btn_text) {
 		this.game = game;
 		this.pos = pos;
 		this.btn_text = btn_text;
@@ -64,7 +67,8 @@ public class CumstomButton extends InputAdapter{
 	private void initBtnText(String btn_text) {
 		layout = new GlyphLayout();
 		font = game.fontloader.load(true);
-		layout.setText(font, btn_text);
+		font.getData().setScale(0.4f);
+		layout.setText(font, btn_text, Color.BLACK, width, Align.center, false);
 	}
 	
 	
@@ -76,16 +80,19 @@ public class CumstomButton extends InputAdapter{
 	public void render(SpriteBatch spritebatch) {
 		spritebatch.draw(this.getTexture(), pos.x, pos.y);
 		//subtraction of 2px in y-direction when pressed to make a 3D-link effect, to make it a more realistic buttonpress
-		font.draw(spritebatch, layout, pos.x + width/2 - layout.width/2, pos.y + height/2 - layout.height/2 - (this.pressed ? 2 : 0));
+		font.draw(spritebatch, layout, pos.x + width - layout.width/2 + (this.pressed ? 1 : 0), pos.y + height/2 + layout.height/2 - (this.pressed ? 2 : 0));
 	}
 	
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		if(!(button == Input.Buttons.LEFT))return false;
-	
+		screenY = Main.WINDOW_HEIGHT - screenY;
+		
 		//check if btn was pressed before and then released and therefore activated
 		if(checkClick(screenX, screenY) && pressed) {
 			clicked = true;
+			pressed = false;
+			return true;
 		}
 		pressed = false;
 		
@@ -95,6 +102,7 @@ public class CumstomButton extends InputAdapter{
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if(!(button == Input.Buttons.LEFT))return false;
+		screenY = Main.WINDOW_HEIGHT - screenY;
 		
 		if(checkClick(screenX, screenY)) {
 			this.pressed = true;
