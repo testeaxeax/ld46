@@ -44,8 +44,10 @@ public final class GameScreen implements Screen {
 		inputmultiplexer.addProcessor(this.wateringCan);
 		
 		this.temperatureController = new TemperatureController(this, 1);
+		inputmultiplexer.addProcessor(this.temperatureController);
 		// TODO generiere shutter sinnvoll
 		this.shutter = new Shutter(this, new Vector2(22,22), new Vector2(44,44));
+		inputmultiplexer.addProcessor(this.shutter);
 		
 		Gdx.input.setInputProcessor(inputmultiplexer);
 		
@@ -76,6 +78,7 @@ public final class GameScreen implements Screen {
 	public void dispose() {
 		this.wateringCan.unload();
 		this.tap.unload();
+		this.temperatureController.dispose();
 		// TODO
 		this.shutter.dispose();
 	}
