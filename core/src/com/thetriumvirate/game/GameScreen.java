@@ -1,8 +1,9 @@
 package com.thetriumvirate.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
@@ -19,8 +20,9 @@ public final class GameScreen implements Screen {
 	
 	// Declare resource variables below
 	// For example: private final Texture testTexture;
-
 	
+	private Tap tap;
+	private WateringCan wateringCan;
 	
 	public GameScreen(Main game) {
 		// Initialize essentials
@@ -31,12 +33,17 @@ public final class GameScreen implements Screen {
 		game.spritebatch.setProjectionMatrix(cam.combined);
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		
+		InputMultiplexer inputmultiplexer = new InputMultiplexer();
+
+		//this.tap = new Tap(game, inputmultiplexer);
+		//this.wateringCan = new WateringCan(game, this.tap, inputmultiplexer);
+		
+		Gdx.input.setInputProcessor(inputmultiplexer);
+		
 		// Initialize resource variables below
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
 		
-		
 		// Do everything else below
-		
 	}
 	
 	// Load all resources for this screen in prefetch !!!
@@ -52,7 +59,8 @@ public final class GameScreen implements Screen {
 	// For fonts: game.fontmanager.unload(RES_SOMETHING_FONT);
 	@Override
 	public void dispose() {
-		
+		this.wateringCan.unloadTextures();
+		this.tap.unloadTextures();
 	}
 
 	@Override
@@ -61,13 +69,19 @@ public final class GameScreen implements Screen {
 	}
 	
 	public void update(float delta) {
+		int mouseX = Gdx.input.getX();
+		int mouseY = Main.WINDOW_HEIGHT - Gdx.input.getY();
 		
+		this.wateringCan.update(mouseX, mouseY, Gdx.input.isButtonPressed(Input.Buttons.LEFT));
 	}
 
 	@Override
 	public void render(float delta) {
 		update(delta);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		this.tap.draw();
+		this.wateringCan.draw();
 	}
 	
 	@Override
