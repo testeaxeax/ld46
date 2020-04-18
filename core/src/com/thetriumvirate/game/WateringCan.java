@@ -250,12 +250,12 @@ public class WateringCan extends InputAdapter{
 			game.assetmanager.load(s, Texture.class);
 	}
 	
-	public void dispose() {
-		this.game.getGame().assetmanager.unload(RES_CAN);
-		this.game.getGame().assetmanager.unload(RES_CAN_STANDING);
+	public static void dispose(Main game) {
+		game.assetmanager.unload(RES_CAN);
+		game.assetmanager.unload(RES_CAN_STANDING);
 		
-		this.game.getGame().assetmanager.unload(RES_CAN_EMPTY);
+		game.assetmanager.unload(RES_CAN_EMPTY);
 		for(String s : RES_CAN_FILLSTATES)
-			this.game.getGame().assetmanager.unload(s);
+			game.assetmanager.unload(s);
 	}
 }

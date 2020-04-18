@@ -51,7 +51,7 @@ public class TemperatureController extends InputAdapter {
 		game.assetmanager.load(RES_SWITCH_OFF, Texture.class);
 	}
 	
-	public void dispose() {
+	public static void dispose(Main game) {
 		game.assetmanager.unload(RES_SWITCH_OFF);
 		game.assetmanager.unload(RES_SWITCH_ON);
 	}
