@@ -72,9 +72,7 @@ public final class SplashScreen implements Screen {
 	private void checkprogress() {
 		if (TimeUtils.timeSinceMillis(showtime) >= MIN_SHOWTIME && game.assetmanager.update()) {
 			// TODO Replace ScreenTemplate with actual game/menu screen
-			//game.screenmanager.set(new ScreenTemplate(game), false);
-			// TODO Remove the following line and this comment (Only necessary for SplashScreen testing)
-			Gdx.app.exit();
+			game.screenmanager.set(new GameScreen(game), false);
 		}
 	}
 
