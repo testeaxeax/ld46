@@ -23,10 +23,12 @@ public class TemperatureController extends InputAdapter {
 	public static final int MAX_TEMP = 100;
 	private static final int INIT_TEMP = 20;
 	private static final Vector2 POSITION = new Vector2(600, 200);
-	private static final int KNOB_WIDTH = 32;
-	private static final int KNOB_HEIGHT = 32;
-	private static final int DISPLAY_WIDTH = 96;
-	private static final int DISPLAY_HEIGHT = 96;
+	
+	private static final float KNOB_WIDTH = 32f / 1024f;
+	private static final float KNOB_HEIGHT = 32f / 800f;
+	private static final float DISPLAY_WIDTH = 96f / 1024f;
+	private static final float DISPLAY_HEIGHT = 96 / 800f;
+	
 	private static final int TEMP_LOSS_PER_SECOND = 1;
 	private static final int TEMP_INCREASE_PER_SECOND = 1;
 	
@@ -38,8 +40,10 @@ public class TemperatureController extends InputAdapter {
 //	private final Texture switch_on_texture, switch_off_texture;
 	private final BitmapFont font;
 	private static final int FONT_SIZE = 30;
-	private static final int TEXT_OFFSET_X = 60;
-	private static final int TEXT_OFFSET_Y = 50;
+
+	// TODO float relative
+	private static final float TEXT_OFFSET_X = 60f / 1024f;
+	private static final float TEXT_OFFSET_Y = 50f / 800f;
 
 	private final Texture knob_texture;
 	private final Texture tempDisplay_texture;
@@ -114,11 +118,11 @@ public class TemperatureController extends InputAdapter {
 
   
 	public void render(SpriteBatch spritebatch) {
-		spritebatch.draw(this.getKnobTextureRegion(), POSITION.x, POSITION.y, KNOB_WIDTH, KNOB_HEIGHT);
+		spritebatch.draw(this.getKnobTextureRegion(), getScaledX(), getScaledY(), KNOB_WIDTH * Main.WINDOW_WIDTH, KNOB_HEIGHT * Main.WINDOW_HEIGHT);
 		
-		spritebatch.draw(tempDisplay_texture, POSITION.x + 1.5f * KNOB_WIDTH, POSITION.y, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+		spritebatch.draw(tempDisplay_texture, getScaledX() + 1.5f * KNOB_WIDTH * Main.WINDOW_WIDTH, getScaledY(), DISPLAY_WIDTH * Main.WINDOW_WIDTH, DISPLAY_HEIGHT * Main.WINDOW_HEIGHT);
     
-		this.font.draw(spritebatch, "" + (int) this.currentTemp, POSITION.x + TEXT_OFFSET_X, POSITION.y + TEXT_OFFSET_Y);
+		this.font.draw(spritebatch, "" + (int) this.currentTemp, getScaledX() + TEXT_OFFSET_X * Main.WINDOW_WIDTH, getScaledY() + TEXT_OFFSET_Y * Main.WINDOW_HEIGHT);
 	}
 	
 	public Vector2 getPosition() {
@@ -133,8 +137,8 @@ public class TemperatureController extends InputAdapter {
 		
 		final int realY = Main.WINDOW_HEIGHT - screenY;
 		
-		if(POSITION.x < screenX && POSITION.x + KNOB_WIDTH > screenX) {
-			if(POSITION.y < realY && POSITION.y + KNOB_HEIGHT > realY) {
+		if(getScaledX() < screenX && getScaledX() + KNOB_WIDTH * Main.WINDOW_WIDTH> screenX) {
+			if(getScaledY() < realY && getScaledY() + KNOB_HEIGHT * Main.WINDOW_HEIGHT > realY) {
 				toggleState();
 				return true;
 			}
@@ -158,5 +162,13 @@ public class TemperatureController extends InputAdapter {
 	
 	public float getCurrentTemp() {
 		return  currentTemp;
+	}
+	
+	private float getScaledX() {
+		return POSITION.x / 1024f * Main.WINDOW_WIDTH;
+	}
+	
+	private float getScaledY() {
+		return POSITION.y / 800 * Main.WINDOW_HEIGHT;
 	}
 }
