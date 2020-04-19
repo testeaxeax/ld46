@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class Shutter extends InputAdapter {
@@ -16,8 +17,8 @@ public class Shutter extends InputAdapter {
 	private static final int OFFSET_SPEED_OPENING = 300;
 	private static final int WIDTH = 128;
 	private static final int HEIGHT = 512;
-	private static final int BUTTON_WIDTH = 50;
-	private static final int BUTTON_HEIGHT = 50;
+	private static final int BUTTON_WIDTH = 32;
+	private static final int BUTTON_HEIGHT = HEIGHT;
 	private static final int OPENING_STEPS = 5;
 	private static final float NEXT_STAGE_OFFSET = MAX_OFFSET / OPENING_STEPS;
 	// The range is inclusive at both ends
@@ -25,10 +26,14 @@ public class Shutter extends InputAdapter {
 	private static final int MAX_RAND_CLOSE = 20;
 	private static final float BRIGHTNESS_FACTOR = 0.4f;
 	
+	private static final float ANIMATIONTIME = 0.02f;
+	private static final int ANIM_SPRITES_AMOUNT = 3;
+	
 	private final GameScreen gameScreen;
 	private final Main game;
 	
 	private final Texture shutterTexture, buttonTexture;
+	private TextureRegion[] buttonTexReg;
 	
 	private STATE state;
 	private Vector2 position;
@@ -38,6 +43,9 @@ public class Shutter extends InputAdapter {
 	private float nextOffset;
 	private int currentStep;
 	private float timeLeft;
+	
+	private int currentAnimationIndex;
+	private float animationTimer;
 	
 	enum STATE {OPEN, CLOSED, CLOSING, OPENING_ACTIVE, OPENING_INACTIVE};
 	
@@ -52,8 +60,16 @@ public class Shutter extends InputAdapter {
 		this.buttonPosition = buttonPosition.cpy();
 		currentStep = 0;
 		
+		buttonTexReg = new TextureRegion[ANIM_SPRITES_AMOUNT];
+		this.currentAnimationIndex = 0;
+		this.animationTimer = 0;
+		
 		shutterTexture = game.assetmanager.get(RES_SHUTTER, Texture.class);
 		buttonTexture = game.assetmanager.get(RES_SHUTTER_BUTTON, Texture.class);
+		
+		buttonTexReg[0] = new TextureRegion(buttonTexture, 0,  0, 16, 256);
+		buttonTexReg[1] = new TextureRegion(buttonTexture, 16, 0, 16, 256);
+		buttonTexReg[2] = new TextureRegion(buttonTexture, 32, 0, 16, 256);
 	}
 	
 	public static void prefetch(Main game) {
@@ -72,6 +88,8 @@ public class Shutter extends InputAdapter {
 			float deltaoffset = delta * OFFSET_SPEED_CLOSING;
 			offset += deltaoffset;
 			position.set(position.x, startPosition.y - offset);
+			incrementAnimationTimer(delta, -1);//-1 bcs closing, see comment above the called method
+			
 		} else if(state == STATE.OPENING_ACTIVE) {
 			float deltaoffset = delta * OFFSET_SPEED_OPENING;
 			offset -= deltaoffset;
@@ -86,6 +104,7 @@ public class Shutter extends InputAdapter {
 				}
 			}
 			position.set(position.x, startPosition.y - offset);
+			incrementAnimationTimer(delta, 1);//1 bcs closing, see comment above the called method
 		}
 		
 		if(offset > MAX_OFFSET) {
@@ -106,7 +125,7 @@ public class Shutter extends InputAdapter {
 	public void render(SpriteBatch spriteBatch) {
 //		spriteBatch.begin();
 		spriteBatch.draw(shutterTexture, position.x, position.y, WIDTH, HEIGHT);
-		spriteBatch.draw(buttonTexture, buttonPosition.x, buttonPosition.y, BUTTON_WIDTH, BUTTON_HEIGHT);
+		spriteBatch.draw(this.getButtonTextureRegion(), buttonPosition.x, buttonPosition.y, BUTTON_WIDTH, BUTTON_HEIGHT);
 //		spriteBatch.end();
 	}
 	
@@ -145,6 +164,21 @@ public class Shutter extends InputAdapter {
 				state = STATE.CLOSING;
 			}
 		}
+	}
+	
+	//when called, the shutterbtn animates movement, if not, not. dir is +1 for opening, -1 for closing
+	public void incrementAnimationTimer(float delta, int dir) {
+		animationTimer += delta;
+		if(animationTimer >= ANIMATIONTIME) {
+			animationTimer = 0;
+			currentAnimationIndex += dir;
+			if(currentAnimationIndex >= 3) currentAnimationIndex = 0;
+			if(currentAnimationIndex <= -1)currentAnimationIndex = 2;
+		}
+	}
+	
+	public TextureRegion getButtonTextureRegion() {
+		return this.buttonTexReg[currentAnimationIndex];
 	}
 	
 	public float getBrightnessOverlayAlpha() {
