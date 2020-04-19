@@ -36,8 +36,8 @@ public class Plant {
 	private static final int MAX_DECAY = MAX_WATERLEVEL;
 	
 	// The min and max temp for the plant to grow normally
-	private static final int TEMP_MAX = 65;
-	private static final int TEMP_MIN = 30;
+	public static final int TEMP_MAX = 65;
+	public static final int TEMP_MIN = 30;
 	
 	private static final int GROWTHSTAGES = 8;
 	private static final int DECAYSTAGES = 5;
@@ -117,7 +117,7 @@ public class Plant {
 		initPlantTextures();
 	}
 	
-	public void update(float delta, float shutteralpha, int currentTemp) {
+	public void update(float delta, float shutteralpha, float currentTemp) {
 		// check the Temp and react to it; if it's...
 		// too high: speed up decay process and remove part of the water
 		// too low:  stop growth process
