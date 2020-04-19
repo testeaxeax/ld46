@@ -5,10 +5,8 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Align;
 
 public class TemperatureController extends InputAdapter {
 
@@ -30,7 +28,6 @@ public class TemperatureController extends InputAdapter {
 	
 	// Resources
 	private final Texture switch_on_texture, switch_off_texture;
-	private final GlyphLayout layout;
 	private final BitmapFont font;
 	private static final int FONT_SIZE = 20;
 	private static final int TEXT_OFFSET_X = 50;
@@ -56,16 +53,14 @@ public class TemperatureController extends InputAdapter {
 		switch_on_texture = game.assetmanager.get(RES_SWITCH_ON, Texture.class);
 		switch_off_texture = game.assetmanager.get(RES_SWITCH_OFF, Texture.class);
 		
-		this.layout = new GlyphLayout();
 		this.font = game.fontloader.get(Main.RES_DEFAULT_FONT, FONT_SIZE, Color.BLACK);
-		this.layout.setText(this.font, "" + (int) this.currentTemp);
 	}
 	
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_SWITCH_ON, Texture.class);
 		game.assetmanager.load(RES_SWITCH_OFF, Texture.class);
 
-		game.fontloader.load(Main.RES_DEFAULT_FONT, FONT_SIZE, Color.BLACK, true);
+		game.fontloader.load(Main.RES_DEFAULT_FONT, FONT_SIZE, Color.BLACK);
 	}
 	
 	public static void dispose(Main game) {
@@ -83,8 +78,6 @@ public class TemperatureController extends InputAdapter {
 		
 		if(currentTemp < MIN_TEMP) {currentTemp = MIN_TEMP;}
 		else if (currentTemp > MAX_TEMP) {currentTemp = MAX_TEMP;}
-		
-		this.layout.setText(this.font, "" + (int) this.currentTemp);
 	}
 
   
@@ -97,7 +90,7 @@ public class TemperatureController extends InputAdapter {
 			spritebatch.draw(switch_on_texture, POSITION.x, POSITION.y, WIDTH, HEIGHT);
 		}
 		
-		this.font.draw(spritebatch, this.layout, POSITION.x + TEXT_OFFSET_X, POSITION.y + TEXT_OFFSET_Y);
+		this.font.draw(spritebatch, "" + (int) this.currentTemp, POSITION.x + TEXT_OFFSET_X, POSITION.y + TEXT_OFFSET_Y);
 //		spritebatch.end();
 	}
 	
