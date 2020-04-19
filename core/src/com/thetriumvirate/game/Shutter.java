@@ -12,8 +12,8 @@ public class Shutter extends InputAdapter {
 	private static final String RES_SHUTTER_BUTTON = "graphics/shutter-button.png";
 	
 	private static final int MAX_OFFSET = 100;
-	private static final int OFFSET_SPEED_CLOSING = 40;
-	private static final int OFFSET_SPEED_OPENING = 10;
+	private static final int OFFSET_SPEED_CLOSING = 300;
+	private static final int OFFSET_SPEED_OPENING = 300;
 	private static final int WIDTH = 128;
 	private static final int HEIGHT = 512;
 	private static final int BUTTON_WIDTH = 50;

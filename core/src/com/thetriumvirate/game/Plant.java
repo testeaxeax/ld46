@@ -158,6 +158,7 @@ public class Plant {
 		//if(!this.splasheffect.isComplete())
 		this.splasheffect.draw(spritebatch, delta);
 		
+
 //		Color before = new Color(spritebatch.getColor());
 //		
 //		spritebatch.setColor(0.0f, 1.0f, 0.0f, 0.5f);
@@ -235,6 +236,7 @@ public class Plant {
 	//Add an absolute amount of water
 	public void addWater(float waterAmount) {
 		this.waterlevel += waterAmount;
+		if(this.waterlevel >= MAX_WATERLEVEL) waterlevel = MAX_WATERLEVEL;
 		
 		// this assumes that the plant is being watered by the watering can
 		if(this.splasheffect.isComplete()) {
