@@ -132,11 +132,11 @@ public class WateringCan extends InputAdapter{
 			}
 		}
 
-		if(this.wateringPlants) {
+//		if(this.wateringPlants) {
 			
 			this.wateringEffect.getEmitters().first().setContinuous(false);
 			
-		}
+//		}
 		this.wateringPlants = false;
 		
 		return false;
