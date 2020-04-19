@@ -15,12 +15,12 @@ public class Tap extends InputAdapter {
 	private static final String RES_TAP_OPENING_SOUND = "audio/tap-opening.wav";
 	private static final String RES_TAP_WATER_RUNNING_SOUND = "audio/tap-running.wav";
 
-	private static final int PLANK_WIDTH = 200;
-	private static final int PLANK_HEIGHT = 60;
-	private static final int TAP_WIDTH = 64;
-	private static final int TAP_HEIGHT = 64;
-	private static final int TAP_OFFSET_X = PLANK_WIDTH / 2 - TAP_WIDTH / 4;
-	private static final int TAP_OFFSET_Y = 160;
+	private static final float PLANK_WIDTH = 200f / 1024f;
+	private static final float PLANK_HEIGHT = 60f / 800f;
+	private static final float TAP_WIDTH = 64f / 1024f;
+	private static final float TAP_HEIGHT = 64f / 800f;
+	private static final float TAP_OFFSET_X = PLANK_WIDTH / 2 - TAP_WIDTH / 4;
+	private static final float TAP_OFFSET_Y = 160f / 800f;
 
 	private final Main game;
 	private final Texture tex_tap;
@@ -29,15 +29,15 @@ public class Tap extends InputAdapter {
 	private final Texture tex_plank;
 	private final Sound tapOpeningSound, tapWaterRunningSound;
 
-	private int pos_x, pos_y;
+	private float pos_x, pos_y;
 	private boolean waterRunning;
 
 	public Tap(final Main instance) {
 		this.game = instance;
 
 		this.waterRunning = false;
-		this.pos_x = 600;
-		this.pos_y = 300;
+		this.pos_x = 600 / 1024f;
+		this.pos_y = 300 / 800f;
 
 		this.tex_tap = this.game.assetmanager.get(RES_TAP, Texture.class);
 		texReg_tap = new TextureRegion[2];//Two states: open and closed. Increase if necessary
@@ -52,12 +52,12 @@ public class Tap extends InputAdapter {
 
 	public void render(SpriteBatch sb) {
 //		sb.begin();
-		sb.draw(tex_plank, this.pos_x, this.pos_y, PLANK_WIDTH, PLANK_HEIGHT);
+		sb.draw(tex_plank, this.pos_x * Main.WINDOW_WIDTH, this.pos_y * Main.WINDOW_HEIGHT, PLANK_WIDTH * Main.WINDOW_WIDTH, PLANK_HEIGHT * Main.WINDOW_HEIGHT);
 
 		if (this.waterRunning)
-			sb.draw(texReg_tap[1], this.pos_x + TAP_OFFSET_X, this.pos_y + TAP_OFFSET_Y, TAP_WIDTH, TAP_HEIGHT);
+			sb.draw(texReg_tap[1], (this.pos_x + TAP_OFFSET_X) * Main.WINDOW_WIDTH, (this.pos_y + TAP_OFFSET_Y) * Main.WINDOW_HEIGHT, TAP_WIDTH * Main.WINDOW_WIDTH, TAP_HEIGHT * Main.WINDOW_HEIGHT);
 		else
-			sb.draw(texReg_tap[0], this.pos_x + TAP_OFFSET_X, this.pos_y + TAP_OFFSET_Y, TAP_WIDTH, TAP_HEIGHT);
+			sb.draw(texReg_tap[0], (this.pos_x + TAP_OFFSET_X) * Main.WINDOW_WIDTH, (this.pos_y + TAP_OFFSET_Y) * Main.WINDOW_HEIGHT, TAP_WIDTH * Main.WINDOW_WIDTH, TAP_HEIGHT * Main.WINDOW_HEIGHT);
 
 //		game.spritebatch.end();
 	}
@@ -74,21 +74,28 @@ public class Tap extends InputAdapter {
 		this.waterRunning = running;
 	}
 
-	public boolean checkAllClicked(int mouseX, int mouseY) {
-		return mouseX >= pos_x && mouseX <= pos_x + PLANK_WIDTH && mouseY >= pos_y
-				&& mouseY <= pos_y + TAP_OFFSET_Y + TAP_HEIGHT;
+	public boolean checkAllClicked(int screenX, int screenY) {
+		float mX = (float) screenX / Main.WINDOW_WIDTH;
+		float mY = (float) screenY / Main.WINDOW_HEIGHT;
+		
+		return  mX >= pos_x && mX <= pos_x + PLANK_WIDTH && 
+				mY >= pos_y	&& mY <= pos_y + TAP_OFFSET_Y + TAP_HEIGHT;
 	}
 
-	public boolean checkTapClick(int mouseX, int mouseY) {
-		return mouseX >= this.pos_x + TAP_OFFSET_X && mouseX <= this.pos_x + TAP_OFFSET_X + TAP_WIDTH
-				&& mouseY >= this.pos_y + TAP_OFFSET_Y && mouseY <= this.pos_y + TAP_OFFSET_Y + TAP_HEIGHT;
+	public boolean checkTapClick(int screenX, int screenY) {
+		float mX = (float) screenX / Main.WINDOW_WIDTH;
+		float mY = (float) screenY / Main.WINDOW_HEIGHT;
+		
+		return mX >= this.pos_x + TAP_OFFSET_X && mX <= this.pos_x + TAP_OFFSET_X + TAP_WIDTH
+				&& mY >= this.pos_y + TAP_OFFSET_Y && mY <= this.pos_y + TAP_OFFSET_Y + TAP_HEIGHT;
 	}
 
-	public int getDockX(int canWidth) {
+	// TODO: relativiern
+	public float getDockX(float canWidth) {
 		return this.pos_x + PLANK_WIDTH / 2 - canWidth / 2;
 	}
 
-	public int getDockY() {
+	public float getDockY() {
 		return this.pos_y + PLANK_HEIGHT / 2;
 	}
 
