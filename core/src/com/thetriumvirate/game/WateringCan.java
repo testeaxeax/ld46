@@ -15,9 +15,9 @@ public class WateringCan extends InputAdapter{
 	// Resource paths
 	private static final String RES_CAN = "graphics/wateringcan.png";
 	// Sound cannot be longer than a few seconds
-	private static final String RES_TAKE_SOUND = "sound/can-take.wav";
-	private static final String RES_DROP_SOUND = "sound/can-drop.wav";
-	private static final String RES_WATER_SOUND = "sound/can-watering.wav";
+	private static final String RES_TAKE_SOUND = "audio/can-take.wav";
+	private static final String RES_DROP_SOUND = "audio/can-drop.wav";
+	private static final String RES_WATER_SOUND = "audio/can-watering.wav";
 	//private static final String RES_CAN_STANDING = "graphics/wateringcanstanding.png";
 	//private static final String RES_CAN_EMPTY = "graphics/canempty.png";
 	//private static final String RES_CAN_FILLSTATES[] = {"graphics/canstate1.png", "graphics/canstate2.png", "graphics/canstate3.png", "graphics/canstate4.png", "graphics/canstate5.png"};
@@ -320,6 +320,9 @@ public class WateringCan extends InputAdapter{
 	
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_CAN, Texture.class);
+		game.assetmanager.load(RES_TAKE_SOUND, Sound.class);
+		game.assetmanager.load(RES_DROP_SOUND, Sound.class);
+		game.assetmanager.load(RES_WATER_SOUND, Sound.class);
 		//game.assetmanager.load(RES_CAN_STANDING, Texture.class);
 		
 		//game.assetmanager.load(RES_CAN_EMPTY, Texture.class);
@@ -329,6 +332,9 @@ public class WateringCan extends InputAdapter{
 	
 	public static void dispose(Main game) {
 		game.assetmanager.unload(RES_CAN);
+		game.assetmanager.unload(RES_TAKE_SOUND);
+		game.assetmanager.unload(RES_DROP_SOUND);
+		game.assetmanager.unload(RES_WATER_SOUND);
 		/*game.assetmanager.unload(RES_CAN_STANDING);
 		
 		game.assetmanager.unload(RES_CAN_EMPTY);

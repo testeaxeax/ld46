@@ -97,12 +97,14 @@ public class Tap extends InputAdapter {
 		//game.assetmanager.load(RES_TAPRUNNING, Texture.class);
 		game.assetmanager.load(RES_PLANK, Texture.class);
 		game.assetmanager.load(RES_TAP_OPENING_SOUND, Sound.class);
+		game.assetmanager.load(RES_TAP_WATER_RUNNING_SOUND, Sound.class);
 	}
 
 	public static void dispose(Main game) {
 		game.assetmanager.unload(RES_TAP);
 		game.assetmanager.unload(RES_PLANK);
 		game.assetmanager.unload(RES_TAP_OPENING_SOUND);
+		game.assetmanager.unload(RES_TAP_WATER_RUNNING_SOUND);
 		//game.assetmanager.unload(RES_TAPRUNNING);
 	}
 
