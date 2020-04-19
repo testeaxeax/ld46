@@ -10,8 +10,8 @@ max: 50
 - Emission - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 70.0
-highMax: 70.0
+highMin: 20.0
+highMax: 20.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -37,8 +37,8 @@ active: false
 independent: false
 - X Offset - 
 active: true
-lowMin: -10.0
-lowMax: 10.0
+lowMin: -20.0
+lowMax: 20.0
 highMin: 0.0
 highMax: 0.0
 relative: false
@@ -82,8 +82,8 @@ timeline0: 0.0
 - X Scale - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 8.0
-highMax: 8.0
+highMin: 16.0
+highMax: 16.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -130,8 +130,8 @@ timelineCount: 1
 timeline0: 0.0
 - Tint - 
 colorsCount: 3
-colors0: 0.44705883
-colors1: 0.5137255
+colors0: 0.74509805
+colors1: 0.7764706
 colors2: 1.0
 timelineCount: 1
 timeline0: 0.0
@@ -155,7 +155,7 @@ timeline3: 0.96575344
 attached: false
 continuous: false
 aligned: false
-additive: true
+additive: false
 behind: false
 premultipliedAlpha: false
 spriteMode: animated
