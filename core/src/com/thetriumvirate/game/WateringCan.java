@@ -81,7 +81,6 @@ public class WateringCan extends InputAdapter{
 	public void update(float delta) {
 		this.canHead.setPosition(this.pos_x, this.pos_y + HEAD_OFFSET_Y);
 		this.wateringEffect.setPosition(this.pos_x + EFFECT_OFFSET_X, this.pos_y + EFFECT_OFFSET_Y);
-//		this.wateringEffectFadeOut.setPosition(this.pos_x, this.pos_y + EFFECT_OFFSET_Y);
 		
 		if(this.wateringPlants && this.wateringEffect.isComplete())
 			this.wateringEffect.start();
@@ -137,8 +136,6 @@ public class WateringCan extends InputAdapter{
 			
 			this.wateringEffect.getEmitters().first().setContinuous(false);
 			
-//			this.wateringEffectFadeOut.reset();
-//			this.wateringEffectFadeOut.start();
 		}
 		this.wateringPlants = false;
 		
@@ -207,11 +204,9 @@ public class WateringCan extends InputAdapter{
 				
 				sb.draw(this.tex_can_fillstates[selectedTexture], this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
 				
-				//this.wateringEffectFadeOut.draw(sb, delta);
-				//if(this.wateringPlants)
-				this.wateringEffect.draw(sb,  delta);
 			}
-			
+
+			this.wateringEffect.draw(sb,  delta);
 //		}
 //		sb.end();
 		
