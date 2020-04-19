@@ -70,7 +70,8 @@ public class Plant {
 	private Rectangle boundingBox;
 	
 	private final ParticleEffect splasheffect;
-	private static final String RES_PEFFECT_SPLASH = "particleeffects/watersplash/watersplash.p";
+	private static final String RES_PEFFECT_SPLASH = "particleeffects/watersplash.p";
+	private static final String RES_PEFFECT_SPLASH_FILES = "particleeffects/";
 	
 	//posSlot: int from 0-7, or whatever fits on the screen
 	public Plant(GameScreen gamescreen, int posSlot) {
@@ -89,7 +90,7 @@ public class Plant {
 		
 		this.splasheffect = new ParticleEffect();
 		this.splasheffect.loadEmitters(Gdx.files.internal(RES_PEFFECT_SPLASH));
-		this.splasheffect.loadEmitterImages(Gdx.files.internal("particleeffects/watersplash/"));
+		this.splasheffect.loadEmitterImages(Gdx.files.internal(RES_PEFFECT_SPLASH_FILES));
 		this.splasheffect.setPosition(plant_pos.x + SPRITEWIDTH / 2, plant_pos.y);
 		
 		initPlantTextures();

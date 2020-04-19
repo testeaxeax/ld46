@@ -153,6 +153,7 @@ public final class GameScreen implements Screen {
 	
 	public void update(float delta) {
 		this.wateringCan.update(delta);
+		this.tap.update(delta);
 		this.temperatureController.update(delta);
 		this.thermometer.update(delta, this.temperatureController.getCurrentTemp());
 		

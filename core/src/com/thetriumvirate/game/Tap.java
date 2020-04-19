@@ -1,8 +1,10 @@
 package com.thetriumvirate.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -31,6 +33,12 @@ public class Tap extends InputAdapter {
 
 	private float pos_x, pos_y;
 	private boolean waterRunning;
+	
+	private final String RES_PEFFECT_WATERRUNNING = "particleeffects/effectcanfilling.p";
+	private final String RES_PEFFECT_WATERRUNNING_FILES = "particleeffects/";
+	private final ParticleEffect effectWaterRunning;
+	private static final float PEFFECT_OFFSET_X = PLANK_WIDTH / 2 + 18f / 1024f;
+	private static final float PEFFECT_OFFSET_Y = TAP_OFFSET_Y + 20f / 800f;
 
 	public Tap(final Main instance) {
 		this.game = instance;
@@ -44,30 +52,50 @@ public class Tap extends InputAdapter {
 		texReg_tap[0] = new TextureRegion(tex_tap, 0, 0, 32, 32);//tap closed
 		texReg_tap[1] = new TextureRegion(tex_tap, 0, 32, 32, 32);//tap open
 		//this.tex_taprunning = this.game.assetmanager.get(RES_TAPRUNNING, Texture.class);
+		
+		this.effectWaterRunning = new ParticleEffect();
+		this.effectWaterRunning.loadEmitters(Gdx.files.internal(RES_PEFFECT_WATERRUNNING));
+		this.effectWaterRunning.loadEmitterImages(Gdx.files.internal(RES_PEFFECT_WATERRUNNING_FILES));
+		
+		this.effectWaterRunning.setPosition(this.pos_x * Main.WINDOW_WIDTH, this.pos_y * Main.WINDOW_HEIGHT);
 
 		this.tex_plank = this.game.assetmanager.get(RES_PLANK, Texture.class);
 		tapOpeningSound = game.assetmanager.get(RES_TAP_OPENING_SOUND, Sound.class);
 		tapWaterRunningSound = game.assetmanager.get(RES_TAP_WATER_RUNNING_SOUND, Sound.class);
+	}
+	
+	public void update(float delta) {
+		this.effectWaterRunning.setPosition((this.pos_x + PEFFECT_OFFSET_X) * Main.WINDOW_WIDTH, (this.pos_y + PEFFECT_OFFSET_Y) * Main.WINDOW_HEIGHT);
+		this.effectWaterRunning.update(delta);
 	}
 
 	public void render(SpriteBatch sb) {
 //		sb.begin();
 		sb.draw(tex_plank, this.pos_x * Main.WINDOW_WIDTH, this.pos_y * Main.WINDOW_HEIGHT, PLANK_WIDTH * Main.WINDOW_WIDTH, PLANK_HEIGHT * Main.WINDOW_HEIGHT);
 
+		this.effectWaterRunning.draw(sb);
+		
 		if (this.waterRunning)
 			sb.draw(texReg_tap[1], (this.pos_x + TAP_OFFSET_X) * Main.WINDOW_WIDTH, (this.pos_y + TAP_OFFSET_Y) * Main.WINDOW_HEIGHT, TAP_WIDTH * Main.WINDOW_WIDTH, TAP_HEIGHT * Main.WINDOW_HEIGHT);
 		else
 			sb.draw(texReg_tap[0], (this.pos_x + TAP_OFFSET_X) * Main.WINDOW_WIDTH, (this.pos_y + TAP_OFFSET_Y) * Main.WINDOW_HEIGHT, TAP_WIDTH * Main.WINDOW_WIDTH, TAP_HEIGHT * Main.WINDOW_HEIGHT);
-
+		
 //		game.spritebatch.end();
 	}
 
 	public void setWaterRunning(boolean running) {
 		if(!waterRunning && running) {
+			this.effectWaterRunning.reset();
+			this.effectWaterRunning.setDuration(500);
+			this.effectWaterRunning.getEmitters().first().setContinuous(true);
+			this.effectWaterRunning.start();
+			
 			tapOpeningSound.play();
 			tapWaterRunningSound.loop();
 		}
 		else if(waterRunning && !running) {
+			this.effectWaterRunning.getEmitters().first().setContinuous(false);
+			
 			tapOpeningSound.play();
 			tapWaterRunningSound.stop();
 		}

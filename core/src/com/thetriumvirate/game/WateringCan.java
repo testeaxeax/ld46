@@ -55,8 +55,8 @@ public class WateringCan extends InputAdapter{
 	private boolean hasWateredThisTick = false;
 	
 	private final ParticleEffect wateringEffect;
-	private static final String RES_PEFFECT = "particleeffects/watersplash/effectcan.p";
-	private static final String RES_PEFFECT_FILES = "particleeffects/watersplash/";
+	private static final String RES_PEFFECT = "particleeffects/effectcan.p";
+	private static final String RES_PEFFECT_FILES = "particleeffects/";
 	private static final float EFFECT_OFFSET_X = 8f / 1024f;
 	private static final float EFFECT_OFFSET_Y = 10f / 800f;
 	
@@ -175,7 +175,7 @@ public class WateringCan extends InputAdapter{
 				if(this.checkClick(screenX, screenY)) {
 					this.select(screenX, screenY);
 					return true;
-				} else if(this.tap.checkTapClick(screenX, screenY)) {
+				} else if(this.tap.checkTapClick(screenX, screenY) && this.fillState < MAX_FILL) {
 					this.tap.setWaterRunning(true);
 				}
 			} else {
