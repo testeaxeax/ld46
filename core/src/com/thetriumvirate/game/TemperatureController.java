@@ -2,6 +2,7 @@ package com.thetriumvirate.game;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -10,6 +11,8 @@ public class TemperatureController extends InputAdapter {
 
 	private static final String RES_SWITCH_ON = "graphics/switch_on.png";
 	private static final String RES_SWITCH_OFF = "graphics/switch_off.png";
+	// Sound cannot be longer than a few seconds
+	private static final String RES_SWITCH_SOUND = "audio/switch.wav";
 	
 	private static final int MIN_TEMP = 0;
 	private static final int MAX_TEMP = 100;
@@ -26,6 +29,7 @@ public class TemperatureController extends InputAdapter {
 	
 	// Resources
 	private final Texture switch_on_texture, switch_off_texture;
+	private final Sound switchSound;
 	
 	private enum STATE {OFF, ON};
 	
@@ -44,16 +48,19 @@ public class TemperatureController extends InputAdapter {
 		// Initialize resources
 		switch_on_texture = game.assetmanager.get(RES_SWITCH_ON, Texture.class);
 		switch_off_texture = game.assetmanager.get(RES_SWITCH_OFF, Texture.class);
+		switchSound = game.assetmanager.get(RES_SWITCH_SOUND, Sound.class);
 	}
 	
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_SWITCH_ON, Texture.class);
 		game.assetmanager.load(RES_SWITCH_OFF, Texture.class);
+		game.assetmanager.load(RES_SWITCH_SOUND, Sound.class);
 	}
 	
 	public static void dispose(Main game) {
 		game.assetmanager.unload(RES_SWITCH_OFF);
 		game.assetmanager.unload(RES_SWITCH_ON);
+		game.assetmanager.unload(RES_SWITCH_SOUND);
 	}
 	
 	public void update(float delta) {
@@ -102,6 +109,7 @@ public class TemperatureController extends InputAdapter {
 	public void toggleState() {
 		if(state == STATE.ON) {state = STATE.OFF;}
 		else {state = STATE.ON;}
+		switchSound.play();
 	}
 	
 	public int getCurrentTemp() {

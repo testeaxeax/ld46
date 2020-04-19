@@ -1,6 +1,7 @@
 package com.thetriumvirate.game;
 
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,6 +11,9 @@ public class Tap extends InputAdapter {
 	private static final String RES_TAP = "graphics/tap.png";
 	//private static final String RES_TAPRUNNING = "graphics/taprunning.png";
 	private static final String RES_PLANK = "graphics/tapplank.png";
+	// Sound cannot be longer than a few seconds
+	private static final String RES_TAP_OPENING_SOUND = "audio/tap-opening.wav";
+	private static final String RES_TAP_WATER_RUNNING_SOUND = "audio/tap-running.wav";
 
 	private static final int PLANK_WIDTH = 200;
 	private static final int PLANK_HEIGHT = 60;
@@ -23,6 +27,7 @@ public class Tap extends InputAdapter {
 	private TextureRegion[] texReg_tap;
 	//private final Texture tex_taprunning;
 	private final Texture tex_plank;
+	private final Sound tapOpeningSound, tapWaterRunningSound;
 
 	private int pos_x, pos_y;
 	private boolean waterRunning;
@@ -41,6 +46,8 @@ public class Tap extends InputAdapter {
 		//this.tex_taprunning = this.game.assetmanager.get(RES_TAPRUNNING, Texture.class);
 
 		this.tex_plank = this.game.assetmanager.get(RES_PLANK, Texture.class);
+		tapOpeningSound = game.assetmanager.get(RES_TAP_OPENING_SOUND, Sound.class);
+		tapWaterRunningSound = game.assetmanager.get(RES_TAP_WATER_RUNNING_SOUND, Sound.class);
 	}
 
 	public void render(SpriteBatch sb) {
@@ -56,6 +63,14 @@ public class Tap extends InputAdapter {
 	}
 
 	public void setWaterRunning(boolean running) {
+		if(!waterRunning && running) {
+			tapOpeningSound.play();
+			tapWaterRunningSound.loop();
+		}
+		else if(waterRunning && !running) {
+			tapOpeningSound.play();
+			tapWaterRunningSound.stop();
+		}
 		this.waterRunning = running;
 	}
 
@@ -81,11 +96,15 @@ public class Tap extends InputAdapter {
 		game.assetmanager.load(RES_TAP, Texture.class);
 		//game.assetmanager.load(RES_TAPRUNNING, Texture.class);
 		game.assetmanager.load(RES_PLANK, Texture.class);
+		game.assetmanager.load(RES_TAP_OPENING_SOUND, Sound.class);
+		game.assetmanager.load(RES_TAP_WATER_RUNNING_SOUND, Sound.class);
 	}
 
 	public static void dispose(Main game) {
 		game.assetmanager.unload(RES_TAP);
 		game.assetmanager.unload(RES_PLANK);
+		game.assetmanager.unload(RES_TAP_OPENING_SOUND);
+		game.assetmanager.unload(RES_TAP_WATER_RUNNING_SOUND);
 		//game.assetmanager.unload(RES_TAPRUNNING);
 	}
 
