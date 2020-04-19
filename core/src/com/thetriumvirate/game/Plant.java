@@ -65,8 +65,6 @@ public class Plant {
 	
 	private Rectangle boundingBox;
 	
-	private final TextureAtlas splashAtlas; //<-load some atlas with your particle assets in
-	private static final String RES_ATLAS_SPLASH = "particleeffects/watersplash/splashparticle.atlas";
 	private final ParticleEffect splasheffect;
 	private static final String RES_PEFFECT_SPLASH = "particleeffects/watersplash/watersplash.p";
 	
@@ -84,13 +82,9 @@ public class Plant {
 		plantpot_texture = game.assetmanager.syncGet(RES_PLANTPOT, Texture.class);
 		plantsprites_texture = game.assetmanager.syncGet(RES_PLANTSPRITES, Texture.class);
 		
-		this.splashAtlas = new TextureAtlas(Gdx.files.internal(RES_ATLAS_SPLASH));
-		
 		this.splasheffect = new ParticleEffect();
 		this.splasheffect.loadEmitters(Gdx.files.internal(RES_PEFFECT_SPLASH));
 		this.splasheffect.loadEmitterImages(Gdx.files.internal("particleeffects/watersplash/"));
-		//this.splasheffect.loadEmitterImages(this.splashAtlas);
-		//this.splasheffect.scaleEffect(0.3f, 0.5f);
 		this.splasheffect.setPosition(plant_pos.x + SPRITEWIDTH / 2, plant_pos.y);
 		
 		initPlantTextures();
@@ -106,12 +100,10 @@ public class Plant {
 		
 		this.boundingBox = new Rectangle(pot_pos.x, pot_pos.y, POT_WIDTH, POT_HEIGHT + SPRITEHEIGHT);
 		
-		this.splashAtlas = new TextureAtlas(Gdx.files.internal(RES_ATLAS_SPLASH));
-		
 		this.splasheffect = new ParticleEffect();
-		this.splasheffect.load(Gdx.files.internal(RES_PEFFECT_SPLASH), this.splashAtlas);
-		this.splasheffect.scaleEffect(0.2f, 0.5f);
-		this.splasheffect.setPosition(plant_pos.x, plant_pos.y);
+		this.splasheffect.loadEmitters(Gdx.files.internal(RES_PEFFECT_SPLASH));
+		this.splasheffect.loadEmitterImages(Gdx.files.internal("particleeffects/watersplash/"));
+		this.splasheffect.setPosition(plant_pos.x + SPRITEWIDTH / 2, plant_pos.y);
 		
 		this.decayStage = decayStage;
 		this.growthStage = growthStage;
