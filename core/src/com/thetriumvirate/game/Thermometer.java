@@ -10,16 +10,16 @@ public class Thermometer {
 	private static final String RES_THERMOMETER = "graphics/thermometer.png";
 	private static final String RES_MERCURY = "graphics/mercury.png";
 	
-	private static final int WIDTH = 96;
-	private static final int HEIGHT = 256;
-	private static final int MERCURY_WIDTH = 8;//width of the mercurytube in px
-	private static final int MAX_MERCURY_HEIGHT = 40;//max height of mercury in the tube in px/4
+	private static final float WIDTH = (float)Main.WINDOW_WIDTH/(1024f/96f);
+	private static final float HEIGHT = (float)Main.WINDOW_HEIGHT/(800f/256f);
+	private static final int MERCURY_WIDTH = (int) (8f * (float)Main.WINDOW_WIDTH / 1024f);//width of the mercurytube in px
+	private static final int MAX_MERCURY_HEIGHT = (int) (160f * (float)Main.WINDOW_HEIGHT / 800f);//max height of mercury in the tube in px/4
 	
 	private final Texture thermometer_texture, mercury_texture;
 	private float currentTemp = 0;
 
 	private final Vector2 POS;
-	private final Vector2 MERCURY_OFFSET = new Vector2(15 *4, 17 *4);
+	private final Vector2 MERCURY_OFFSET = new Vector2((float)(15 *4) * (float)Main.WINDOW_WIDTH / 1024f, (float)(17 *4) * (float)Main.WINDOW_HEIGHT / 800f);
 	
 	private final Main game;
 	
@@ -40,7 +40,7 @@ public class Thermometer {
 		sb.draw(thermometer_texture, this.POS.x, this.POS.y, this.WIDTH, this.HEIGHT);
 		
 		//display temperature by drawing the mercury with fixed width of 8 and a hight corresponding to the current temperature
-		sb.draw(this.mercury_texture, this.POS.x + this.MERCURY_OFFSET.x, this.POS.y + this.MERCURY_OFFSET.y, this.MERCURY_WIDTH, 4 *(currentTemp * ((float)this.MAX_MERCURY_HEIGHT/(float)TemperatureController.MAX_TEMP)));
+		sb.draw(this.mercury_texture, this.POS.x + this.MERCURY_OFFSET.x, this.POS.y + this.MERCURY_OFFSET.y, this.MERCURY_WIDTH, (currentTemp * ((float)this.MAX_MERCURY_HEIGHT/(float)TemperatureController.MAX_TEMP)));
 	}
 	
 	public static void prefetch(Main game) {
