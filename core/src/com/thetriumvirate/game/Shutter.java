@@ -131,7 +131,7 @@ public class Shutter extends InputAdapter {
 	
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if(button != Buttons.LEFT) {
+		if(button != Buttons.LEFT || gameScreen.getMouseInUse()) {
 			return false;
 		}
 		

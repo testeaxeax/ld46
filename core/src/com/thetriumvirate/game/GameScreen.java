@@ -38,12 +38,15 @@ public final class GameScreen implements Screen {
 	private final int difficulty;
 
 	private final List<Plant> plants;
+	
+	private boolean mouseInUse;
 
 	
 	public GameScreen(Main game, int difficulty) {
 		// Initialize essentials
 		this.game = game;
 		this.difficulty = difficulty;
+		mouseInUse = false;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
 		cam.update();
@@ -223,5 +226,13 @@ public final class GameScreen implements Screen {
 	
 	public Main getGame() {
 		return this.game;
+	}
+	
+	public boolean getMouseInUse() {
+		return mouseInUse;
+	}
+	
+	public void setMouseInUse(boolean mouseInUse) {
+		this.mouseInUse = mouseInUse;
 	}
 }
