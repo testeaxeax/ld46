@@ -35,6 +35,10 @@ public class Plant {
 	
 	private static final int MAX_DECAY = MAX_WATERLEVEL;
 	
+	// The min and max temp for the plant to grow normally
+	private static final int TEMP_MAX = 65;
+	private static final int TEMP_MIN = 30;
+	
 	private static final int GROWTHSTAGES = 8;
 	private static final int DECAYSTAGES = 4;
 	private static final int SPRITEWIDTH = 64;
@@ -113,15 +117,31 @@ public class Plant {
 		initPlantTextures();
 	}
 	
-	public void update(float delta) {
-		if(growing)growth += delta * GROWTH_PER_SEC;
+	public void update(float delta, float shutteralpha, int currentTemp) {
+		// check the Temp and react to it; if it's...
+		// too high: speed up decay process and remove part of the water
+		// too low:  stop growth process
+		if(currentTemp > TEMP_MAX) {
+			decay += 150;
+			
+			this.waterlevel *= 0.7;
+		} else if(currentTemp < TEMP_MIN) {
+			this.growing = false;
+		}
+		
+		// the darker it is, the slower plants grow		
+		if(growing)growth += delta * GROWTH_PER_SEC * (1.0f - shutteralpha);
 		
 		waterlevel -= waterlossPerSec * delta;
+		
+		
 		if(waterlevel <= MIN_WATERLEVEL)waterlevel = MIN_WATERLEVEL;
 		
-		decay = MAX_DECAY - waterlevel;
+		// let the plants decay faster if there's not enough light available
+		decay = MAX_DECAY - waterlevel - 2 * shutteralpha * waterlevel;
 		
-		if(waterlevel <= SUFFICIENT_WATERLEVEL) {
+		// stop growth completely if its too dark
+		if(waterlevel <= SUFFICIENT_WATERLEVEL || shutteralpha > 0.85f) {
 			growing = false;
 		}else {
 			growing = true;
