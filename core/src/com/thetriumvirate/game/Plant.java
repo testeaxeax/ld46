@@ -15,7 +15,7 @@ public class Plant {
 	private static final String RES_PLANTPOT = "graphics/pot_test.png";
 	
 	//Be aware to adjust SPRITEWIDTH and SPRITEHEIGHT after changing the source
-	private static final String RES_PLANTSPRITES = "graphics/plant_test.png";
+	private static final String RES_PLANTSPRITES = "graphics/plant.png";
 	
 	
 	private static final int POT_POS_Y = 100;
@@ -40,7 +40,7 @@ public class Plant {
 	private static final int TEMP_MIN = 30;
 	
 	private static final int GROWTHSTAGES = 8;
-	private static final int DECAYSTAGES = 4;
+	private static final int DECAYSTAGES = 5;
 	private static final int SPRITEWIDTH = 64;
 	private static final int SPRITEHEIGHT = 128;
 	
@@ -126,6 +126,7 @@ public class Plant {
 			
 			this.waterlevel -= this.waterlevel * 0.25 * delta;
 		} else if(currentTemp < TEMP_MIN) {
+			//debug, uncomment thereafter
 			this.growing = false;
 		}
 		
