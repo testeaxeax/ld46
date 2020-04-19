@@ -103,4 +103,8 @@ public class TemperatureController extends InputAdapter {
 		if(state == STATE.ON) {state = STATE.OFF;}
 		else {state = STATE.ON;}
 	}
+	
+	public int getCurrentTemp() {
+		return currentTemp;
+	}
 }

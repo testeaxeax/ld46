@@ -135,16 +135,16 @@ public final class GameScreen implements Screen {
 		}
 		
 
-		// last thing to be updated should be the plants
-		for(Plant p : this.plants)
-			p.update(delta);
-
-
 		float alpha = 0;
 		for(Shutter shutter : shutters) {
 			alpha += shutter.getBrightnessOverlayAlpha();
 		}
 		alpha /= shutters.size();
+		
+		// last thing to be updated should be the plants
+		for(Plant p : this.plants)
+			p.update(delta, alpha, this.temperatureController.getCurrentTemp());
+
 		brightnessOverlayPixmap.setColor(0f, 0f, 0f, alpha);
 		brightnessOverlayPixmap.fill();
 
