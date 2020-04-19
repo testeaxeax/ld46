@@ -1,9 +1,11 @@
 package com.thetriumvirate.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -40,6 +42,12 @@ public class WateringCan extends InputAdapter{
 	private Rectangle canHead;
 	private boolean hasWateredThisTick = false;
 	
+	private final ParticleEffect wateringEffect;
+	private static final String RES_PEFFECT = "particleeffects/watersplash/effectcan.p";
+	private static final String RES_PEFFECT_FILES = "particleeffects/watersplash/";
+	private static final int EFFECT_OFFSET_X = 8;
+	private static final int EFFECT_OFFSET_Y = 95;
+	
 	public WateringCan(final GameScreen gameScreen, final Tap myTap) {
 		this.game = gameScreen;
 		this.tap = myTap;
@@ -55,8 +63,13 @@ public class WateringCan extends InputAdapter{
 		
 		this.canHead = new Rectangle(this.pos_x, this.pos_y + HEAD_OFFSET_Y, HEAD_SIZE, HEAD_SIZE);
 		
-		this.tex_can = this.game.getGame().assetmanager.syncGet(RES_CAN, Texture.class);
-		this.tex_can_standing = this.game.getGame().assetmanager.syncGet(RES_CAN_STANDING, Texture.class);
+		this.wateringEffect = new ParticleEffect();
+		this.wateringEffect.load(Gdx.files.internal(RES_PEFFECT), Gdx.files.internal(RES_PEFFECT_FILES));
+		this.wateringEffect.setPosition(this.pos_x + EFFECT_OFFSET_X, this.pos_y + EFFECT_OFFSET_Y);
+		this.wateringEffect.setDuration(500);
+		
+		this.tex_can = this.game.getGame().assetmanager.get(RES_CAN, Texture.class);
+		this.tex_can_standing = this.game.getGame().assetmanager.get(RES_CAN_STANDING, Texture.class);
 		
 		this.tex_can_empty = this.game.getGame().assetmanager.get(RES_CAN_EMPTY, Texture.class);
 		this.tex_can_fillstates = new Texture[RES_CAN_FILLSTATES.length];
@@ -67,6 +80,11 @@ public class WateringCan extends InputAdapter{
 	
 	public void update(float delta) {
 		this.canHead.setPosition(this.pos_x, this.pos_y + HEAD_OFFSET_Y);
+		this.wateringEffect.setPosition(this.pos_x + EFFECT_OFFSET_X, this.pos_y + EFFECT_OFFSET_Y);
+//		this.wateringEffectFadeOut.setPosition(this.pos_x, this.pos_y + EFFECT_OFFSET_Y);
+		
+		if(this.wateringPlants && this.wateringEffect.isComplete())
+			this.wateringEffect.start();
 		
 		if(this.tap.isWaterRunning() && !this.isSelected()) {
 			this.fillState += REFILL_SPEED * delta;
@@ -114,7 +132,14 @@ public class WateringCan extends InputAdapter{
 				return true;
 			}
 		}
-		
+
+		if(this.wateringPlants) {
+			
+			this.wateringEffect.getEmitters().first().setContinuous(false);
+			
+//			this.wateringEffectFadeOut.reset();
+//			this.wateringEffectFadeOut.start();
+		}
 		this.wateringPlants = false;
 		
 		return false;
@@ -139,8 +164,14 @@ public class WateringCan extends InputAdapter{
 				
 					return true;
 				} else {
-					if(this.fillState > 0.0f)
+					if(this.fillState > 0.0f) {
 						this.wateringPlants = true;
+
+						this.wateringEffect.reset();
+						this.wateringEffect.setDuration(500);
+						this.wateringEffect.getEmitters().first().setContinuous(true);
+						this.wateringEffect.start();
+					}
 				}
 			}
 		}
@@ -148,7 +179,7 @@ public class WateringCan extends InputAdapter{
 		return false;
 	}
 	
-	public void render(SpriteBatch sb) {
+	public void render(SpriteBatch sb, float delta) {
 		// TODO: add sprinkling animation
 		
 //		sb.begin();
@@ -175,23 +206,27 @@ public class WateringCan extends InputAdapter{
 				
 				
 				sb.draw(this.tex_can_fillstates[selectedTexture], this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
+				
+				//this.wateringEffectFadeOut.draw(sb, delta);
+				//if(this.wateringPlants)
+				this.wateringEffect.draw(sb,  delta);
 			}
 			
 //		}
 //		sb.end();
 		
-		Color c = new Color(sb.getColor());
-		
-		if(this.fillState <= 0.0f)
-			sb.setColor(1.0f, 0.0f, 0.0f, 0.5f);
-		else if(this.hasWateredThisTick)
-			sb.setColor(0.0f, 0.0f, 1.0f, 0.5f);
-		else
-			sb.setColor(0.0f, 0.0f, 0.0f, 0.3f);
-		
-		sb.draw(this.game.tex_debugrect, this.canHead.x, this.canHead.y, this.canHead.width, this.canHead.height);
-		
-		sb.setColor(c);
+//		Color c = new Color(sb.getColor());
+//		
+//		if(this.fillState <= 0.0f)
+//			sb.setColor(1.0f, 0.0f, 0.0f, 0.5f);
+//		else if(this.hasWateredThisTick)
+//			sb.setColor(0.0f, 0.0f, 1.0f, 0.5f);
+//		else
+//			sb.setColor(0.0f, 0.0f, 0.0f, 0.3f);
+//		
+//		sb.draw(this.game.tex_debugrect, this.canHead.x, this.canHead.y, this.canHead.width, this.canHead.height);
+//		
+//		sb.setColor(c);
 		this.hasWateredThisTick = false;
 	}
 
