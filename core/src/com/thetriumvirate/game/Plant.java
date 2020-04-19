@@ -122,9 +122,9 @@ public class Plant {
 		// too high: speed up decay process and remove part of the water
 		// too low:  stop growth process
 		if(currentTemp > TEMP_MAX) {
-			decay += 150;
+			decay += delta * 80;
 			
-			this.waterlevel *= 0.7;
+			this.waterlevel -= this.waterlevel * 0.25 * delta;
 		} else if(currentTemp < TEMP_MIN) {
 			this.growing = false;
 		}
