@@ -39,13 +39,14 @@ public class CustomButton extends InputAdapter{
 		this.pos = pos;
 		this.btn_text = btn_text;
 		
-		initBtnText(btn_text);
-		
 		btn_pressed_texture = game.assetmanager.get(RES_BTN_PRESSED, Texture.class);
 		btn_released_texture = game.assetmanager.get(RES_BTN_RELEASED, Texture.class);
 		
-		width = btn_released_texture.getWidth();
+		//width = btn_released_texture.getWidth();
+		width = 80;
 		height = btn_released_texture.getHeight();
+		// Needs to be called after width and height are set
+		initBtnText(btn_text);
 	}
 	
 	
@@ -55,15 +56,14 @@ public class CustomButton extends InputAdapter{
 		this.pos = pos;
 		this.btn_text = btn_text;
 		
-		initBtnText(btn_text);
-		
 		
 		btn_pressed_texture = tex_pressed;
 		btn_released_texture = tex_released;
 		
 		width = btn_released_texture.getWidth();
 		height = btn_released_texture.getHeight();
-
+		// Needs to be called after width and height are set
+		initBtnText(btn_text);
 	}
 	
 	private void initBtnText(String btn_text) {
@@ -79,9 +79,9 @@ public class CustomButton extends InputAdapter{
 	}
 	
 	public void render(SpriteBatch spritebatch) {
-		spritebatch.draw(this.getTexture(), pos.x, pos.y);
+		spritebatch.draw(this.getTexture(), pos.x, pos.y, width, height);
 		//subtraction of 2px in y-direction when pressed to make a 3D-link effect, to make it a more realistic buttonpress
-		font.draw(spritebatch, layout, pos.x + width - layout.width/2 + (this.pressed ? 1 : 0), pos.y + height/2 + layout.height/2 - (this.pressed ? 2 : 0));
+		font.draw(spritebatch, layout, pos.x + (this.pressed ? 1 : 0), pos.y + height/2 + layout.height/2 - (this.pressed ? 2 : 0));
 	}
 	
 	@Override

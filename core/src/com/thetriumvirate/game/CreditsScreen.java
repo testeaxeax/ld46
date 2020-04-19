@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 
-public final class CreditsScreen extends InputAdapter implements Screen {
+public final class CreditsScreen implements Screen {
 	
 	private static final int CAM_WIDTH = Main.WINDOW_WIDTH;
 	private static final int CAM_HEIGHT = Main.WINDOW_HEIGHT;
@@ -34,12 +34,13 @@ public final class CreditsScreen extends InputAdapter implements Screen {
 	private final Main game;
 	private final OrthographicCamera cam;
 	private final GlyphLayout layout;
+	private final CustomButton returnBtn;
+	private final Vector2 position;
 	
 	// Declare resource variables below
 	// For example: private final Texture testTexture;
 	private final Texture background;
 	private final BitmapFont font;
-	private final Vector2 position;
 	
 	
 	public CreditsScreen(Main game) {
@@ -60,6 +61,8 @@ public final class CreditsScreen extends InputAdapter implements Screen {
 		layout = new GlyphLayout();
 		layout.setText(font, CREDITS, Color.BLACK, Main.WINDOW_WIDTH, Align.center, true);
 		position = new Vector2(0, (Main.WINDOW_HEIGHT / 2) + (layout.height / 2));
+		Vector2 positionReturnBtn = new Vector2(Main.WINDOW_WIDTH / 10, Main.WINDOW_HEIGHT / 10);
+		returnBtn = new CustomButton(game, positionReturnBtn, "Return");
 	}
 	
 	// Load all resources for this screen in prefetch !!!
@@ -82,15 +85,17 @@ public final class CreditsScreen extends InputAdapter implements Screen {
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(this);
+		Gdx.input.setInputProcessor(returnBtn);
 	}
 
 	@Override
 	public void render(float delta) {
+		checkReturnButton();
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.spritebatch.begin();
 		game.spritebatch.draw(background, 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
 		font.draw(game.spritebatch, layout, position.x, position.y);
+		returnBtn.render(game.spritebatch);
 		game.spritebatch.end();
 	}
 	
@@ -114,12 +119,9 @@ public final class CreditsScreen extends InputAdapter implements Screen {
 		
 	}
 	
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if(button == Buttons.LEFT) {
+	private void checkReturnButton() {
+		if(returnBtn.getClicked() == true) {
 			game.screenmanager.pop();
-			return true;
 		}
-		return false;
 	}
 }
