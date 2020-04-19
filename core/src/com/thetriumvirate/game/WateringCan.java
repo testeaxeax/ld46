@@ -280,6 +280,7 @@ public class WateringCan extends InputAdapter{
 	
 	public void select(int screenX, int screenY) {
 		this.selected = true;
+		game.setMouseInUse(true);
 		
 		this.pos_x = screenX - DRAW_WIDTH / 2;
 		this.pos_y = screenY - DRAW_HEIGHT / 2;
@@ -287,6 +288,7 @@ public class WateringCan extends InputAdapter{
 
 	public void unselect() {
 		this.selected = false;
+		game.setMouseInUse(false);
 		
 		this.pos_x = this.tap.getDockX(DRAW_WIDTH);
 		this.pos_y = this.tap.getDockY();
