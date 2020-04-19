@@ -135,7 +135,7 @@ public class Plant {
 		Color before = new Color(spritebatch.getColor());
 		
 		spritebatch.setColor(0.0f, 1.0f, 0.0f, 0.5f);
-		spritebatch.draw(this.gamescreen.tex_debugrect, this.boundingBox.x, this.boundingBox.y, this.boundingBox.width, this.boundingBox.height);
+		//spritebatch.draw(this.gamescreen.tex_debugrect, this.boundingBox.x, this.boundingBox.y, this.boundingBox.width, this.boundingBox.height);
 	
 		spritebatch.setColor(before);
 	}
@@ -209,6 +209,7 @@ public class Plant {
 	//Add an absolute amount of water
 	public void addWater(float waterAmount) {
 		this.waterlevel += waterAmount;
+		if(this.waterlevel >= MAX_WATERLEVEL) waterlevel = MAX_WATERLEVEL;
 	}
 
 
