@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,6 +22,8 @@ public final class MenuScreen implements Screen {
 	// Declare resource paths below
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
 	private static final String RES_BACKGROUND = "graphics/menu-background.png";
+	// This is shared with CreditsScreen
+	public static final String RES_BACKGROUND_MUSIC = "audio/menu-music.mp3";
 	
 	private final Main game;
 	private final OrthographicCamera cam;
@@ -29,6 +33,7 @@ public final class MenuScreen implements Screen {
 	// Declare resource variables below
 	// For example: private final Texture testTexture;
 	private final Texture background;
+	private final Music music;
 	
 	
 	public MenuScreen(Main game) {
@@ -43,6 +48,8 @@ public final class MenuScreen implements Screen {
 		// Initialize resource variables below
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
 		background = game.assetmanager.get(RES_BACKGROUND, Texture.class);
+		music = game.assetmanager.get(RES_BACKGROUND_MUSIC, Music.class);
+		music.setLooping(true);
 		
 		// Do everything else below
 		creditsBtn = new CustomButton(game, new Vector2(0, 0), "Credits", FONT_SIZE);
@@ -77,6 +84,7 @@ public final class MenuScreen implements Screen {
 	// Unload all resources in dispose !!!
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_BACKGROUND, Texture.class);
+		game.assetmanager.load(RES_BACKGROUND_MUSIC, Music.class);
 	}
 	
 	// Unload all resources for this screen
@@ -85,6 +93,7 @@ public final class MenuScreen implements Screen {
 	@Override
 	public void dispose() {
 		game.assetmanager.unload(RES_BACKGROUND);
+		game.assetmanager.unload(RES_BACKGROUND_MUSIC);
 		creditsBtn.dispose();
 		easyBtn.dispose();
 		moderateBtn.dispose();
@@ -97,8 +106,8 @@ public final class MenuScreen implements Screen {
 		easyBtn.reset();
 		moderateBtn.reset();
 		difficultBtn.reset();
-		
 		Gdx.input.setInputProcessor(this.multiplexer);
+		music.play();
 	}
 
 	@Override
@@ -136,12 +145,16 @@ public final class MenuScreen implements Screen {
 	
 	private void checkButtons() {
 		if(creditsBtn.getClicked()) {
+			// Do not stop the music for CreditsScreen
 			game.screenmanager.push(new CreditsScreen(game));
 		} else if(easyBtn.getClicked()) {
+			music.stop();
 			game.screenmanager.push(new GameScreen(game, 0));
 		} else if(moderateBtn.getClicked()) {
+			music.stop();
 			game.screenmanager.push(new GameScreen(game, 1));
 		} else if(difficultBtn.getClicked()) {
+			music.stop();
 			game.screenmanager.push(new GameScreen(game, 2));
 		}
 	}

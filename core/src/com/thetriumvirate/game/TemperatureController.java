@@ -2,6 +2,7 @@ package com.thetriumvirate.game;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -14,6 +15,7 @@ public class TemperatureController extends InputAdapter {
 	//private static final String RES_SWITCH_OFF = "graphics/switch_off.png";
 	private static final String RES_KNOB = "graphics/tempBtn.png";
 	private static final String RES_TEMPDISPLAY = "graphics/tempMonitor.png";
+	private static final String RES_SWITCH_SOUND = "audio/switch.wav";
 	
 	private static final int MIN_TEMP = 0;
 	private static final int MAX_TEMP = 100;
@@ -37,6 +39,8 @@ public class TemperatureController extends InputAdapter {
 	private TextureRegion[] knob_texReg;
 	private final int SPRITE_WIDTH = 32;
 	private final int SPRITE_HEIGHT = 32;
+  
+	private final Sound switchSound;
 	
 	private enum STATE {OFF, ON};
 	
@@ -57,6 +61,7 @@ public class TemperatureController extends InputAdapter {
 		//switch_off_texture = game.assetmanager.get(RES_SWITCH_OFF, Texture.class);
 		knob_texture = game.assetmanager.get(RES_KNOB, Texture.class);
 		tempDisplay_texture = game.assetmanager.get(RES_TEMPDISPLAY, Texture.class);
+    switchSound = game.assetmanager.get(RES_SWITCH_SOUND, Sound.class);
 		
 		knob_texReg = new TextureRegion[2];
 		knob_texReg[0] = new TextureRegion(knob_texture, 0, 0, SPRITE_WIDTH, SPRITE_HEIGHT);
@@ -68,6 +73,7 @@ public class TemperatureController extends InputAdapter {
 		//game.assetmanager.load(RES_SWITCH_OFF, Texture.class);
 		game.assetmanager.load(RES_KNOB, Texture.class);
 		game.assetmanager.load(RES_TEMPDISPLAY, Texture.class);
+		game.assetmanager.load(RES_SWITCH_SOUND, Sound.class);
 	}
 	
 	public static void dispose(Main game) {
@@ -75,7 +81,10 @@ public class TemperatureController extends InputAdapter {
 		//game.assetmanager.unload(RES_SWITCH_ON);
 		game.assetmanager.unload(RES_KNOB);
 		game.assetmanager.unload(RES_TEMPDISPLAY);
+    game.assetmanager.unload(RES_SWITCH_SOUND);
 	}
+	
+	
 	
 	public void update(float delta) {
 		currentTemp -= delta * tempLossPerSecond;
@@ -125,6 +134,7 @@ public class TemperatureController extends InputAdapter {
 	public void toggleState() {
 		if(state == STATE.ON) {state = STATE.OFF;}
 		else {state = STATE.ON;}
+		switchSound.play();
 	}
 	
 	public int getCurrentTemp() {
