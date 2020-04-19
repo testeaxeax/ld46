@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -21,8 +22,11 @@ public final class GameScreen implements Screen {
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
 
 	private static final String RES_DEBUG_RECT = "graphics/debugrec.png";
+	private static final String RES_BACKGROUND_MUSIC = "audio/game-background-music.mp3";
+	
 	public final Texture tex_debugrect;
 	public final Pixmap brightnessOverlayPixmap;
+	public final Music backgroundMusic;
 	
 	private final Main game;
 	private final OrthographicCamera cam;
@@ -91,6 +95,8 @@ public final class GameScreen implements Screen {
 		
 		// Do everything else below
 		brightnessOverlayPixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+		backgroundMusic = game.assetmanager.get(RES_BACKGROUND_MUSIC, Music.class);
+		backgroundMusic.setLooping(true);
 	}
 	
 	// Load all resources for this screen in prefetch !!!
@@ -99,6 +105,7 @@ public final class GameScreen implements Screen {
 	// Unload all resources in dispose !!!
 	public static void prefetch(Main game) {
 		game.assetmanager.load(GameScreen.RES_DEBUG_RECT, Texture.class);
+		game.assetmanager.load(RES_BACKGROUND_MUSIC, Music.class);
 		
 		Plant.prefetch(game);
 		Shutter.prefetch(game);
@@ -114,6 +121,7 @@ public final class GameScreen implements Screen {
 	@Override
 	public void dispose() {
 		game.assetmanager.unload(RES_DEBUG_RECT);
+		game.assetmanager.unload(RES_BACKGROUND_MUSIC);
 		
 		WateringCan.dispose(game);
 		Tap.dispose(game);
@@ -124,7 +132,7 @@ public final class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		
+		backgroundMusic.play();
 	}
 	
 	public void update(float delta) {
@@ -217,7 +225,7 @@ public final class GameScreen implements Screen {
 
 	@Override
 	public void hide() {
-		
+		backgroundMusic.stop();
 	}
 	
 	public List<Plant> getPlants(){

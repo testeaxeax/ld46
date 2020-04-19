@@ -2,6 +2,7 @@ package com.thetriumvirate.game;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -15,10 +16,13 @@ public class CustomButton extends InputAdapter{
 	
 	private static final String RES_BTN_RELEASED = "graphics/btn_released.png";
 	private static final String RES_BTN_PRESSED = "graphics/btn_pressed.png";
+	// Sound cannot be longer than a few seconds
+	private static final String RES_BTN_CLICK_SOUND = "audio/button-click.wav";
 	
 	private static final int DEFAULT_BUTTON_FONTSIZE = 10;
 	
 	private static boolean class_assets_disposed = false;
+	private static int existing_buttons = 0;
 	
 	
 	private Main game;
@@ -26,6 +30,7 @@ public class CustomButton extends InputAdapter{
 	private Vector2 pos;
 	private int width, height;
 	private Texture btn_pressed_texture, btn_released_texture;
+	private Sound btnClick;
 	
 	private BitmapFont font;
 	private int fontSize;
@@ -45,6 +50,7 @@ public class CustomButton extends InputAdapter{
 		
 		btn_pressed_texture = game.assetmanager.get(RES_BTN_PRESSED, Texture.class);
 		btn_released_texture = game.assetmanager.get(RES_BTN_RELEASED, Texture.class);
+		btnClick = game.assetmanager.get(RES_BTN_CLICK_SOUND, Sound.class);
 		
 		// Keep hardcoded width for testing without proper texture
 		//width = btn_released_texture.getWidth();
@@ -64,6 +70,7 @@ public class CustomButton extends InputAdapter{
 		
 		btn_pressed_texture = tex_pressed;
 		btn_released_texture = tex_released;
+		btnClick = game.assetmanager.get(RES_BTN_CLICK_SOUND, Sound.class);
 		
 		width = btn_released_texture.getWidth();
 		height = btn_released_texture.getHeight();
@@ -113,6 +120,7 @@ public class CustomButton extends InputAdapter{
 		
 		if(checkClick(screenX, screenY)) {
 			this.pressed = true;
+			btnClick.play();
 			return true;
 		}
 		
@@ -127,13 +135,15 @@ public class CustomButton extends InputAdapter{
 		game.assetmanager.load(RES_BTN_PRESSED, Texture.class);
 		game.assetmanager.load(RES_BTN_RELEASED, Texture.class);
 		game.fontloader.load(Main.RES_DEFAULT_FONT, DEFAULT_BUTTON_FONTSIZE);
+		game.assetmanager.load(RES_BTN_CLICK_SOUND, Sound.class);
 	}
 	
 	// This dispose can't be static
 	public void dispose() {
-		if(!class_assets_disposed) {
+		if(!class_assets_disposed && existing_buttons == 0) {
 			game.assetmanager.unload(RES_BTN_PRESSED);
 			game.assetmanager.unload(RES_BTN_RELEASED);
+			game.assetmanager.unload(RES_BTN_CLICK_SOUND);
 			class_assets_disposed = true;
 		}
 		game.fontloader.unload(Main.RES_DEFAULT_FONT, fontSize);

@@ -3,6 +3,7 @@ package com.thetriumvirate.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -13,6 +14,10 @@ import com.badlogic.gdx.math.Rectangle;
 public class WateringCan extends InputAdapter{
 	// Resource paths
 	private static final String RES_CAN = "graphics/wateringcan.png";
+	// Sound cannot be longer than a few seconds
+	private static final String RES_TAKE_SOUND = "sound/can-take.wav";
+	private static final String RES_DROP_SOUND = "sound/can-drop.wav";
+	private static final String RES_WATER_SOUND = "sound/can-watering.wav";
 	//private static final String RES_CAN_STANDING = "graphics/wateringcanstanding.png";
 	//private static final String RES_CAN_EMPTY = "graphics/canempty.png";
 	//private static final String RES_CAN_FILLSTATES[] = {"graphics/canstate1.png", "graphics/canstate2.png", "graphics/canstate3.png", "graphics/canstate4.png", "graphics/canstate5.png"};
@@ -26,6 +31,7 @@ public class WateringCan extends InputAdapter{
 	
 	private final GameScreen game;
 	private final Texture tex_can/*, tex_can_standing, tex_can_empty, tex_can_fillstates[]*/;
+	private final Sound takeSound, dropSound, waterSound;
 	private final Tap tap;
 	private TextureRegion[][] texReg_can;
 	
@@ -76,6 +82,9 @@ public class WateringCan extends InputAdapter{
 		
 		this.tex_can = this.game.getGame().assetmanager.get(RES_CAN, Texture.class);
 		this.texReg_can = TextureRegion.split(tex_can, SPRITE_WIDTH, SPRITE_HEIGHT);
+		takeSound = game.getGame().assetmanager.get(RES_TAKE_SOUND, Sound.class);
+		dropSound = game.getGame().assetmanager.get(RES_DROP_SOUND, Sound.class);
+		waterSound = game.getGame().assetmanager.get(RES_WATER_SOUND, Sound.class);
 		//this.tex_can_standing = this.game.getGame().assetmanager.get(RES_CAN_STANDING, Texture.class);
 		
 		//this.tex_can_empty = this.game.getGame().assetmanager.get(RES_CAN_EMPTY, Texture.class);
@@ -107,6 +116,7 @@ public class WateringCan extends InputAdapter{
 			if(this.fillState < 0.0f) {
 				this.fillState = 0.0f;
 				this.wateringPlants = false;
+				waterSound.stop();
 				this.wateringEffect.getEmitters().first().setContinuous(false);
 			} else {
 				// Check which plants are currently being watered(?)
@@ -146,6 +156,7 @@ public class WateringCan extends InputAdapter{
 			
 
 		this.wateringPlants = false;
+		waterSound.stop();
 		
 		return false;
 	}
@@ -173,6 +184,7 @@ public class WateringCan extends InputAdapter{
 					
 					if(this.fillState > 0.0f) {
 						this.wateringPlants = true;
+						waterSound.loop();
 
 						this.wateringEffect.reset();
 						this.wateringEffect.setDuration(500);
@@ -290,6 +302,7 @@ public class WateringCan extends InputAdapter{
 		
 		this.pos_x = screenX - DRAW_WIDTH / 2;
 		this.pos_y = screenY - DRAW_HEIGHT / 2;
+		takeSound.play();
 	}
 
 	public void unselect() {
@@ -298,6 +311,7 @@ public class WateringCan extends InputAdapter{
 		
 		this.pos_x = this.tap.getDockX(DRAW_WIDTH);
 		this.pos_y = this.tap.getDockY();
+		dropSound.play();
 	}
 	
 	public boolean isSelected() {
