@@ -3,6 +3,7 @@ package com.thetriumvirate.game;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -14,6 +15,8 @@ public class TemperatureController extends InputAdapter {
 
 	private static final String RES_SWITCH_ON = "graphics/switch_on.png";
 	private static final String RES_SWITCH_OFF = "graphics/switch_off.png";
+	// Sound cannot be longer than a few seconds
+	private static final String RES_SWITCH_SOUND = "audio/switch.wav";
 	
 	public static final int MIN_TEMP = 0;
 	public static final int MAX_TEMP = 100;
@@ -30,12 +33,15 @@ public class TemperatureController extends InputAdapter {
 	
 	// Resources
 	private final Texture switch_on_texture, switch_off_texture;
+
 	private final GlyphLayout layout;
 	private final BitmapFont font;
 	private static final int FONT_SIZE = 20;
 	private static final int TEXT_OFFSET_X = 50;
 	private static final int TEXT_OFFSET_Y = 20;
 
+	private final Sound switchSound;
+	
 	private enum STATE {OFF, ON};
 	
 	private float currentTemp;
@@ -55,10 +61,12 @@ public class TemperatureController extends InputAdapter {
 		// Initialize resources
 		switch_on_texture = game.assetmanager.get(RES_SWITCH_ON, Texture.class);
 		switch_off_texture = game.assetmanager.get(RES_SWITCH_OFF, Texture.class);
-		
+    
 		this.layout = new GlyphLayout();
 		this.font = game.fontloader.get(Main.RES_DEFAULT_FONT, FONT_SIZE, Color.BLACK);
 		this.layout.setText(this.font, "" + (int) this.currentTemp);
+
+		switchSound = game.assetmanager.get(RES_SWITCH_SOUND, Sound.class);
 	}
 	
 	public static void prefetch(Main game) {
@@ -66,11 +74,14 @@ public class TemperatureController extends InputAdapter {
 		game.assetmanager.load(RES_SWITCH_OFF, Texture.class);
 
 		game.fontloader.load(Main.RES_DEFAULT_FONT, FONT_SIZE, Color.BLACK, true);
+    
+		game.assetmanager.load(RES_SWITCH_SOUND, Sound.class);
 	}
 	
 	public static void dispose(Main game) {
 		game.assetmanager.unload(RES_SWITCH_OFF);
 		game.assetmanager.unload(RES_SWITCH_ON);
+		game.assetmanager.unload(RES_SWITCH_SOUND);
 	}
 	
 	public void update(float delta) {
@@ -125,6 +136,7 @@ public class TemperatureController extends InputAdapter {
 	public void toggleState() {
 		if(state == STATE.ON) {state = STATE.OFF;}
 		else {state = STATE.ON;}
+		switchSound.play();
 	}
 	
 	public float getCurrentTemp() {

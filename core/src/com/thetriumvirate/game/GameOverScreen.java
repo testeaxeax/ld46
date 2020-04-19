@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -16,12 +17,14 @@ public final class GameOverScreen implements Screen {
 	
 	// Declare resource paths below
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
+	private static final String RES_GAMEOVER_MUSIC = "audio/gameover.mp3";
 	
 	private final Main game;
 	private final OrthographicCamera cam;
 	
 	// Declare resource variables below
 	// For example: private final Texture testTexture;
+	private final Music gameoverMusic;
 
 	private CustomButton btnMenu;
 	
@@ -40,6 +43,8 @@ public final class GameOverScreen implements Screen {
 		
 		// Initialize resource variables below
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
+		gameoverMusic = game.assetmanager.get(RES_GAMEOVER_MUSIC, Music.class);
+		gameoverMusic.setLooping(true);
 		InputMultiplexer inputmultiplexer = new InputMultiplexer();
 		
 		this.btnMenu = new CustomButton(game, new Vector2(100, 100), "Main Menu", FONT_SIZE);
@@ -58,6 +63,8 @@ public final class GameOverScreen implements Screen {
 	// or			game.fontloader.load(RES_SOMETHING_FONT);
 	// Unload all resources in dispose !!!
 	public static void prefetch(Main game) {
+		game.assetmanager.load(RES_GAMEOVER_MUSIC, Music.class);
+		
 		CustomButton.prefetch(game);
 	}
 	
@@ -66,12 +73,12 @@ public final class GameOverScreen implements Screen {
 	// For fonts: game.fontmanager.unload(RES_SOMETHING_FONT);
 	@Override
 	public void dispose() {
-		
+		game.assetmanager.unload(RES_GAMEOVER_MUSIC);
 	}
 
 	@Override
 	public void show() {
-		
+		gameoverMusic.play();
 	}
 
 	@Override
@@ -102,6 +109,6 @@ public final class GameOverScreen implements Screen {
 
 	@Override
 	public void hide() {
-		
+		gameoverMusic.stop();
 	}
 }

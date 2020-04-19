@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -88,6 +89,7 @@ public final class CreditsScreen implements Screen {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(returnBtn);
+		// music is already being played by MenuScreen
 	}
 
 	@Override
