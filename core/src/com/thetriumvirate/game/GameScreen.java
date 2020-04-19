@@ -24,11 +24,9 @@ public final class GameScreen implements Screen {
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
 
 	private static final String RES_DEBUG_RECT = "graphics/debugrec.png";
-	private static final String RES_BACKGROUND_MUSIC = "audio/game-background-music.mp3";
 	
 	public final Texture tex_debugrect;
 	public final Pixmap brightnessOverlayPixmap;
-	public final Music backgroundMusic;
 	
 	private enum TemperatureOverlayStatus {NONE, COLD, HOT};
 	private TemperatureOverlayStatus temperatureOverlayStatus;
@@ -110,9 +108,6 @@ public final class GameScreen implements Screen {
 		this.tex_temperatureOverlayRegions = TextureRegion.split(this.tex_temperatureOverlay, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT)[0];
 		this.temperatureOverlayStatus = TemperatureOverlayStatus.NONE;
 		this.temperatureOverlayAlpha = 0.0f;
-    
-		backgroundMusic = game.assetmanager.get(RES_BACKGROUND_MUSIC, Music.class);
-		backgroundMusic.setLooping(true);
 	}
 	
 	// Load all resources for this screen in prefetch !!!

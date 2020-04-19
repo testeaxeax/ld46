@@ -23,7 +23,7 @@ public final class MenuScreen implements Screen {
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
 	private static final String RES_BACKGROUND = "graphics/menu-background.png";
 	// This is used in all screens except SplashScreen
-	private static final String RES_BACKGROUND_MUSIC = "audio/menu-music.mp3";
+	private static final String RES_BACKGROUND_MUSIC = "audio/background-music.mp3";
 	
 	private final Main game;
 	private final OrthographicCamera cam;
