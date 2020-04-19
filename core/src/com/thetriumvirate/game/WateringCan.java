@@ -100,6 +100,7 @@ public class WateringCan extends InputAdapter{
 			if(this.fillState < 0.0f) {
 				this.fillState = 0.0f;
 				this.wateringPlants = false;
+				this.wateringEffect.getEmitters().first().setContinuous(false);
 			} else {
 				// Check which plants are currently being watered(?)
 				
