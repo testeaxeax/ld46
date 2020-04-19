@@ -35,7 +35,7 @@ public class TemperatureController extends InputAdapter {
 	private final int tempLossPerSecond, tempIncreasePerSecond;
 	
 	// Resources
-	private final Texture switch_on_texture, switch_off_texture;
+//	private final Texture switch_on_texture, switch_off_texture;
 	private final BitmapFont font;
 	private static final int FONT_SIZE = 20;
 	private static final int TEXT_OFFSET_X = 50;
@@ -73,11 +73,10 @@ public class TemperatureController extends InputAdapter {
 	
 		knob_texture = game.assetmanager.get(RES_KNOB, Texture.class);
 		tempDisplay_texture = game.assetmanager.get(RES_TEMPDISPLAY, Texture.class);
-    switchSound = game.assetmanager.get(RES_SWITCH_SOUND, Sound.class);
 		
 		knob_texReg = new TextureRegion[2];
 		knob_texReg[0] = new TextureRegion(knob_texture, 0, 0, SPRITE_WIDTH, SPRITE_HEIGHT);
-		knob_texReg[1] = new TextureRegion(knob_texture, 0, SPRITE_HEIGHT, SPRITE_WIDT SPRITE_HEIGHT);
+		knob_texReg[1] = new TextureRegion(knob_texture, 0, SPRITE_HEIGHT, SPRITE_WIDTH, SPRITE_HEIGHT);
 	}
 	
 	public static void prefetch(Main game) {
