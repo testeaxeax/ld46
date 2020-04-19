@@ -51,7 +51,7 @@ public class WateringCan extends InputAdapter{
 	private static final String RES_PEFFECT = "particleeffects/watersplash/effectcan.p";
 	private static final String RES_PEFFECT_FILES = "particleeffects/watersplash/";
 	private static final int EFFECT_OFFSET_X = 8;
-	private static final int EFFECT_OFFSET_Y = 95;
+	private static final int EFFECT_OFFSET_Y = 10;
 	
 	public WateringCan(final GameScreen gameScreen, final Tap myTap) {
 		this.game = gameScreen;
