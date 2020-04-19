@@ -139,6 +139,7 @@ public class CustomButton extends InputAdapter{
 	}
 	
 	// This dispose can't be static
+	// TODO This is complete nonsense :D
 	public void dispose() {
 		if(!class_assets_disposed && existing_buttons == 0) {
 			game.assetmanager.unload(RES_BTN_PRESSED);
