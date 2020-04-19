@@ -22,7 +22,7 @@ public class WateringCan extends InputAdapter{
 	private static final int SPRITE_WIDTH = 64;
 	private static final int SPRITE_HEIGHT = 64;
 	
-	private boolean selected, wateringPlants;
+	private boolean selected, wateringPlants, canTilted;
 	
 	private final GameScreen game;
 	private final Texture tex_can/*, tex_can_standing, tex_can_empty, tex_can_fillstates[]*/;
@@ -58,6 +58,7 @@ public class WateringCan extends InputAdapter{
 		this.tap = myTap;
 		
 		this.selected = false;
+		this.canTilted = false;
 		this.wateringPlants = false;
 		
 		// start with full can
@@ -137,13 +138,13 @@ public class WateringCan extends InputAdapter{
 				
 				return true;
 			}
+		} else {
+			this.canTilted = false;
 		}
 
-//		if(this.wateringPlants) {
+		this.wateringEffect.getEmitters().first().setContinuous(false);
 			
-			this.wateringEffect.getEmitters().first().setContinuous(false);
-			
-//		}
+
 		this.wateringPlants = false;
 		
 		return false;
@@ -168,6 +169,8 @@ public class WateringCan extends InputAdapter{
 				
 					return true;
 				} else {
+					this.canTilted = true;
+					
 					if(this.fillState > 0.0f) {
 						this.wateringPlants = true;
 
@@ -272,6 +275,9 @@ public class WateringCan extends InputAdapter{
 				fillStage = i;
 			} 
 		}
+		
+		if(this.canTilted && !this.wateringPlants)
+			return texReg_can[1][texReg_can[1].length - 1];
 		
 		return texReg_can[this.wateringPlants ? 1 : 0]
 						 [fillStage];
