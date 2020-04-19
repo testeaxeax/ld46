@@ -18,13 +18,14 @@ public final class GameOverScreen implements Screen {
 	// Declare resource paths below
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
 	private static final String RES_GAMEOVER_MUSIC = "audio/gameover.mp3";
+	private static final String RES_VICTORY_MUSIC = "audio/victory.mp3";
 	
 	private final Main game;
 	private final OrthographicCamera cam;
 	
 	// Declare resource variables below
 	// For example: private final Texture testTexture;
-	private final Music gameoverMusic;
+	private final Music music;
 
 	private CustomButton btnMenu;
 	
@@ -43,8 +44,7 @@ public final class GameOverScreen implements Screen {
 		
 		// Initialize resource variables below
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
-		gameoverMusic = game.assetmanager.get(RES_GAMEOVER_MUSIC, Music.class);
-		gameoverMusic.setLooping(true);
+		music = game.assetmanager.get(gameWon ? RES_VICTORY_MUSIC : RES_GAMEOVER_MUSIC, Music.class);
 		InputMultiplexer inputmultiplexer = new InputMultiplexer();
 		
 		this.btnMenu = new CustomButton(game, new Vector2(100, 100), "Main Menu", FONT_SIZE);
@@ -64,6 +64,7 @@ public final class GameOverScreen implements Screen {
 	// Unload all resources in dispose !!!
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_GAMEOVER_MUSIC, Music.class);
+		game.assetmanager.load(RES_VICTORY_MUSIC, Music.class);
 		
 		CustomButton.prefetch(game);
 	}
@@ -74,11 +75,12 @@ public final class GameOverScreen implements Screen {
 	@Override
 	public void dispose() {
 		game.assetmanager.unload(RES_GAMEOVER_MUSIC);
+		game.assetmanager.unload(RES_VICTORY_MUSIC);
 	}
 
 	@Override
 	public void show() {
-		gameoverMusic.play();
+		music.play();
 	}
 
 	@Override
@@ -109,6 +111,6 @@ public final class GameOverScreen implements Screen {
 
 	@Override
 	public void hide() {
-		gameoverMusic.stop();
+		music.stop();
 	}
 }

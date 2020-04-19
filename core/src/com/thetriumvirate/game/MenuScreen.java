@@ -22,8 +22,8 @@ public final class MenuScreen implements Screen {
 	// Declare resource paths below
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
 	private static final String RES_BACKGROUND = "graphics/menu-background.png";
-	// This is shared with CreditsScreen
-	public static final String RES_BACKGROUND_MUSIC = "audio/menu-music.mp3";
+	// This is used in all screens except SplashScreen
+	private static final String RES_BACKGROUND_MUSIC = "audio/menu-music.mp3";
 	
 	private final Main game;
 	private final OrthographicCamera cam;
@@ -107,7 +107,9 @@ public final class MenuScreen implements Screen {
 		moderateBtn.reset();
 		difficultBtn.reset();
 		Gdx.input.setInputProcessor(this.multiplexer);
-		music.play();
+		if(!music.isPlaying()) {
+			music.play();
+		}
 	}
 
 	@Override
@@ -145,16 +147,13 @@ public final class MenuScreen implements Screen {
 	
 	private void checkButtons() {
 		if(creditsBtn.getClicked()) {
-			// Do not stop the music for CreditsScreen
+			// Music never stops
 			game.screenmanager.push(new CreditsScreen(game));
 		} else if(easyBtn.getClicked()) {
-			music.stop();
 			game.screenmanager.push(new GameScreen(game, 0));
 		} else if(moderateBtn.getClicked()) {
-			music.stop();
 			game.screenmanager.push(new GameScreen(game, 1));
 		} else if(difficultBtn.getClicked()) {
-			music.stop();
 			game.screenmanager.push(new GameScreen(game, 2));
 		}
 	}
