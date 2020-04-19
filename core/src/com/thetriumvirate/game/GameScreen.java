@@ -6,11 +6,13 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public final class GameScreen implements Screen {
@@ -25,8 +27,16 @@ public final class GameScreen implements Screen {
 	private static final String RES_BACKGROUND_MUSIC = "audio/game-background-music.mp3";
 	
 	public final Texture tex_debugrect;
+	
 	public final Pixmap brightnessOverlayPixmap;
 	public final Music backgroundMusic;
+	
+	private enum TemperatureOverlayStatus {NONE, COLD, HOT};
+	private TemperatureOverlayStatus temperatureOverlayStatus;
+	private float temperatureOverlayAlpha;
+	private static final String RES_TEMPERATUREOVERLAY = "graphics/temperatureoverlay.png";
+	private final Texture tex_temperatureOverlay;
+	private final TextureRegion[] tex_temperatureOverlayRegions;
 	
 	private final Main game;
 	private final OrthographicCamera cam;
@@ -94,7 +104,14 @@ public final class GameScreen implements Screen {
 		this.tex_debugrect = this.game.assetmanager.get(RES_DEBUG_RECT, Texture.class);
 		
 		// Do everything else below
-		brightnessOverlayPixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+
+		this.brightnessOverlayPixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+
+		this.tex_temperatureOverlay = this.game.assetmanager.get(RES_TEMPERATUREOVERLAY, Texture.class);
+		this.tex_temperatureOverlayRegions = TextureRegion.split(this.tex_temperatureOverlay, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT)[0];
+		this.temperatureOverlayStatus = TemperatureOverlayStatus.NONE;
+		this.temperatureOverlayAlpha = 0.0f;
+    
 		backgroundMusic = game.assetmanager.get(RES_BACKGROUND_MUSIC, Music.class);
 		backgroundMusic.setLooping(true);
 	}
@@ -105,6 +122,7 @@ public final class GameScreen implements Screen {
 	// Unload all resources in dispose !!!
 	public static void prefetch(Main game) {
 		game.assetmanager.load(GameScreen.RES_DEBUG_RECT, Texture.class);
+		game.assetmanager.load(GameScreen.RES_TEMPERATUREOVERLAY, Texture.class);
 		game.assetmanager.load(RES_BACKGROUND_MUSIC, Music.class);
 		
 		Plant.prefetch(game);
@@ -121,6 +139,7 @@ public final class GameScreen implements Screen {
 	@Override
 	public void dispose() {
 		game.assetmanager.unload(RES_DEBUG_RECT);
+		game.assetmanager.unload(RES_TEMPERATUREOVERLAY);
 		game.assetmanager.unload(RES_BACKGROUND_MUSIC);
 		
 		WateringCan.dispose(game);
@@ -137,7 +156,31 @@ public final class GameScreen implements Screen {
 	
 	public void update(float delta) {
 		this.wateringCan.update(delta);
+		
 		this.temperatureController.update(delta);
+		
+		if(this.temperatureController.getCurrentTemp() > Plant.TEMP_MAX) {
+			// it's too hot for the plants
+			this.temperatureOverlayStatus = TemperatureOverlayStatus.HOT;
+			
+			float toohotness = (this.temperatureController.getCurrentTemp() - Plant.TEMP_MAX)/ (TemperatureController.MAX_TEMP - Plant.TEMP_MAX);
+			
+			this.temperatureOverlayAlpha = toohotness;
+		} else if(this.temperatureController.getCurrentTemp() < Plant.TEMP_MIN) {
+			// it's too cold for the plants
+			this.temperatureOverlayStatus = TemperatureOverlayStatus.COLD;
+						
+			float toocoldness = (Plant.TEMP_MIN - this.temperatureController.getCurrentTemp()) / Plant.TEMP_MIN;
+			
+			this.temperatureOverlayAlpha = toocoldness;
+		} else {
+			// the plants can grow just fine
+			
+			this.temperatureOverlayStatus = TemperatureOverlayStatus.NONE;
+			this.temperatureOverlayAlpha = 0.0f;
+		}
+		
+		
 		for(Shutter shutter : shutters) {
 			shutter.update(delta);
 		}
@@ -179,6 +222,22 @@ public final class GameScreen implements Screen {
 			p.render(game.spritebatch, delta);
 		
 		this.wateringCan.render(game.spritebatch, delta);
+		
+		// drawing the temperature overlay
+		Color batchColor = game.spritebatch.getColor();
+		
+		Color before = new Color(batchColor);
+		// TODO: check if / 2f is still necessary with good texture
+		batchColor.a = this.temperatureOverlayAlpha / 2f;
+		game.spritebatch.setColor(batchColor);
+		
+		if(this.temperatureOverlayStatus == TemperatureOverlayStatus.HOT)
+			game.spritebatch.draw(this.tex_temperatureOverlayRegions[0], 0, 0);
+		else if(this.temperatureOverlayStatus == TemperatureOverlayStatus.COLD)
+			game.spritebatch.draw(this.tex_temperatureOverlayRegions[1], 0, 0);
+		
+		game.spritebatch.setColor(before);
+		
 		
 		game.spritebatch.draw(new Texture(brightnessOverlayPixmap), 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
 		
