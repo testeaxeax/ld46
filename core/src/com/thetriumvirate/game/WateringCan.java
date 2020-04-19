@@ -7,23 +7,28 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 public class WateringCan extends InputAdapter{
 	// Resource paths
 	private static final String RES_CAN = "graphics/wateringcan.png";
-	private static final String RES_CAN_STANDING = "graphics/wateringcanstanding.png";
-	private static final String RES_CAN_EMPTY = "graphics/canempty.png";
-	private static final String RES_CAN_FILLSTATES[] = {"graphics/canstate1.png", "graphics/canstate2.png", "graphics/canstate3.png", "graphics/canstate4.png", "graphics/canstate5.png"};
+	//private static final String RES_CAN_STANDING = "graphics/wateringcanstanding.png";
+	//private static final String RES_CAN_EMPTY = "graphics/canempty.png";
+	//private static final String RES_CAN_FILLSTATES[] = {"graphics/canstate1.png", "graphics/canstate2.png", "graphics/canstate3.png", "graphics/canstate4.png", "graphics/canstate5.png"};
 
-	private static final int DRAW_WIDTH = 120;
-	private static final int DRAW_HEIGHT = 120;
+	private static final int DRAW_WIDTH = 128;
+	private static final int DRAW_HEIGHT = 128;
+	private static final int SPRITE_WIDTH = 64;
+	private static final int SPRITE_HEIGHT = 64;
 	
 	private boolean selected, wateringPlants;
 	
 	private final GameScreen game;
-	private final Texture tex_can, tex_can_standing, tex_can_empty, tex_can_fillstates[];
+	private final Texture tex_can/*, tex_can_standing, tex_can_empty, tex_can_fillstates[]*/;
 	private final Tap tap;
+	private TextureRegion[][] texReg_can;
+	
 	
 	private int pos_x, pos_y;
 	
@@ -69,13 +74,14 @@ public class WateringCan extends InputAdapter{
 		this.wateringEffect.setDuration(500);
 		
 		this.tex_can = this.game.getGame().assetmanager.get(RES_CAN, Texture.class);
-		this.tex_can_standing = this.game.getGame().assetmanager.get(RES_CAN_STANDING, Texture.class);
+		this.texReg_can = TextureRegion.split(tex_can, SPRITE_WIDTH, SPRITE_HEIGHT);
+		//this.tex_can_standing = this.game.getGame().assetmanager.get(RES_CAN_STANDING, Texture.class);
 		
-		this.tex_can_empty = this.game.getGame().assetmanager.get(RES_CAN_EMPTY, Texture.class);
-		this.tex_can_fillstates = new Texture[RES_CAN_FILLSTATES.length];
+		//this.tex_can_empty = this.game.getGame().assetmanager.get(RES_CAN_EMPTY, Texture.class);
+		//this.tex_can_fillstates = new Texture[RES_CAN_FILLSTATES.length];
 		
-		for(int i = 0; i < RES_CAN_FILLSTATES.length; i++)
-			this.tex_can_fillstates[i] = this.game.getGame().assetmanager.get(RES_CAN_FILLSTATES[i], Texture.class);
+		//for(int i = 0; i < RES_CAN_FILLSTATES.length; i++)
+		//	this.tex_can_fillstates[i] = this.game.getGame().assetmanager.get(RES_CAN_FILLSTATES[i], Texture.class);
 	}
 	
 	public void update(float delta) {
@@ -186,9 +192,13 @@ public class WateringCan extends InputAdapter{
 //		else {
 			//sb.draw(tex_can_standing, this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
 			
-			sb.draw(this.tex_can_empty, this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
+		
+		//TODO: ReDo
+			sb.draw(this.getTextureRegion(), this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
 			
-			if(this.fillState > 0.0f) {
+			
+			//not necessary anymore as the fillStated is now incororated into the Textureregion texReg_can
+			/*if(this.fillState > 0.0f) {
 				float fillPercentage = this.fillState / MAX_FILL;
 				
 				int selectedTexture = 0;
@@ -205,7 +215,7 @@ public class WateringCan extends InputAdapter{
 				
 				sb.draw(this.tex_can_fillstates[selectedTexture], this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
 				
-			}
+			}*/
 
 			this.wateringEffect.draw(sb,  delta);
 //		}
@@ -254,6 +264,20 @@ public class WateringCan extends InputAdapter{
 		return false;
 	}
 	
+	
+	public TextureRegion getTextureRegion() {
+		int fillStage = 0;
+		for(int i = 0; i < texReg_can[0].length; i++) {
+			if(fillState < MAX_FILL - (float)i * (float)(MAX_FILL / (float)texReg_can[0].length)) {
+				fillStage = i;
+			} 
+		}
+		
+		return texReg_can[this.wateringPlants ? 1 : 0]
+						 [fillStage];
+	}
+	
+	
 	public void select(int screenX, int screenY) {
 		this.selected = true;
 		
@@ -274,19 +298,19 @@ public class WateringCan extends InputAdapter{
 	
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_CAN, Texture.class);
-		game.assetmanager.load(RES_CAN_STANDING, Texture.class);
+		//game.assetmanager.load(RES_CAN_STANDING, Texture.class);
 		
-		game.assetmanager.load(RES_CAN_EMPTY, Texture.class);
-		for(String s : RES_CAN_FILLSTATES)
-			game.assetmanager.load(s, Texture.class);
+		//game.assetmanager.load(RES_CAN_EMPTY, Texture.class);
+		/*for(String s : RES_CAN_FILLSTATES)
+			game.assetmanager.load(s, Texture.class);*/
 	}
 	
 	public static void dispose(Main game) {
 		game.assetmanager.unload(RES_CAN);
-		game.assetmanager.unload(RES_CAN_STANDING);
+		/*game.assetmanager.unload(RES_CAN_STANDING);
 		
 		game.assetmanager.unload(RES_CAN_EMPTY);
 		for(String s : RES_CAN_FILLSTATES)
-			game.assetmanager.unload(s);
+			game.assetmanager.unload(s);*/
 	}
 }
