@@ -16,7 +16,9 @@ public class CustomButton extends InputAdapter{
 	private static final String RES_BTN_RELEASED = "graphics/btn_released.png";
 	private static final String RES_BTN_PRESSED = "graphics/btn_pressed.png";
 	
-	private static final int BUTTON_FONTSIZE = 10;
+	private static final int DEFAULT_BUTTON_FONTSIZE = 10;
+	
+	private static boolean class_assets_disposed = false;
 	
 	
 	private Main game;
@@ -26,6 +28,7 @@ public class CustomButton extends InputAdapter{
 	private Texture btn_pressed_texture, btn_released_texture;
 	
 	private BitmapFont font;
+	private int fontSize;
 	private GlyphLayout layout;
 	private String btn_text = "";
 	
@@ -34,24 +37,26 @@ public class CustomButton extends InputAdapter{
 	private boolean clicked = false;
 	
 	
-	public CustomButton(Main game, Vector2 pos, String btn_text) {
+	public CustomButton(Main game, Vector2 pos, String btn_text, int fontsize) {
 		this.game = game;
 		this.pos = pos;
 		this.btn_text = btn_text;
+		this.fontSize = fontsize;
 		
 		btn_pressed_texture = game.assetmanager.get(RES_BTN_PRESSED, Texture.class);
 		btn_released_texture = game.assetmanager.get(RES_BTN_RELEASED, Texture.class);
 		
+		// Keep hardcoded width for testing without proper texture
 		//width = btn_released_texture.getWidth();
-		width = 80;
+		width = 100;
 		height = btn_released_texture.getHeight();
 		// Needs to be called after width and height are set
-		initBtnText(btn_text);
+		initBtnText(btn_text, fontsize);
 	}
 	
 	
 	//apply custom textures
-	public CustomButton(Main game, Vector2 pos, Texture tex_pressed, Texture tex_released, String btn_text) {
+	public CustomButton(Main game, Vector2 pos, Texture tex_pressed, Texture tex_released, String btn_text, int fontsize) {
 		this.game = game;
 		this.pos = pos;
 		this.btn_text = btn_text;
@@ -63,12 +68,13 @@ public class CustomButton extends InputAdapter{
 		width = btn_released_texture.getWidth();
 		height = btn_released_texture.getHeight();
 		// Needs to be called after width and height are set
-		initBtnText(btn_text);
+		initBtnText(btn_text, fontsize);
 	}
 	
-	private void initBtnText(String btn_text) {
+	
+	private void initBtnText(String btn_text, int fontsize) {
 		layout = new GlyphLayout();
-		font = game.fontloader.get(Main.RES_DEFAULT_FONT, BUTTON_FONTSIZE);
+		font = game.fontloader.load(Main.RES_DEFAULT_FONT, fontsize, true);
 		layout.setText(font, btn_text, Color.BLACK, width, Align.center, false);
 	}
 	
@@ -120,17 +126,29 @@ public class CustomButton extends InputAdapter{
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_BTN_PRESSED, Texture.class);
 		game.assetmanager.load(RES_BTN_RELEASED, Texture.class);
-		game.fontloader.load(Main.RES_DEFAULT_FONT, BUTTON_FONTSIZE);
+		game.fontloader.load(Main.RES_DEFAULT_FONT, DEFAULT_BUTTON_FONTSIZE);
 	}
 	
+	// This dispose can't be static
 	public void dispose() {
-		game.assetmanager.unload(RES_BTN_PRESSED);
-		game.assetmanager.unload(RES_BTN_RELEASED);
-		game.fontloader.unload(Main.RES_DEFAULT_FONT, BUTTON_FONTSIZE);;
+		if(!class_assets_disposed) {
+			game.assetmanager.unload(RES_BTN_PRESSED);
+			game.assetmanager.unload(RES_BTN_RELEASED);
+			class_assets_disposed = true;
+		}
+		game.fontloader.unload(Main.RES_DEFAULT_FONT, fontSize);
 	}
 	
 	public Texture getTexture() {
 		return this.pressed ? this.btn_pressed_texture : this.btn_released_texture;
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
 	}
 	
 	public boolean getClicked() {
@@ -140,5 +158,9 @@ public class CustomButton extends InputAdapter{
 	public void reset() {
 		this.clicked = false;
 		
+	}
+	
+	public void setPosition(Vector2 pos) {
+		this.pos = pos;
 	}
 }
