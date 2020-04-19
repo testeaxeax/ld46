@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -23,9 +24,12 @@ public final class GameScreen implements Screen {
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
 
 	private static final String RES_DEBUG_RECT = "graphics/debugrec.png";
+	private static final String RES_BACKGROUND_MUSIC = "audio/game-background-music.mp3";
+	
 	public final Texture tex_debugrect;
 	
 	public final Pixmap brightnessOverlayPixmap;
+	public final Music backgroundMusic;
 	
 	private enum TemperatureOverlayStatus {NONE, COLD, HOT};
 	private TemperatureOverlayStatus temperatureOverlayStatus;
@@ -100,12 +104,16 @@ public final class GameScreen implements Screen {
 		this.tex_debugrect = this.game.assetmanager.get(RES_DEBUG_RECT, Texture.class);
 		
 		// Do everything else below
+
 		this.brightnessOverlayPixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
 
 		this.tex_temperatureOverlay = this.game.assetmanager.get(RES_TEMPERATUREOVERLAY, Texture.class);
 		this.tex_temperatureOverlayRegions = TextureRegion.split(this.tex_temperatureOverlay, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT)[0];
 		this.temperatureOverlayStatus = TemperatureOverlayStatus.NONE;
 		this.temperatureOverlayAlpha = 0.0f;
+    
+		backgroundMusic = game.assetmanager.get(RES_BACKGROUND_MUSIC, Music.class);
+		backgroundMusic.setLooping(true);
 	}
 	
 	// Load all resources for this screen in prefetch !!!
@@ -115,6 +123,7 @@ public final class GameScreen implements Screen {
 	public static void prefetch(Main game) {
 		game.assetmanager.load(GameScreen.RES_DEBUG_RECT, Texture.class);
 		game.assetmanager.load(GameScreen.RES_TEMPERATUREOVERLAY, Texture.class);
+		game.assetmanager.load(RES_BACKGROUND_MUSIC, Music.class);
 		
 		Plant.prefetch(game);
 		Shutter.prefetch(game);
@@ -131,6 +140,7 @@ public final class GameScreen implements Screen {
 	public void dispose() {
 		game.assetmanager.unload(RES_DEBUG_RECT);
 		game.assetmanager.unload(RES_TEMPERATUREOVERLAY);
+		game.assetmanager.unload(RES_BACKGROUND_MUSIC);
 		
 		WateringCan.dispose(game);
 		Tap.dispose(game);
@@ -141,7 +151,7 @@ public final class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		
+		backgroundMusic.play();
 	}
 	
 	public void update(float delta) {
@@ -274,7 +284,7 @@ public final class GameScreen implements Screen {
 
 	@Override
 	public void hide() {
-		
+		backgroundMusic.stop();
 	}
 	
 	public List<Plant> getPlants(){

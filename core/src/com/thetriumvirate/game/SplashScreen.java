@@ -2,6 +2,7 @@ package com.thetriumvirate.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,10 +19,12 @@ public final class SplashScreen implements Screen {
 	private static final int MIN_SHOWTIME = 5000;
 	// Resource paths
 	private static final String RES_SPLASH = "graphics/splash-test.png";
+	private static final String RES_LOAD_MUSIC = "audio/splash-music.mp3";
 
 	private final Main game;
 	private final OrthographicCamera cam;
 	private final Texture splashImage;
+	private final Music loadMusic;
 	private final BitmapFont font;
 	// Used to center the text
 	private final GlyphLayout layout;
@@ -43,6 +46,8 @@ public final class SplashScreen implements Screen {
 		// These resources need be loaded synchronously
 		font = game.fontloader.load(true);
 		splashImage = game.assetmanager.syncGet(RES_SPLASH, Texture.class);
+		loadMusic = game.assetmanager.syncGet(RES_LOAD_MUSIC, Music.class);
+		loadMusic.setLooping(true);
 	}
 
 	@Override
@@ -51,6 +56,8 @@ public final class SplashScreen implements Screen {
 		// prefetch needs to be called for every screen other than SplashScreen
 		// prefetch loads all game resources asynchronously while SplashScreen is displayed
 		// For example: ScreenTemplate.prefetch(game);
+		loadMusic.play();
+		
 		GameOverScreen.prefetch(game);
 		GameScreen.prefetch(game);
 		CreditsScreen.prefetch(game);
@@ -99,7 +106,7 @@ public final class SplashScreen implements Screen {
 
 	@Override
 	public void hide() {
-
+		loadMusic.stop();
 	}
 
 	// Unload all resources used by SplashScreen
@@ -107,5 +114,6 @@ public final class SplashScreen implements Screen {
 	public void dispose() {
 		game.fontloader.unload();
 		game.assetmanager.unload(RES_SPLASH);
+		game.assetmanager.unload(RES_LOAD_MUSIC);
 	}
 }

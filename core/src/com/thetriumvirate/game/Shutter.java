@@ -1,6 +1,7 @@
 package com.thetriumvirate.game;
 
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,6 +12,9 @@ public class Shutter extends InputAdapter {
 
 	private static final String RES_SHUTTER = "graphics/shutter.png";
 	private static final String RES_SHUTTER_BUTTON = "graphics/shutter-button.png";
+	// Sound cannot be longer than a few seconds
+	private static final String RES_SHUTTER_CLOSING_SOUND = "audio/shutter-closing.wav";
+	private static final String RES_SHUTTER_OPENING_SOUND = "audio/shutter-opening.wav";
 	
 	private static final int MAX_OFFSET = 100;
 	private static final int OFFSET_SPEED_CLOSING = 300;
@@ -34,6 +38,7 @@ public class Shutter extends InputAdapter {
 	
 	private final Texture shutterTexture, buttonTexture;
 	private TextureRegion[] buttonTexReg;
+	private final Sound shutterOpeningSound, shutterClosingSound;
 	
 	private STATE state;
 	private Vector2 position;
@@ -66,6 +71,8 @@ public class Shutter extends InputAdapter {
 		
 		shutterTexture = game.assetmanager.get(RES_SHUTTER, Texture.class);
 		buttonTexture = game.assetmanager.get(RES_SHUTTER_BUTTON, Texture.class);
+		shutterOpeningSound = game.assetmanager.get(RES_SHUTTER_OPENING_SOUND, Sound.class);
+		shutterClosingSound = game.assetmanager.get(RES_SHUTTER_CLOSING_SOUND, Sound.class);
 		
 		buttonTexReg[0] = new TextureRegion(buttonTexture, 0,  0, 16, 256);
 		buttonTexReg[1] = new TextureRegion(buttonTexture, 16, 0, 16, 256);
@@ -75,11 +82,15 @@ public class Shutter extends InputAdapter {
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_SHUTTER, Texture.class);
 		game.assetmanager.load(RES_SHUTTER_BUTTON, Texture.class);
+		game.assetmanager.load(RES_SHUTTER_OPENING_SOUND, Sound.class);
+		game.assetmanager.load(RES_SHUTTER_CLOSING_SOUND, Sound.class);
 	}
 	
 	public static void dispose(Main game) {
 		game.assetmanager.unload(RES_SHUTTER);
 		game.assetmanager.unload(RES_SHUTTER_BUTTON);
+		game.assetmanager.unload(RES_SHUTTER_OPENING_SOUND);
+		game.assetmanager.unload(RES_SHUTTER_CLOSING_SOUND);
 	}
 	
 	public void update(float delta) {
@@ -102,6 +113,7 @@ public class Shutter extends InputAdapter {
 				} else {
 					state = STATE.OPENING_INACTIVE;
 				}
+				shutterOpeningSound.stop();
 			}
 			position.set(position.x, startPosition.y - offset);
 			incrementAnimationTimer(delta, 1);//1 bcs closing, see comment above the called method
@@ -109,8 +121,10 @@ public class Shutter extends InputAdapter {
 		
 		if(offset > MAX_OFFSET) {
 			state = STATE.CLOSED;
+			shutterClosingSound.stop();
 		} else if(offset < 0) {
 			state = STATE.OPEN;
+			shutterOpeningSound.stop();
 		}
 		
 		if(state == STATE.OPEN) {
@@ -142,10 +156,12 @@ public class Shutter extends InputAdapter {
 				if(state == STATE.CLOSED) {
 					state = STATE.OPENING_ACTIVE;
 					nextOffset = MAX_OFFSET - NEXT_STAGE_OFFSET;
+					shutterOpeningSound.loop();
 					resetRandomClosing();
 				}
 				else if(state == STATE.OPENING_INACTIVE) {
 					state = STATE.OPENING_ACTIVE;
+					shutterOpeningSound.loop();
 				}
 				return true;
 			}
@@ -162,6 +178,7 @@ public class Shutter extends InputAdapter {
 			timeLeft -= delta;
 			if(timeLeft <= 0) {
 				state = STATE.CLOSING;
+				shutterClosingSound.loop();
 			}
 		}
 	}
