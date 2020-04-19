@@ -48,7 +48,7 @@ public class TemperatureController extends InputAdapter {
 		game = gamescreen.getGame();
 		
 		// TODO We may need to change this
-		this.tempLossPerSecond = TEMP_LOSS_PER_SECOND * (difficulty + 1) * 2;
+		this.tempLossPerSecond = TEMP_LOSS_PER_SECOND * (difficulty + 1);
 		this.tempIncreasePerSecond = TEMP_INCREASE_PER_SECOND * (difficulty + 1);
 		
 		currentTemp = INIT_TEMP;
