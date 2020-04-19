@@ -37,9 +37,9 @@ public class TemperatureController extends InputAdapter {
 	// Resources
 //	private final Texture switch_on_texture, switch_off_texture;
 	private final BitmapFont font;
-	private static final int FONT_SIZE = 20;
-	private static final int TEXT_OFFSET_X = 50;
-	private static final int TEXT_OFFSET_Y = 20;
+	private static final int FONT_SIZE = 30;
+	private static final int TEXT_OFFSET_X = 60;
+	private static final int TEXT_OFFSET_Y = 50;
 
 	private final Texture knob_texture;
 	private final Texture tempDisplay_texture;
