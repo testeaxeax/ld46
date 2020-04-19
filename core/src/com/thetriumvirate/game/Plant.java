@@ -127,7 +127,7 @@ public class Plant {
 			this.waterlevel -= this.waterlevel * 0.25 * delta;
 		} else if(currentTemp < TEMP_MIN) {
 			//debug, uncomment thereafter
-			this.growing = false;
+			//this.growing = false;
 		}
 		
 		// the darker it is, the slower plants grow		
