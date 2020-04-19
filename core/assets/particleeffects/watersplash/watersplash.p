@@ -131,7 +131,7 @@ timeline0: 0.0
 - Tint - 
 colorsCount: 3
 colors0: 0.44705883
-colors1: 0.50980395
+colors1: 0.5137255
 colors2: 1.0
 timelineCount: 1
 timeline0: 0.0
@@ -158,7 +158,7 @@ aligned: false
 additive: true
 behind: false
 premultipliedAlpha: false
-spriteMode: single
+spriteMode: animated
 - Image Paths -
-/C:/Maxi/Java/github/repositories/ld46/core/assets/graphics/drop.png
+splashparticle.png
 

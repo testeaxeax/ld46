@@ -68,7 +68,7 @@ public class Plant {
 	private final TextureAtlas splashAtlas; //<-load some atlas with your particle assets in
 	private static final String RES_ATLAS_SPLASH = "particleeffects/watersplash/splashparticle.atlas";
 	private final ParticleEffect splasheffect;
-	private static final String RES_PEFFECT_SPLASH = "particleeffects/watersplash/watersplash2.p";
+	private static final String RES_PEFFECT_SPLASH = "particleeffects/watersplash/watersplash.p";
 	
 	//posSlot: int from 0-7, or whatever fits on the screen
 	public Plant(GameScreen gamescreen, int posSlot) {
@@ -87,8 +87,10 @@ public class Plant {
 		this.splashAtlas = new TextureAtlas(Gdx.files.internal(RES_ATLAS_SPLASH));
 		
 		this.splasheffect = new ParticleEffect();
-		this.splasheffect.load(Gdx.files.internal(RES_PEFFECT_SPLASH), this.splashAtlas);
-		this.splasheffect.scaleEffect(0.3f, 0.5f);
+		this.splasheffect.loadEmitters(Gdx.files.internal(RES_PEFFECT_SPLASH));
+		this.splasheffect.loadEmitterImages(Gdx.files.internal("particleeffects/watersplash/"));
+		//this.splasheffect.loadEmitterImages(this.splashAtlas);
+		//this.splasheffect.scaleEffect(0.3f, 0.5f);
 		this.splasheffect.setPosition(plant_pos.x + SPRITEWIDTH / 2, plant_pos.y);
 		
 		initPlantTextures();
