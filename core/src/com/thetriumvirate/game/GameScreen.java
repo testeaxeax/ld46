@@ -46,6 +46,8 @@ public final class GameScreen implements Screen {
 	private final TemperatureController temperatureController;
 	private final List<Shutter> shutters;
 	
+	private Thermometer thermometer;
+	
 	private final int difficulty;
 
 	private final List<Plant> plants;
@@ -92,6 +94,7 @@ public final class GameScreen implements Screen {
 			this.plants.add(new Plant(this, i));
 		
 		
+		this.thermometer = new Thermometer(game, new Vector2(800, 512));
 		
 		
 		Gdx.input.setInputProcessor(inputmultiplexer);
@@ -123,7 +126,8 @@ public final class GameScreen implements Screen {
 		TemperatureController.prefetch(game);
 		Tap.prefetch(game);
 		WateringCan.prefetch(game);
-
+		Thermometer.prefetch(game);
+		
 	}
 	
 	// Unload all resources for this screen
@@ -139,6 +143,7 @@ public final class GameScreen implements Screen {
 		TemperatureController.dispose(game);
 		Shutter.dispose(game);
 		Plant.dispose(game);
+		Thermometer.dispose(game);
 	}
 
 	@Override
@@ -149,6 +154,7 @@ public final class GameScreen implements Screen {
 	public void update(float delta) {
 		this.wateringCan.update(delta);
 		this.temperatureController.update(delta);
+		this.thermometer.update(delta, this.temperatureController.getCurrentTemp());
 		
 		if(this.temperatureController.getCurrentTemp() > Plant.TEMP_MAX) {
 			// it's too hot for the plants
@@ -208,6 +214,7 @@ public final class GameScreen implements Screen {
 		
 		this.tap.render(game.spritebatch);
 		this.temperatureController.render(game.spritebatch);
+		this.thermometer.render(game.spritebatch);
 		
 		for(Plant p : this.plants)
 			p.render(game.spritebatch, delta);
