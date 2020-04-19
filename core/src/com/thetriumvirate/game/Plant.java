@@ -70,7 +70,8 @@ public class Plant {
 	private Rectangle boundingBox;
 	
 	private final ParticleEffect splasheffect;
-	private static final String RES_PEFFECT_SPLASH = "particleeffects/watersplash/watersplash.p";
+	private static final String RES_PEFFECT_SPLASH = "particleeffects/watersplash.p";
+	private static final String RES_PEFFECT_SPLASH_FILES = "particleeffects/";
 	
 	//posSlot: int from 0-7, or whatever fits on the screen
 	public Plant(GameScreen gamescreen, int posSlot) {
@@ -80,7 +81,8 @@ public class Plant {
 		pot_pos = new Vector2(POT_POS_X_OFFSET + posSlot * SLOT_WIDTH, POT_POS_Y);
 		plant_pos = new Vector2(pot_pos.x, pot_pos.y + POT_HEIGHT - 4); // -4 offset so the plant is "inside the pot" bcs the pot overlaps over the plant; 
 		
-		this.boundingBox = new Rectangle(pot_pos.x, pot_pos.y, POT_WIDTH, POT_HEIGHT + SPRITEHEIGHT);
+		// TODO: Remove the scaling once the coordinates are relative
+		this.boundingBox = new Rectangle(pot_pos.x / 1024f, pot_pos.y / 800f, POT_WIDTH / 1024f, (POT_HEIGHT + SPRITEHEIGHT) / 800f);
 		
 		//init resources
 		plantpot_texture = game.assetmanager.syncGet(RES_PLANTPOT, Texture.class);
@@ -88,7 +90,7 @@ public class Plant {
 		
 		this.splasheffect = new ParticleEffect();
 		this.splasheffect.loadEmitters(Gdx.files.internal(RES_PEFFECT_SPLASH));
-		this.splasheffect.loadEmitterImages(Gdx.files.internal("particleeffects/watersplash/"));
+		this.splasheffect.loadEmitterImages(Gdx.files.internal(RES_PEFFECT_SPLASH_FILES));
 		this.splasheffect.setPosition(plant_pos.x + SPRITEWIDTH / 2, plant_pos.y);
 		
 		initPlantTextures();
@@ -168,16 +170,7 @@ public class Plant {
 		
 		spritebatch.draw(this.getTextureRegion(), plant_pos.x, plant_pos.y, SPRITEWIDTH, SPRITEHEIGHT);
 
-		//if(!this.splasheffect.isComplete())
 		this.splasheffect.draw(spritebatch, delta);
-		
-
-//		Color before = new Color(spritebatch.getColor());
-//		
-//		spritebatch.setColor(0.0f, 1.0f, 0.0f, 0.5f);
-//		spritebatch.draw(this.gamescreen.tex_debugrect, this.boundingBox.x, this.boundingBox.y, this.boundingBox.width, this.boundingBox.height);
-//	
-//		spritebatch.setColor(before);
 	}
 	
 	
