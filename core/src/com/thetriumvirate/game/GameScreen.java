@@ -63,8 +63,8 @@ public final class GameScreen implements Screen {
 		shutters = new ArrayList<Shutter>();
 		for(int i = 0; i < 4; i++) {
 			Shutter shutter = new Shutter(this,
-					new Vector2(100 + Shutter.getWidth() * 2 * i, 500),
-					new Vector2(200 + Shutter.getWidth() * 2 * i,400));
+					new Vector2(100 + Shutter.getWidth() * 2 * i, 400),
+					new Vector2(235 + Shutter.getWidth() * 2 * i, 300));
 			this.shutters.add(shutter);
 			inputmultiplexer.addProcessor(shutter);
 		}

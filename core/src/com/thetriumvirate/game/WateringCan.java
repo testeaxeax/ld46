@@ -78,7 +78,7 @@ public class WateringCan extends InputAdapter{
 		} else if(this.isSelected() && this.wateringPlants) {
 			// TODO DEBUGGING --> uncomment
 			
-			//this.fillState -= WATERING_SPEED * delta;
+			this.fillState -= WATERING_SPEED * delta;
 			
 			if(this.fillState < 0.0f) {
 				this.fillState = 0.0f;
