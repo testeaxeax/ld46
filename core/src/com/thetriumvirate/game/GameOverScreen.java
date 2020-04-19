@@ -12,6 +12,7 @@ public final class GameOverScreen implements Screen {
 	
 	private static final int CAM_WIDTH = Main.WINDOW_WIDTH;
 	private static final int CAM_HEIGHT = Main.WINDOW_HEIGHT;
+	private static final int FONT_SIZE = 10;
 	
 	// Declare resource paths below
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
@@ -41,7 +42,7 @@ public final class GameOverScreen implements Screen {
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
 		InputMultiplexer inputmultiplexer = new InputMultiplexer();
 		
-		this.btnMenu = new CustomButton(game, new Vector2(100, 100), "Main Menu");
+		this.btnMenu = new CustomButton(game, new Vector2(100, 100), "Main Menu", FONT_SIZE);
 		inputmultiplexer.addProcessor(btnMenu);
 		
 		Gdx.input.setInputProcessor(inputmultiplexer);

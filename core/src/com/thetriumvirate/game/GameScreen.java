@@ -35,13 +35,15 @@ public final class GameScreen implements Screen {
 	private final TemperatureController temperatureController;
 	private final List<Shutter> shutters;
 	
+	private final int difficulty;
 
 	private final List<Plant> plants;
 
 	
-	public GameScreen(Main game) {
+	public GameScreen(Main game, int difficulty) {
 		// Initialize essentials
 		this.game = game;
+		this.difficulty = difficulty;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
 		cam.update();

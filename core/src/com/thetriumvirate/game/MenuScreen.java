@@ -1,24 +1,34 @@
 package com.thetriumvirate.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.math.Vector2;
 
 public final class MenuScreen implements Screen {
 	
 	private static final int CAM_WIDTH = Main.WINDOW_WIDTH;
 	private static final int CAM_HEIGHT = Main.WINDOW_HEIGHT;
+	private static final int FONT_SIZE = 20;
 	
 	// Declare resource paths below
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
+	private static final String RES_BACKGROUND = "graphics/menu-background.png";
 	
 	private final Main game;
 	private final OrthographicCamera cam;
+	private final CustomButton creditsBtn, easyBtn, moderateBtn, difficultBtn;
+	private final InputMultiplexer multiplexer;
 	
 	// Declare resource variables below
 	// For example: private final Texture testTexture;
+	private final Texture background;
 	
 	
 	public MenuScreen(Main game) {
@@ -32,10 +42,33 @@ public final class MenuScreen implements Screen {
 		
 		// Initialize resource variables below
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
-		
+		background = game.assetmanager.get(RES_BACKGROUND, Texture.class);
 		
 		// Do everything else below
+		creditsBtn = new CustomButton(game, new Vector2(0, 0), "Credits", FONT_SIZE);
+		easyBtn = new CustomButton(game, new Vector2(0, 0), "Easy", FONT_SIZE);
+		moderateBtn = new CustomButton(game, new Vector2(0, 0), "Moderate", FONT_SIZE);
+		difficultBtn = new CustomButton(game, new Vector2(0, 0), "Difficult", FONT_SIZE);
 		
+		// Buttons use the same Texture
+		int btnheight = creditsBtn.getHeight();
+		int btnwidth = creditsBtn.getWidth();
+		int difficultyxpos = (Main.WINDOW_WIDTH / 2) - (btnwidth / 2);
+		int difficultyyposspace = 10;
+		int difficultyyposstart = (Main.WINDOW_HEIGHT / 2) - (btnheight / 2) + btnheight + difficultyyposspace;
+		
+		creditsBtn.setPosition(new Vector2(0, 0));
+		easyBtn.setPosition(new Vector2(difficultyxpos, difficultyyposstart));
+		moderateBtn.setPosition(new Vector2(difficultyxpos, difficultyyposstart - btnheight - difficultyyposspace));
+		difficultBtn.setPosition(new Vector2(difficultyxpos, difficultyyposstart - 2 * btnheight - (2 * difficultyyposspace)));
+		multiplexer = new InputMultiplexer();
+		
+		multiplexer.addProcessor(creditsBtn);
+		multiplexer.addProcessor(difficultBtn);
+		multiplexer.addProcessor(easyBtn);
+		multiplexer.addProcessor(moderateBtn);
+		
+		Gdx.input.setInputProcessor(multiplexer);
 	}
 	
 	// Load all resources for this screen in prefetch !!!
@@ -43,7 +76,7 @@ public final class MenuScreen implements Screen {
 	// or			game.fontloader.load(RES_SOMETHING_FONT);
 	// Unload all resources in dispose !!!
 	public static void prefetch(Main game) {
-		
+		game.assetmanager.load(RES_BACKGROUND, Texture.class);
 	}
 	
 	// Unload all resources for this screen
@@ -51,17 +84,32 @@ public final class MenuScreen implements Screen {
 	// For fonts: game.fontmanager.unload(RES_SOMETHING_FONT);
 	@Override
 	public void dispose() {
-		
+		game.assetmanager.unload(RES_BACKGROUND);
+		creditsBtn.dispose();
+		easyBtn.dispose();
+		moderateBtn.dispose();
+		difficultBtn.dispose();
 	}
 
 	@Override
 	public void show() {
-		
+		creditsBtn.reset();
+		easyBtn.reset();
+		moderateBtn.reset();
+		difficultBtn.reset();
 	}
 
 	@Override
 	public void render(float delta) {
+		checkButtons();
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		game.spritebatch.begin();
+		game.spritebatch.draw(background, 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
+		creditsBtn.render(game.spritebatch);
+		easyBtn.render(game.spritebatch);
+		moderateBtn.render(game.spritebatch);
+		difficultBtn.render(game.spritebatch);
+		game.spritebatch.end();
 	}
 	
 	@Override
@@ -82,5 +130,17 @@ public final class MenuScreen implements Screen {
 	@Override
 	public void hide() {
 		
+	}
+	
+	private void checkButtons() {
+		if(creditsBtn.getClicked()) {
+			game.screenmanager.push(new CreditsScreen(game));
+		} else if(easyBtn.getClicked()) {
+			game.screenmanager.push(new GameScreen(game, 0));
+		} else if(moderateBtn.getClicked()) {
+			game.screenmanager.push(new GameScreen(game, 1));
+		} else if(difficultBtn.getClicked()) {
+			game.screenmanager.push(new GameScreen(game, 2));
+		}
 	}
 }
