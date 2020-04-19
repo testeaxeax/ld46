@@ -97,6 +97,8 @@ public final class MenuScreen implements Screen {
 		easyBtn.reset();
 		moderateBtn.reset();
 		difficultBtn.reset();
+		
+		Gdx.input.setInputProcessor(this.multiplexer);
 	}
 
 	@Override
