@@ -113,7 +113,7 @@ public final class GameScreen implements Screen {
 			this.plants.add(new Plant(this, i));
 		
 		
-		this.thermometer = new Thermometer(game, new Vector2((int)((float)(800) * (float)Main.WINDOW_WIDTH / 1024f), (int)((float)(512) * (float)Main.WINDOW_HEIGHT / 800f)));
+		this.thermometer = new Thermometer(game, new Vector2((int)((float)(828) * (float)Main.WINDOW_WIDTH / 1024f), (int)((float)(508) * (float)Main.WINDOW_HEIGHT / 800f)));
 		
 		
 		Gdx.input.setInputProcessor(inputmultiplexer);

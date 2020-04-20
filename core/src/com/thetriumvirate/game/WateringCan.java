@@ -180,7 +180,7 @@ public class WateringCan extends InputAdapter{
 					this.tap.setWaterRunning(true);
 				}
 			} else {
-				if(this.tap.checkAllClicked(screenX, Main.WINDOW_HEIGHT - screenY)) {
+				if(this.tap.checkAllClicked(screenX,/* Main.WINDOW_HEIGHT - */screenY)) {
 					this.unselect();
 				
 					return true;

@@ -21,8 +21,8 @@ public class TemperatureController extends InputAdapter {
 	
 	public static final int MIN_TEMP = 0;
 	public static final int MAX_TEMP = 100;
-	private static final int INIT_TEMP = 20;
-	private static final Vector2 POSITION = new Vector2(600, 200);
+	private static final int INIT_TEMP = 50;
+	private static final Vector2 POSITION = new Vector2(185*4, 24*4);
 	
 	private static final float KNOB_WIDTH = 32f / 1024f;
 	private static final float KNOB_HEIGHT = 32f / 800f;
