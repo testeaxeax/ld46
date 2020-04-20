@@ -15,6 +15,8 @@ public final class MenuScreen implements Screen {
 	private static final int CAM_WIDTH = Main.WINDOW_WIDTH;
 	private static final int CAM_HEIGHT = Main.WINDOW_HEIGHT;
 	private static final int FONT_SIZE = Main.DEFAULT_FONTSIZE;
+	private static final int KNOB_SPRITE_WIDTH = 32;
+	private static final int KNOB_SPRITE_HEIGHT = 32;
 	
 	// Declare resource paths below
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
@@ -22,6 +24,7 @@ public final class MenuScreen implements Screen {
 	private static final String RES_SKY = "graphics/sky.png";
 	// This is used in all screens except SplashScreen
 	private static final String RES_BACKGROUND_MUSIC = "audio/background-music.mp3";
+	private static final String RES_KNOB = "graphics/tempBtn.png";
 	
 	//all textures for the btns
 	private static final String RES_BTN_EASY = "graphics/customBtn_easy.png";
@@ -37,14 +40,18 @@ public final class MenuScreen implements Screen {
 	private final Main game;
 	private final OrthographicCamera cam;
 	private final CustomButton creditsBtn, easyBtn, moderateBtn, difficultBtn, exitBtn;
-	private final Texture creditsBtn_tex, easyBtn_tex, moderateBtn_tex, difficultBtn_tex, exitBtn_tex;
+	private final Texture creditsBtn_tex, easyBtn_tex, moderateBtn_tex, difficultBtn_tex, exitBtn_tex, knob_tex;
 	private TextureRegion[] creditsBtn_texReg, easyBtn_texReg, moderateBtn_texReg, difficultBtn_texReg, exitBtn_texReg;
+	private TextureRegion knob_texReg;
 	private final InputMultiplexer multiplexer;
 	
 	// Declare resource variables below
 	// For example: private final Texture testTexture;
 	private final Texture background, sky;
 	private final Music music;
+	
+	private final int KNOB_WIDTH = (int) ((32f / 1024f) * (float) Main.WINDOW_WIDTH);
+	private final int KNOB_HEIGHT = (int) ((32f / 800f) * (float) Main.WINDOW_HEIGHT);
 	
 	
 	public MenuScreen(Main game) {
@@ -60,6 +67,7 @@ public final class MenuScreen implements Screen {
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
 		background = game.assetmanager.get(RES_BACKGROUND, Texture.class);
 		sky = game.assetmanager.get(RES_SKY, Texture.class);
+		knob_tex = game.assetmanager.get(RES_KNOB, Texture.class);
 		music = game.assetmanager.get(RES_BACKGROUND_MUSIC, Music.class);
 		music.setLooping(true);
 		music.setVolume(0.2f);
@@ -91,6 +99,8 @@ public final class MenuScreen implements Screen {
 		exitBtn_texReg = new TextureRegion[2];
 		exitBtn_texReg[0] = new TextureRegion(exitBtn_tex, 0, 0, BTN_SPRITE_WIDTH, BTN_SPRITE_HEIGHT);
 		exitBtn_texReg[1] = new TextureRegion(exitBtn_tex, 0, BTN_SPRITE_HEIGHT, BTN_SPRITE_WIDTH, BTN_SPRITE_HEIGHT);
+		
+		knob_texReg = new TextureRegion(knob_tex, 0, 0, KNOB_SPRITE_WIDTH, KNOB_SPRITE_HEIGHT);
 		
 		
 		
@@ -131,6 +141,7 @@ public final class MenuScreen implements Screen {
 		game.assetmanager.load(RES_BACKGROUND, Texture.class);
 		game.assetmanager.load(RES_SKY, Texture.class);
 		game.assetmanager.load(RES_BACKGROUND_MUSIC, Music.class);
+		game.assetmanager.load(RES_KNOB, Texture.class);
 		
 		game.assetmanager.load(RES_BTN_CREDITS, Texture.class);
 		game.assetmanager.load(RES_BTN_EASY, Texture.class);
@@ -148,6 +159,7 @@ public final class MenuScreen implements Screen {
 		game.assetmanager.unload(RES_BACKGROUND);
 		game.assetmanager.unload(RES_SKY);
 		game.assetmanager.unload(RES_BACKGROUND_MUSIC);
+		game.assetmanager.unload(RES_KNOB);
 		
 		game.assetmanager.unload(RES_BTN_CREDITS);
 		game.assetmanager.unload(RES_BTN_EASY);
@@ -182,6 +194,7 @@ public final class MenuScreen implements Screen {
 		game.spritebatch.begin();
 		game.spritebatch.draw(sky, 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
 		game.spritebatch.draw(background, 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
+		game.spritebatch.draw(knob_texReg, 185f * 4f / 1024f * (float) Main.WINDOW_WIDTH, 24f * 4f / 800f * (float) Main.WINDOW_HEIGHT, KNOB_WIDTH, KNOB_HEIGHT);
 		easyBtn.render(game.spritebatch);
 		creditsBtn.render(game.spritebatch);
 		moderateBtn.render(game.spritebatch);
