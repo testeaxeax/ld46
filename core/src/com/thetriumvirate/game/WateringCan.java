@@ -15,7 +15,8 @@ public class WateringCan extends InputAdapter{
 	private static final String RES_CAN = "graphics/wateringcan.png";
 	// Sound cannot be longer than a few seconds
 	private static final String RES_TAKE_SOUND = "audio/can-take.wav";
-	private static final String RES_DROP_SOUND = "audio/can-drop.wav";
+	private static final String RES_DROP_EMPTY_SOUND = "audio/can-drop-empty.wav";
+	private static final String RES_DROP_FULL_SOUND = "audio/can-drop-full.wav";
 	private static final String RES_WATER_SOUND = "audio/can-watering.wav";
 	//private static final String RES_CAN_STANDING = "graphics/wateringcanstanding.png";
 	//private static final String RES_CAN_EMPTY = "graphics/canempty.png";
@@ -30,7 +31,7 @@ public class WateringCan extends InputAdapter{
 	
 	private final GameScreen game;
 	private final Texture tex_can/*, tex_can_standing, tex_can_empty, tex_can_fillstates[]*/;
-	private final Sound takeSound, dropSound, waterSound;
+	private final Sound takeSound, dropEmptySound, dropFullSound, waterSound;
 	private final Tap tap;
 	private TextureRegion[][] texReg_can;
 	
@@ -83,7 +84,8 @@ public class WateringCan extends InputAdapter{
 		this.tex_can = this.game.getGame().assetmanager.get(RES_CAN, Texture.class);
 		this.texReg_can = TextureRegion.split(tex_can, SPRITE_WIDTH, SPRITE_HEIGHT);
 		takeSound = game.getGame().assetmanager.get(RES_TAKE_SOUND, Sound.class);
-		dropSound = game.getGame().assetmanager.get(RES_DROP_SOUND, Sound.class);
+		dropEmptySound = game.getGame().assetmanager.get(RES_DROP_EMPTY_SOUND, Sound.class);
+		dropFullSound = game.getGame().assetmanager.get(RES_DROP_FULL_SOUND, Sound.class);
 		waterSound = game.getGame().assetmanager.get(RES_WATER_SOUND, Sound.class);
 		//this.tex_can_standing = this.game.getGame().assetmanager.get(RES_CAN_STANDING, Texture.class);
 		
@@ -272,7 +274,8 @@ public class WateringCan extends InputAdapter{
 		
 		this.pos_x = this.tap.getDockX(DRAW_WIDTH);
 		this.pos_y = this.tap.getDockY();
-		dropSound.play();
+		if(this.fillState > 0)dropFullSound.play();
+		else dropEmptySound.play();
 	}
 	
 	public boolean isSelected() {
@@ -282,7 +285,8 @@ public class WateringCan extends InputAdapter{
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_CAN, Texture.class);
 		game.assetmanager.load(RES_TAKE_SOUND, Sound.class);
-		game.assetmanager.load(RES_DROP_SOUND, Sound.class);
+		game.assetmanager.load(RES_DROP_EMPTY_SOUND, Sound.class);
+		game.assetmanager.load(RES_DROP_FULL_SOUND, Sound.class);
 		game.assetmanager.load(RES_WATER_SOUND, Sound.class);
 		//game.assetmanager.load(RES_CAN_STANDING, Texture.class);
 		
@@ -294,7 +298,8 @@ public class WateringCan extends InputAdapter{
 	public static void dispose(Main game) {
 		game.assetmanager.unload(RES_CAN);
 		game.assetmanager.unload(RES_TAKE_SOUND);
-		game.assetmanager.unload(RES_DROP_SOUND);
+		game.assetmanager.unload(RES_DROP_EMPTY_SOUND);
+		game.assetmanager.unload(RES_DROP_FULL_SOUND);
 		game.assetmanager.unload(RES_WATER_SOUND);
 		/*game.assetmanager.unload(RES_CAN_STANDING);
 		

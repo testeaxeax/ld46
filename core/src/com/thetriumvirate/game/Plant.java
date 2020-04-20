@@ -16,7 +16,7 @@ public class Plant {
 	private static final String RES_PLANTSPRITES = "graphics/plant.png";
 	
 	
-	private static final float POT_POS_Y = (float)(43*4) / 800f;
+	private static final float POT_POS_Y = (float)(44*4) / 800f;
 	private static final float POT_POS_X_OFFSET = (float)(38*4) / 1024f;
 	private static final float POT_WIDTH = 64f / 1024f;
 	private static final float POT_HEIGHT = 64f / 800f;
