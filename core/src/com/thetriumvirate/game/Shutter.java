@@ -163,6 +163,8 @@ public class Shutter extends InputAdapter {
 					nextOffset = MAX_OFFSET - NEXT_STAGE_OFFSET;
 					shutterOpeningSound.loop();
 					resetRandomClosing();
+					
+					TutorialManager.TutState.SHUTTER.triggerStop();
 				}
 				else if(state == STATE.OPENING_INACTIVE) {
 					state = STATE.OPENING_ACTIVE;

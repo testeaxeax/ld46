@@ -258,6 +258,8 @@ public class Plant {
 			this.splasheffect.reset(false);
 			this.splasheffect.start();
 		}
+		
+		TutorialManager.TutState.WATERING.triggerStop();
 	}
 
 
