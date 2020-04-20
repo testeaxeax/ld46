@@ -127,8 +127,6 @@ public final class SplashScreen implements Screen {
 		if(animCounter > 12)
 			animCounter = 0;
 		
-		System.out.println(drawX + " " + drawY);
-		
 		game.spritebatch.draw(this.plantStagesReg[drawY][drawX], DRAW_PLANT_X, DRAW_PLANT_Y, DRAW_WIDTH, DRAW_HEIGHT);
 		game.spritebatch.draw(this.plantPot, DRAW_POT_X, DRAW_POT_Y, DRAW_WIDTH, DRAW_WIDTH);
 		game.spritebatch.end();
@@ -142,6 +140,7 @@ public final class SplashScreen implements Screen {
 			//game.screenmanager.set(new GameScreen(game, 0), false);
 			//game.screenmanager.push(new CreditsScreen(game));
 			game.screenmanager.push(new MenuScreen(game));
+			//game.screenmanager.push(new GameOverScreen(game, false));
 		}
 	}
 

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.thetriumvirate.game.TutorialManager.TutState;
 
 public class TemperatureController extends InputAdapter {
 
@@ -105,11 +106,14 @@ public class TemperatureController extends InputAdapter {
 	
 	public void update(float delta) {
 		
-		if(state == STATE.ON) {
-			currentTemp += delta * tempIncreasePerSecond;
-		} else {
-			currentTemp -= delta * tempLossPerSecond;
+		if(!(TutorialManager.isShowing())) {
+			if(state == STATE.ON) {
+				currentTemp += delta * tempIncreasePerSecond;
+			} else {
+				currentTemp -= delta * tempLossPerSecond;
+			}
 		}
+		
 		
 		if(currentTemp < MIN_TEMP) {currentTemp = MIN_TEMP;}
 		else if (currentTemp > MAX_TEMP) {currentTemp = MAX_TEMP;}

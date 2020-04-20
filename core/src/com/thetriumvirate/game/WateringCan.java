@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.thetriumvirate.game.TutorialManager.TutState;
 
 public class WateringCan extends InputAdapter{
 	// Resource paths
@@ -181,11 +182,16 @@ public class WateringCan extends InputAdapter{
 			
 			if(!this.isSelected()) {
 				if(this.checkClick(screenX, screenY)) {
-					this.select(screenX, screenY);
-					return true;
+					if(!(TutorialManager.isShowing() && TutorialManager.currentShowState() != TutState.WATERING)) {
+						this.select(screenX, screenY);
+						return true;
+					}
+					return false;
 				} else if(this.tap.checkTapClick(screenX, screenY) && this.fillState < MAX_FILL) {
-					this.tap.setWaterRunning(true);
-					TutorialManager.TutState.CAN_EMPTY.triggerStop();
+					if(!(TutorialManager.isShowing() && TutorialManager.currentShowState() != TutState.WATERING)){
+						this.tap.setWaterRunning(true);
+						TutorialManager.TutState.CAN_EMPTY.triggerStop();
+					}
 				}
 			} else {
 				if(this.tap.checkAllClicked(screenX,/* Main.WINDOW_HEIGHT - */screenY)) {
