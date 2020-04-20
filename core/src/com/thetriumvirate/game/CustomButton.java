@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 
@@ -25,6 +26,7 @@ public class CustomButton extends InputAdapter{
 	private Vector2 pos;
 	private int width, height;
 	private Texture btn_pressed_texture, btn_released_texture;
+	private TextureRegion[] texReg;
 	private Sound btnClick;
 	
 	private BitmapFont font;
@@ -44,6 +46,10 @@ public class CustomButton extends InputAdapter{
 		btn_pressed_texture = game.assetmanager.get(RES_BTN_PRESSED, Texture.class);
 		btn_released_texture = game.assetmanager.get(RES_BTN_RELEASED, Texture.class);
 		btnClick = game.assetmanager.get(RES_BTN_CLICK_SOUND, Sound.class);
+		
+		texReg = new TextureRegion[2];
+		texReg[0] = new TextureRegion(btn_released_texture);
+		texReg[1] = new TextureRegion(btn_pressed_texture);
 
 		width = Main.DEFAULT_BUTTON_WIDTH;
 		height = Main.DEFAULT_BUTTON_HEIGHT;
@@ -61,6 +67,28 @@ public class CustomButton extends InputAdapter{
 		
 		btn_pressed_texture = tex_pressed;
 		btn_released_texture = tex_released;
+		
+		texReg = new TextureRegion[2];
+		texReg[0] = new TextureRegion(btn_released_texture);
+		texReg[1] = new TextureRegion(btn_pressed_texture);
+		
+		btnClick = game.assetmanager.get(RES_BTN_CLICK_SOUND, Sound.class);
+		
+		width = Main.DEFAULT_BUTTON_WIDTH;
+		height = Main.DEFAULT_BUTTON_HEIGHT;
+		// Needs to be called after width and height are set
+		initBtnText(btn_text, fontsize);
+	}
+	
+	public CustomButton(Main game, Vector2 pos, TextureRegion[] texReg, String btn_text, int fontsize) {
+		this.game = game;
+		this.pos = pos;
+		this.btn_text = btn_text;
+		
+		
+		//btn_pressed_texture = tex_pressed;
+		//btn_released_texture = tex_released;
+		this.texReg = texReg;
 		btnClick = game.assetmanager.get(RES_BTN_CLICK_SOUND, Sound.class);
 		
 		width = Main.DEFAULT_BUTTON_WIDTH;
@@ -85,7 +113,7 @@ public class CustomButton extends InputAdapter{
 	}
 	
 	public void render(SpriteBatch spritebatch) {
-		spritebatch.draw(this.getTexture(), pos.x, pos.y, width, height);
+		spritebatch.draw(this.getTextureRegion(), pos.x, pos.y, width, height);
 		//subtraction of 2px in y-direction when pressed to make a 3D-link effect, to make it a more realistic buttonpress
 		// TODO Make 3d effect relative?
 		font.draw(spritebatch, layout, pos.x + (this.pressed ? 1 : 0), pos.y + (height / 2) + (layout.height / 2) - (this.pressed ? 2 : 0));
@@ -146,8 +174,8 @@ public class CustomButton extends InputAdapter{
 		*/
 	}
 	
-	public Texture getTexture() {
-		return this.pressed ? this.btn_pressed_texture : this.btn_released_texture;
+	public TextureRegion getTextureRegion() {
+		return this.pressed ? this.texReg[1] : this.texReg[0];
 	}
 	
 	public int getWidth() {
