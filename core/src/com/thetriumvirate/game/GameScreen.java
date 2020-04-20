@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -44,6 +45,11 @@ public final class GameScreen implements Screen {
 	private static final String RES_TEMPERATUREOVERLAY = "graphics/temperatureoverlay.png";
 	private final Texture tex_temperatureOverlay;
 	private final TextureRegion[] tex_temperatureOverlayRegions;
+	private static final String RES_HOT_SOUND = "audio/hot.wav";
+	private static final String RES_COLD_SOUND = "audio/cold.wav";
+	private Sound hot_sound, cold_sound;
+	private boolean playingTempSound = false;
+	private long tempSoundID = 0;
 	
 	private final Main game;
 	private final OrthographicCamera cam;
@@ -136,6 +142,9 @@ public final class GameScreen implements Screen {
 		this.tex_temperatureOverlayRegions = TextureRegion.split(this.tex_temperatureOverlay, 256, 200)[0];
 		this.temperatureOverlayStatus = TemperatureOverlayStatus.NONE;
 		this.temperatureOverlayAlpha = 0.0f;
+		
+		this.hot_sound = game.assetmanager.get(RES_HOT_SOUND, Sound.class);
+		this.cold_sound = game.assetmanager.get(RES_COLD_SOUND, Sound.class);
 	}
 	
 	// Load all resources for this screen in prefetch !!!
@@ -147,9 +156,10 @@ public final class GameScreen implements Screen {
 		game.assetmanager.load(GameScreen.RES_TEMPERATUREOVERLAY, Texture.class);
 		game.assetmanager.load(GameScreen.RES_BACKGROUND, Texture.class);
 		game.assetmanager.load(GameScreen.RES_SKY, Texture.class);
+		game.assetmanager.load(GameScreen.RES_HOT_SOUND, Sound.class);
+		game.assetmanager.load(GameScreen.RES_COLD_SOUND, Sound.class);
 
 		TutorialManager.prefetch(game);
-		
 		Plant.prefetch(game);
 		Shutter.prefetch(game);
 		TemperatureController.prefetch(game);
@@ -168,9 +178,10 @@ public final class GameScreen implements Screen {
 		game.assetmanager.unload(RES_TEMPERATUREOVERLAY);
 		game.assetmanager.unload(RES_BACKGROUND);
 		game.assetmanager.unload(RES_SKY);
+		game.assetmanager.unload(RES_HOT_SOUND);
+		game.assetmanager.unload(RES_COLD_SOUND);
 		
 		TutorialManager.dispose(game);
-		
 		WateringCan.dispose(game);
 		Tap.dispose(game);
 		TemperatureController.dispose(game);
@@ -197,6 +208,11 @@ public final class GameScreen implements Screen {
 			float toohotness = (this.temperatureController.getCurrentTemp() - Plant.TEMP_MAX)/ (TemperatureController.MAX_TEMP - Plant.TEMP_MAX);
 			
 			this.temperatureOverlayAlpha = toohotness;
+			if(!playingTempSound) {
+				tempSoundID = hot_sound.loop(toohotness * 2f);
+				playingTempSound = true;
+			}
+			else hot_sound.setVolume(tempSoundID, toohotness * 2f);
 			
 			TutorialManager.TutState.TEMP_HIGH.triggerStart();
 		} else if(this.temperatureController.getCurrentTemp() < Plant.TEMP_MIN) {
@@ -206,12 +222,22 @@ public final class GameScreen implements Screen {
 			float toocoldness = (Plant.TEMP_MIN - this.temperatureController.getCurrentTemp()) / Plant.TEMP_MIN;
 			
 			this.temperatureOverlayAlpha = toocoldness;
+			
+			if(!playingTempSound) {
+				tempSoundID = cold_sound.loop(toocoldness * 2f);
+				playingTempSound = true;
+			}
+			else cold_sound.setVolume(tempSoundID, toocoldness * 2f);
+			
 			TutorialManager.TutState.TEMP_LOW.triggerStart();
 		} else {
 			// the plants can grow just fine
 			
 			this.temperatureOverlayStatus = TemperatureOverlayStatus.NONE;
 			this.temperatureOverlayAlpha = 0.0f;
+			hot_sound.stop();
+			cold_sound.stop();
+			this.playingTempSound = false;
 		}
 		
 		
@@ -273,14 +299,14 @@ public final class GameScreen implements Screen {
 		
 		Color before = new Color(batchColor);
 		// TODO: check if / 2f is still necessary with good texture
-		batchColor.a = this.temperatureOverlayAlpha / 2f;
+		batchColor.a = this.temperatureOverlayAlpha;
 		game.spritebatch.setColor(batchColor);
 		
-		if(this.temperatureOverlayStatus == TemperatureOverlayStatus.HOT)
+		if(this.temperatureOverlayStatus == TemperatureOverlayStatus.HOT) {
 			game.spritebatch.draw(this.tex_temperatureOverlayRegions[0], 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
-		else if(this.temperatureOverlayStatus == TemperatureOverlayStatus.COLD)
+		} else if(this.temperatureOverlayStatus == TemperatureOverlayStatus.COLD) {
 			game.spritebatch.draw(this.tex_temperatureOverlayRegions[1], 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
-		
+		}
 		game.spritebatch.setColor(before);
 		
 		

@@ -20,7 +20,7 @@ public final class MenuScreen implements Screen {
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
 	private static final String RES_BACKGROUND = "graphics/menu-background.png";
 	// This is used in all screens except SplashScreen
-	private static final String RES_BACKGROUND_MUSIC = "audio/background-music.mp3";
+	private static final String RES_BACKGROUND_MUSIC = "audio/background-music.wav";
 	
 	//all textures for the btns
 	private static final String RES_BTN_EASY = "graphics/customBtn_easy.png";
@@ -60,7 +60,7 @@ public final class MenuScreen implements Screen {
 		background = game.assetmanager.get(RES_BACKGROUND, Texture.class);
 		music = game.assetmanager.get(RES_BACKGROUND_MUSIC, Music.class);
 		music.setLooping(true);
-		music.setVolume(0.2f);
+		music.setVolume(0.05f);
 		
 		//all btn textures
 		creditsBtn_tex = game.assetmanager.get(RES_BTN_CREDITS, Texture.class);
