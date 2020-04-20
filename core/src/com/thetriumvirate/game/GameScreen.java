@@ -133,7 +133,8 @@ public final class GameScreen implements Screen {
 		this.brightnessOverlayPixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
 
 		this.tex_temperatureOverlay = this.game.assetmanager.get(RES_TEMPERATUREOVERLAY, Texture.class);
-		this.tex_temperatureOverlayRegions = TextureRegion.split(this.tex_temperatureOverlay, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT)[0];
+		//do NOT scale width and hight with Main.WINDOWWIDTH/HEIGHT!
+		this.tex_temperatureOverlayRegions = TextureRegion.split(this.tex_temperatureOverlay, 256, 200)[0];
 		this.temperatureOverlayStatus = TemperatureOverlayStatus.NONE;
 		this.temperatureOverlayAlpha = 0.0f;
 	}
@@ -277,9 +278,9 @@ public final class GameScreen implements Screen {
 		game.spritebatch.setColor(batchColor);
 		
 		if(this.temperatureOverlayStatus == TemperatureOverlayStatus.HOT)
-			game.spritebatch.draw(this.tex_temperatureOverlayRegions[0], 0, 0);
+			game.spritebatch.draw(this.tex_temperatureOverlayRegions[0], 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
 		else if(this.temperatureOverlayStatus == TemperatureOverlayStatus.COLD)
-			game.spritebatch.draw(this.tex_temperatureOverlayRegions[1], 0, 0);
+			game.spritebatch.draw(this.tex_temperatureOverlayRegions[1], 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
 		
 		game.spritebatch.setColor(before);
 		
