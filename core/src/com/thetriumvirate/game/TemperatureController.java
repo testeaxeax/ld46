@@ -123,9 +123,9 @@ public class TemperatureController extends InputAdapter {
 	public void render(SpriteBatch spritebatch) {
 		spritebatch.draw(this.getKnobTextureRegion(), getScaledX(), getScaledY(), KNOB_WIDTH * Main.WINDOW_WIDTH, KNOB_HEIGHT * Main.WINDOW_HEIGHT);
 		
-		spritebatch.draw(tempDisplay_texture, getScaledX() + 1.5f * KNOB_WIDTH * Main.WINDOW_WIDTH, getScaledY(), DISPLAY_WIDTH * Main.WINDOW_WIDTH, DISPLAY_HEIGHT * Main.WINDOW_HEIGHT);
+		//spritebatch.draw(tempDisplay_texture, getScaledX() + 1.5f * KNOB_WIDTH * Main.WINDOW_WIDTH, getScaledY(), DISPLAY_WIDTH * Main.WINDOW_WIDTH, DISPLAY_HEIGHT * Main.WINDOW_HEIGHT);
     
-		this.font.draw(spritebatch, "" + (int) this.currentTemp, getScaledX() + TEXT_OFFSET_X * Main.WINDOW_WIDTH, getScaledY() + TEXT_OFFSET_Y * Main.WINDOW_HEIGHT);
+		//this.font.draw(spritebatch, "" + (int) this.currentTemp, getScaledX() + TEXT_OFFSET_X * Main.WINDOW_WIDTH, getScaledY() + TEXT_OFFSET_Y * Main.WINDOW_HEIGHT);
 	}
 	
 	public Vector2 getPosition() {
