@@ -7,6 +7,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public final class GameOverScreen implements Screen {
@@ -19,6 +21,7 @@ public final class GameOverScreen implements Screen {
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
 	private static final String RES_GAMEOVER_MUSIC = "audio/gameover.wav";
 	private static final String RES_VICTORY_MUSIC = "audio/victory.wav";
+	private static final String RES_BTN_MENU_TEXTURE = "graphics/customBtn_menu.png";
 	
 	private final Main game;
 	private final OrthographicCamera cam;
@@ -29,6 +32,8 @@ public final class GameOverScreen implements Screen {
 	private final Music music;
 
 	private CustomButton btnMenu;
+	private TextureRegion[] btn_texReg;
+	private Texture btn_tex;
 	
 	
 	private boolean gameWon = false;
@@ -49,7 +54,12 @@ public final class GameOverScreen implements Screen {
 		music = game.assetmanager.get(MenuScreen.RES_BACKGROUND_MUSIC, Music.class);
 		InputMultiplexer inputmultiplexer = new InputMultiplexer();
 		
-		this.btnMenu = new CustomButton(game, new Vector2(100, 100), "Main Menu", FONT_SIZE);
+		btn_tex = game.assetmanager.get(RES_BTN_MENU_TEXTURE, Texture.class);
+		btn_texReg = new TextureRegion[2];
+		btn_texReg[0] = new TextureRegion(btn_tex, 0, 0, Main.DEFAULT_BUTTON_WIDTH, Main.DEFAULT_BUTTON_HEIGHT);
+		btn_texReg[1] = new TextureRegion(btn_tex, 0, Main.DEFAULT_BUTTON_HEIGHT, Main.DEFAULT_BUTTON_WIDTH, Main.DEFAULT_BUTTON_HEIGHT);
+		
+		this.btnMenu = new CustomButton(game, new Vector2(100, 100), btn_texReg, "", FONT_SIZE);
 		inputmultiplexer.addProcessor(btnMenu);
 		
 		Gdx.input.setInputProcessor(inputmultiplexer);
@@ -67,6 +77,7 @@ public final class GameOverScreen implements Screen {
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_GAMEOVER_MUSIC, Sound.class);
 		game.assetmanager.load(RES_VICTORY_MUSIC, Sound.class);
+		game.assetmanager.load(RES_BTN_MENU_TEXTURE, Texture.class);
 		
 		CustomButton.prefetch(game);
 	}
@@ -78,6 +89,7 @@ public final class GameOverScreen implements Screen {
 	public void dispose() {
 		game.assetmanager.unload(RES_GAMEOVER_MUSIC);
 		game.assetmanager.unload(RES_VICTORY_MUSIC);
+		game.assetmanager.unload(RES_BTN_MENU_TEXTURE);
 	}
 
 	@Override
