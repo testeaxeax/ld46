@@ -188,7 +188,8 @@ public class WateringCan extends InputAdapter{
 					}
 					return false;
 				} else if(this.tap.checkTapClick(screenX, screenY) && this.fillState < MAX_FILL) {
-					if(!(TutorialManager.isShowing() && TutorialManager.currentShowState() != TutState.WATERING)){
+					System.out.println(TutorialManager.currentShowState());
+					if(!(TutorialManager.isShowing() && TutorialManager.currentShowState() != TutState.CAN_EMPTY)){
 						this.tap.setWaterRunning(true);
 						TutorialManager.TutState.CAN_EMPTY.triggerStop();
 					}
