@@ -154,7 +154,7 @@ public class Shutter extends InputAdapter {
 		
 		final int realY = Main.WINDOW_HEIGHT - screenY;
 		
-		if(buttonPosition.x < screenX && buttonPosition.x + WIDTH > screenX) {
+		if(buttonPosition.x < screenX && buttonPosition.x + BUTTON_WIDTH > screenX) {
 			if(buttonPosition.y < realY && buttonPosition.y + HEIGHT > realY) {
 				if(state == STATE.CLOSED) {
 					state = STATE.OPENING_ACTIVE;

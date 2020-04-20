@@ -44,8 +44,8 @@ public class Tap extends InputAdapter {
 		this.game = instance;
 
 		this.waterRunning = false;
-		this.pos_x = 600 / 1024f;
-		this.pos_y = 300 / 800f;
+		this.pos_x = 752 / 1024f;
+		this.pos_y = 224 / 800f;
 
 		this.tex_tap = this.game.assetmanager.get(RES_TAP, Texture.class);
 		texReg_tap = new TextureRegion[2];//Two states: open and closed. Increase if necessary
