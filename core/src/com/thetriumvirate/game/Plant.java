@@ -1,6 +1,7 @@
 package com.thetriumvirate.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -67,6 +68,9 @@ public class Plant {
 	private Vector2 plant_pos;
 	
 	private Rectangle boundingBox;
+	
+//	private final String RES_SOUND_DECAY = "";
+//	private final Sound soundDecay;
 	
 	private final ParticleEffect splasheffect;
 	private static final String RES_PEFFECT_SPLASH = "particleeffects/watersplash.p";
