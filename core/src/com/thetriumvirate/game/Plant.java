@@ -17,7 +17,7 @@ public class Plant {
 	private static final String RES_PLANTSPRITES = "graphics/plant.png";
 	
 	
-	private static final float POT_POS_Y = (float)(43*4) / 800f;
+	private static final float POT_POS_Y = (float)(44*4) / 800f;
 	private static final float POT_POS_X_OFFSET = (float)(38*4) / 1024f;
 	private static final float POT_WIDTH = 64f / 1024f;
 	private static final float POT_HEIGHT = 64f / 800f;
@@ -69,8 +69,8 @@ public class Plant {
 	
 	private Rectangle boundingBox;
 	
-//	private final String RES_SOUND_DECAY = "";
-//	private final Sound soundDecay;
+	private static final String RES_SOUND_DECAY = "audio/decay.wav";
+	private final Sound soundDecay;
 	
 	private final ParticleEffect splasheffect;
 	private static final String RES_PEFFECT_SPLASH = "particleeffects/watersplash.p";
@@ -95,6 +95,8 @@ public class Plant {
 		this.splasheffect.loadEmitterImages(Gdx.files.internal(RES_PEFFECT_SPLASH_FILES));
 		this.splasheffect.setPosition(plant_pos.x + SPRITEWIDTH / 2, plant_pos.y);
 		
+		this.soundDecay = game.assetmanager.get(RES_SOUND_DECAY, Sound.class);
+		
 		initPlantTextures();
 	}
 	
@@ -117,6 +119,9 @@ public class Plant {
 		//init resources
 		plantpot_texture = game.assetmanager.get(RES_PLANTPOT, Texture.class);
 		plantsprites_texture = game.assetmanager.get(RES_PLANTSPRITES, Texture.class);
+
+		this.soundDecay = game.assetmanager.get(RES_SOUND_DECAY, Sound.class);
+		
 		initPlantTextures();
 	}
 	
@@ -213,16 +218,21 @@ public class Plant {
 		
 		if(oldDecay != this.decayStage)
 			TutorialManager.TutState.WATERING.triggerStart();
+		
+		if(oldDecay < this.decayStage)
+			this.soundDecay.play();
 	}
 	
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_PLANTPOT, Texture.class);
 		game.assetmanager.load(RES_PLANTSPRITES, Texture.class);
+		game.assetmanager.load(RES_SOUND_DECAY, Sound.class);
 	}
 	
 	public static void dispose(Main game) {
 		game.assetmanager.unload(RES_PLANTPOT);
 		game.assetmanager.unload(RES_PLANTSPRITES);
+		game.assetmanager.unload(RES_SOUND_DECAY);
 	}
 
 	//Getters
