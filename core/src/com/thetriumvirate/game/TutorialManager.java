@@ -1,6 +1,5 @@
 package com.thetriumvirate.game;
 
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -14,7 +13,7 @@ public abstract class TutorialManager {
 	private static TextureRegion[] tex_regions;
 	
 	public static enum TutState{
-		TEMP_LOW(0), TEMP_HIGH(1), SHUTTER(2), WATERING(3);
+		TEMP_LOW(0), TEMP_HIGH(1), SHUTTER(2), WATERING(3), CAN_EMPTY(4);
 		
 		private int texIndex;
 		private boolean isShown, hasBeenShown;
@@ -65,25 +64,6 @@ public abstract class TutorialManager {
 	}
 	
 	public static void dispatch(Main game) {
-		game.assetmanager.load(RES_TEX, Texture.class);
-	}
-	
-	public static TutorialInputAdapter getInputAdapter() {
-		if(adapter == null)
-			adapter = new TutorialInputAdapter();
-		
-		return adapter;
-	}
-	
-	private static TutorialInputAdapter adapter;
-	
-	private static class TutorialInputAdapter extends InputAdapter{
-		@Override
-		public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-//			for(TutState ts : TutorialManager.TutState.values())
-//				ts.triggerStop();
-			
-			return false;
-		}
+		game.assetmanager.unload(RES_TEX);
 	}
 }

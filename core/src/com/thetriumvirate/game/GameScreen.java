@@ -80,8 +80,6 @@ public final class GameScreen implements Screen {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		
 		InputMultiplexer inputmultiplexer = new InputMultiplexer();
-
-		inputmultiplexer.addProcessor(TutorialManager.getInputAdapter());
 		
 		this.tap = new Tap(game);
 		inputmultiplexer.addProcessor(this.tap);
