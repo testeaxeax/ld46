@@ -98,6 +98,7 @@ public class WateringCan extends InputAdapter{
 	public void update(float delta) {
 		this.canHead.setPosition(this.pos_x, this.pos_y + HEAD_OFFSET_Y);
 		this.wateringEffect.setPosition((this.pos_x + EFFECT_OFFSET_X) * Main.WINDOW_WIDTH, (this.pos_y + EFFECT_OFFSET_Y) * Main.WINDOW_HEIGHT);
+		this.wateringEffect.update(delta);
 		
 		if(this.wateringPlants && this.wateringEffect.isComplete())
 			this.wateringEffect.start();
@@ -202,11 +203,11 @@ public class WateringCan extends InputAdapter{
 		return false;
 	}
 	
-	public void render(SpriteBatch sb, float delta) {
+	public void render(SpriteBatch sb) {
 		//TODO: ReDo
 		sb.draw(this.getTextureRegion(), this.pos_x * Main.WINDOW_WIDTH, this.pos_y * Main.WINDOW_HEIGHT, DRAW_WIDTH * Main.WINDOW_WIDTH, DRAW_HEIGHT * Main.WINDOW_HEIGHT);
 		
-		this.wateringEffect.draw(sb,  delta);
+		this.wateringEffect.draw(sb);
 			
 		this.hasWateredThisTick = false;
 	}

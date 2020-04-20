@@ -218,9 +218,9 @@ public final class GameScreen implements Screen {
 		this.thermometer.render(game.spritebatch);
 		
 		for(Plant p : this.plants)
-			p.render(game.spritebatch, delta);
+			p.render(game.spritebatch);
 		
-		this.wateringCan.render(game.spritebatch, delta);
+		this.wateringCan.render(game.spritebatch);
 		
 		// drawing the temperature overlay
 		Color batchColor = game.spritebatch.getColor();
