@@ -1,11 +1,9 @@
 package com.thetriumvirate.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -46,7 +44,6 @@ public class Plant {
 	private static final float SPRITEWIDTH_DRAW = (float) SPRITEWIDTH / 1024f;
 	private static final float SPRITEHEIGHT_DRAW = (float) SPRITEHEIGHT / 800f;
 	
-	private final GameScreen gamescreen;
 	private final Main game;
 	
 	
@@ -77,7 +74,6 @@ public class Plant {
 	
 	//posSlot: int from 0-7, or whatever fits on the screen
 	public Plant(GameScreen gamescreen, int posSlot) {
-		this.gamescreen = gamescreen;
 		game = gamescreen.getGame();
 		
 		pot_pos = new Vector2(POT_POS_X_OFFSET + posSlot * SLOT_WIDTH, POT_POS_Y);
@@ -100,7 +96,6 @@ public class Plant {
 	
 	//Constructor for Plants to be used in Menuscrenn or Gameoverscreen. These plants are not intended to receive any update() calls
 	public Plant(GameScreen gamescreen, int posX, int posY, int growthStage, int decayStage) {
-		this.gamescreen = gamescreen;
 		game = gamescreen.getGame();
 		
 		pot_pos = new Vector2(posX, posY);

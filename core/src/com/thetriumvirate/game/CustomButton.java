@@ -31,7 +31,6 @@ public class CustomButton extends InputAdapter{
 	
 	private BitmapFont font;
 	private GlyphLayout layout;
-	private String btn_text = "";
 	
 	//pressed means the btn was pressed down, mainly for determining the texture; clicked means pressed & released and therefore activated
 	private boolean pressed = false;
@@ -41,7 +40,6 @@ public class CustomButton extends InputAdapter{
 	public CustomButton(Main game, Vector2 pos, String btn_text, int fontsize) {
 		this.game = game;
 		this.pos = pos;
-		this.btn_text = btn_text;
 		
 		btn_pressed_texture = game.assetmanager.get(RES_BTN_PRESSED, Texture.class);
 		btn_released_texture = game.assetmanager.get(RES_BTN_RELEASED, Texture.class);
@@ -62,7 +60,6 @@ public class CustomButton extends InputAdapter{
 	public CustomButton(Main game, Vector2 pos, Texture tex_pressed, Texture tex_released, String btn_text, int fontsize) {
 		this.game = game;
 		this.pos = pos;
-		this.btn_text = btn_text;
 		
 		
 		btn_pressed_texture = tex_pressed;
@@ -83,7 +80,6 @@ public class CustomButton extends InputAdapter{
 	public CustomButton(Main game, Vector2 pos, TextureRegion[] texReg, String btn_text, int fontsize) {
 		this.game = game;
 		this.pos = pos;
-		this.btn_text = btn_text;
 		
 		
 		//btn_pressed_texture = tex_pressed;

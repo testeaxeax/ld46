@@ -1,15 +1,7 @@
 package com.thetriumvirate.game.client;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFont.BitmapFontData;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.thetriumvirate.game.FontLoader;
 import com.thetriumvirate.game.Main;
 
