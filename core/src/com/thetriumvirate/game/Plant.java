@@ -205,11 +205,15 @@ public class Plant {
 	
 	
 	private void determineDecayStage() {
+		int oldDecay = this.decayStage;
 		//Maybe add another scaling: not linear but at different gameplay-relevant points.
 		for(int i = 0; i < DECAYSTAGES; i++) {
 			if(decay >= (MAX_DECAY*i)/DECAYSTAGES) decayStage = i;
 			else break;
 		}
+		
+		if(oldDecay != this.decayStage)
+			TutorialManager.TutState.WATERING.triggerStart();
 	}
 	
 	public static void prefetch(Main game) {
@@ -254,6 +258,8 @@ public class Plant {
 			this.splasheffect.reset(false);
 			this.splasheffect.start();
 		}
+		
+		TutorialManager.TutState.WATERING.triggerStop();
 	}
 
 

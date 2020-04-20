@@ -80,7 +80,7 @@ public final class GameScreen implements Screen {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		
 		InputMultiplexer inputmultiplexer = new InputMultiplexer();
-
+		
 		this.tap = new Tap(game);
 		inputmultiplexer.addProcessor(this.tap);
 		
@@ -128,6 +128,8 @@ public final class GameScreen implements Screen {
 		
 		// Do everything else below
 
+		TutorialManager.load(game);
+		
 		this.brightnessOverlayPixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
 
 		this.tex_temperatureOverlay = this.game.assetmanager.get(RES_TEMPERATUREOVERLAY, Texture.class);
@@ -145,6 +147,8 @@ public final class GameScreen implements Screen {
 		game.assetmanager.load(GameScreen.RES_TEMPERATUREOVERLAY, Texture.class);
 		game.assetmanager.load(GameScreen.RES_BACKGROUND, Texture.class);
 		game.assetmanager.load(GameScreen.RES_SKY, Texture.class);
+
+		TutorialManager.prefetch(game);
 		
 		Plant.prefetch(game);
 		Shutter.prefetch(game);
@@ -164,6 +168,8 @@ public final class GameScreen implements Screen {
 		game.assetmanager.unload(RES_TEMPERATUREOVERLAY);
 		game.assetmanager.unload(RES_BACKGROUND);
 		game.assetmanager.unload(RES_SKY);
+		
+		TutorialManager.dispose(game);
 		
 		WateringCan.dispose(game);
 		Tap.dispose(game);
@@ -191,6 +197,8 @@ public final class GameScreen implements Screen {
 			float toohotness = (this.temperatureController.getCurrentTemp() - Plant.TEMP_MAX)/ (TemperatureController.MAX_TEMP - Plant.TEMP_MAX);
 			
 			this.temperatureOverlayAlpha = toohotness;
+			
+			TutorialManager.TutState.TEMP_HIGH.triggerStart();
 		} else if(this.temperatureController.getCurrentTemp() < Plant.TEMP_MIN) {
 			// it's too cold for the plants
 			this.temperatureOverlayStatus = TemperatureOverlayStatus.COLD;
@@ -198,6 +206,7 @@ public final class GameScreen implements Screen {
 			float toocoldness = (Plant.TEMP_MIN - this.temperatureController.getCurrentTemp()) / Plant.TEMP_MIN;
 			
 			this.temperatureOverlayAlpha = toocoldness;
+			TutorialManager.TutState.TEMP_LOW.triggerStart();
 		} else {
 			// the plants can grow just fine
 			
@@ -276,6 +285,8 @@ public final class GameScreen implements Screen {
 		
 		
 		game.spritebatch.draw(new Texture(brightnessOverlayPixmap), 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
+		
+		TutorialManager.render(game.spritebatch);
 		
 		game.spritebatch.end();
 	}

@@ -111,11 +111,11 @@ public class WateringCan extends InputAdapter{
 				this.tap.setWaterRunning(false);
 			}
 		} else if(this.isSelected() && this.wateringPlants) {
-			// TODO DEBUGGING --> uncomment
-			
 			this.fillState -= WATERING_SPEED * delta;
 			
 			if(this.fillState < 0.0f) {
+				TutorialManager.TutState.CAN_EMPTY.triggerStart();
+				
 				this.fillState = 0.0f;
 				this.wateringPlants = false;
 				waterSound.stop();
@@ -178,6 +178,7 @@ public class WateringCan extends InputAdapter{
 					return true;
 				} else if(this.tap.checkTapClick(screenX, screenY) && this.fillState < MAX_FILL) {
 					this.tap.setWaterRunning(true);
+					TutorialManager.TutState.CAN_EMPTY.triggerStop();
 				}
 			} else {
 				if(this.tap.checkAllClicked(screenX,/* Main.WINDOW_HEIGHT - */screenY)) {

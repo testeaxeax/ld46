@@ -158,6 +158,11 @@ public class TemperatureController extends InputAdapter {
 		if(state == STATE.ON) {state = STATE.OFF;}
 		else {state = STATE.ON;}
 		switchSound.play();
+		
+		if(this.state == STATE.ON)
+			TutorialManager.TutState.TEMP_LOW.triggerStop();
+		else if(this.state == STATE.OFF)
+			TutorialManager.TutState.TEMP_HIGH.triggerStop();
 	}
 	
 	public float getCurrentTemp() {
