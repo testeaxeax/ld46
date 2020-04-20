@@ -21,10 +21,7 @@ public class Thermometer {
 	private final Vector2 POS;
 	private final Vector2 MERCURY_OFFSET = new Vector2((float)(15 *4) * (float)Main.WINDOW_WIDTH / 1024f, (float)(17 *4) * (float)Main.WINDOW_HEIGHT / 800f);
 	
-	private final Main game;
-	
 	public Thermometer(Main game, Vector2 pos) {
-		this.game = game;
 		this.POS = pos;
 		
 		thermometer_texture = game.assetmanager.get(RES_THERMOMETER, Texture.class);
@@ -37,10 +34,10 @@ public class Thermometer {
 	
 	public void render(SpriteBatch sb) {
 		//draw thermometer
-		sb.draw(thermometer_texture, this.POS.x, this.POS.y, this.WIDTH, this.HEIGHT);
+		sb.draw(thermometer_texture, this.POS.x, this.POS.y, WIDTH, HEIGHT);
 		
 		//display temperature by drawing the mercury with fixed width of 8 and a hight corresponding to the current temperature
-		sb.draw(this.mercury_texture, this.POS.x + this.MERCURY_OFFSET.x, this.POS.y + this.MERCURY_OFFSET.y, this.MERCURY_WIDTH, (currentTemp * ((float)this.MAX_MERCURY_HEIGHT/(float)TemperatureController.MAX_TEMP)));
+		sb.draw(this.mercury_texture, this.POS.x + this.MERCURY_OFFSET.x, this.POS.y + this.MERCURY_OFFSET.y, MERCURY_WIDTH, (currentTemp * ((float)MAX_MERCURY_HEIGHT/(float)TemperatureController.MAX_TEMP)));
 	}
 	
 	public static void prefetch(Main game) {

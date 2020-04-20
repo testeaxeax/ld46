@@ -1,7 +1,6 @@
 package com.thetriumvirate.game.client;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.thetriumvirate.game.Main;
 import com.google.gwt.user.client.Window;
