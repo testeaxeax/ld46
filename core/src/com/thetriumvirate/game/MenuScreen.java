@@ -64,6 +64,7 @@ public final class MenuScreen implements Screen {
 		background = game.assetmanager.get(RES_BACKGROUND, Texture.class);
 		music = game.assetmanager.get(RES_BACKGROUND_MUSIC, Music.class);
 		music.setLooping(true);
+		music.setVolume(0.2f);
 		
 		//all btn textures
 		creditsBtn_tex = game.assetmanager.get(RES_BTN_CREDITS, Texture.class);
