@@ -17,7 +17,7 @@ public class TemperatureController extends InputAdapter {
 	//private static final String RES_SWITCH_ON = "graphics/switch_on.png";
 	//private static final String RES_SWITCH_OFF = "graphics/switch_off.png";
 	private static final String RES_KNOB = "graphics/tempBtn.png";
-	private static final String RES_TEMPDISPLAY = "graphics/tempMonitor.png";
+	//private static final String RES_TEMPDISPLAY = "graphics/tempMonitor.png";
 	private static final String RES_SWITCH_SOUND = "audio/switch.wav";
 	
 	public static final int MIN_TEMP = 0;
@@ -27,8 +27,8 @@ public class TemperatureController extends InputAdapter {
 	
 	private static final float KNOB_WIDTH = 32f / 1024f;
 	private static final float KNOB_HEIGHT = 32f / 800f;
-	private static final float DISPLAY_WIDTH = 96f / 1024f;
-	private static final float DISPLAY_HEIGHT = 96 / 800f;
+//	private static final float DISPLAY_WIDTH = 96f / 1024f;
+//	private static final float DISPLAY_HEIGHT = 96 / 800f;
 	
 	private static final int TEMP_LOSS_PER_SECOND = 1;
 	private static final int TEMP_INCREASE_PER_SECOND = 1;
@@ -39,14 +39,14 @@ public class TemperatureController extends InputAdapter {
 	
 	// Resources
 //	private final Texture switch_on_texture, switch_off_texture;
-	private final BitmapFont font;
+//	private final BitmapFont font;
 
 	// TODO float relative
-	private static final float TEXT_OFFSET_X = 60f / 1024f;
-	private static final float TEXT_OFFSET_Y = 50f / 800f;
+//	private static final float TEXT_OFFSET_X = 60f / 1024f;
+//	private static final float TEXT_OFFSET_Y = 50f / 800f;
 
 	private final Texture knob_texture;
-	private final Texture tempDisplay_texture;
+	//private final Texture tempDisplay_texture;
 	//private final Texture switch_on_texture, switch_off_texture;
 	private TextureRegion[] knob_texReg;
 	private final int SPRITE_WIDTH = 32;
@@ -71,12 +71,12 @@ public class TemperatureController extends InputAdapter {
 		state = STATE.OFF;
 		
 		// Initialize resources
-		this.font = game.fontloader.get(Main.RES_DEFAULT_FONT, Main.DEFAULT_FONTSIZE, Color.BLACK);
+//		this.font = game.fontloader.get(Main.RES_DEFAULT_FONT, Main.DEFAULT_FONTSIZE, Color.BLACK);
     
 		switchSound = game.assetmanager.get(RES_SWITCH_SOUND, Sound.class);
 	
 		knob_texture = game.assetmanager.get(RES_KNOB, Texture.class);
-		tempDisplay_texture = game.assetmanager.get(RES_TEMPDISPLAY, Texture.class);
+		//tempDisplay_texture = game.assetmanager.get(RES_TEMPDISPLAY, Texture.class);
 		
 		knob_texReg = new TextureRegion[2];
 		knob_texReg[0] = new TextureRegion(knob_texture, 0, 0, SPRITE_WIDTH, SPRITE_HEIGHT);
@@ -86,10 +86,10 @@ public class TemperatureController extends InputAdapter {
 	public static void prefetch(Main game) {
 		//game.assetmanager.load(RES_SWITCH_ON, Texture.class);
 		//game.assetmanager.load(RES_SWITCH_OFF, Texture.class);
-		game.fontloader.load(Main.RES_DEFAULT_FONT, Main.DEFAULT_FONTSIZE, Color.BLACK);
+//		game.fontloader.load(Main.RES_DEFAULT_FONT, Main.DEFAULT_FONTSIZE, Color.BLACK);
     
 		game.assetmanager.load(RES_KNOB, Texture.class);
-		game.assetmanager.load(RES_TEMPDISPLAY, Texture.class);
+		//game.assetmanager.load(RES_TEMPDISPLAY, Texture.class);
     
 		game.assetmanager.load(RES_SWITCH_SOUND, Sound.class);
 	}
@@ -98,8 +98,8 @@ public class TemperatureController extends InputAdapter {
 		//game.assetmanager.unload(RES_SWITCH_OFF);
 		//game.assetmanager.unload(RES_SWITCH_ON);
 		game.assetmanager.unload(RES_KNOB);
-		game.assetmanager.unload(RES_TEMPDISPLAY);
-    game.assetmanager.unload(RES_SWITCH_SOUND);
+		//game.assetmanager.unload(RES_TEMPDISPLAY);
+		game.assetmanager.unload(RES_SWITCH_SOUND);
 	}
 	
 	
