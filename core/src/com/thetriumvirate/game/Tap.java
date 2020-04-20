@@ -17,8 +17,8 @@ public class Tap extends InputAdapter {
 	private static final String RES_TAP_OPENING_SOUND = "audio/tap-opening.wav";
 	private static final String RES_TAP_WATER_RUNNING_SOUND = "audio/tap-running.wav";
 
-	private static final float PLANK_WIDTH = 200f / 1024f;
-	private static final float PLANK_HEIGHT = 60f / 800f;
+	private static final float PLANK_WIDTH = 256f / 1024f;
+	private static final float PLANK_HEIGHT = 64f / 800f;
 	private static final float TAP_WIDTH = 64f / 1024f;
 	private static final float TAP_HEIGHT = 64f / 800f;
 	private static final float TAP_OFFSET_X = PLANK_WIDTH / 2 - TAP_WIDTH / 4;
@@ -124,7 +124,7 @@ public class Tap extends InputAdapter {
 	}
 
 	public float getDockY() {
-		return this.pos_y + PLANK_HEIGHT / 2;
+		return this.pos_y + (PLANK_HEIGHT / 2) - (12f/800f);
 	}
 
 	public static void prefetch(Main game) {
