@@ -75,6 +75,7 @@ public final class SplashScreen implements Screen {
 		
 		loadMusic = game.assetmanager.syncGet(RES_LOAD_MUSIC, Music.class);
 		loadMusic.setLooping(true);
+		loadMusic.setVolume(0.05f);
 	}
 
 	@Override

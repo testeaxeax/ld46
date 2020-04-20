@@ -26,6 +26,7 @@ public final class GameOverScreen implements Screen {
 	// Declare resource variables below
 	// For example: private final Texture testTexture;
 	private final Sound jingle;
+	private final Music music;
 
 	private CustomButton btnMenu;
 	
@@ -45,6 +46,7 @@ public final class GameOverScreen implements Screen {
 		// Initialize resource variables below
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
 		jingle = game.assetmanager.get(gameWon ? RES_VICTORY_MUSIC : RES_GAMEOVER_MUSIC, Sound.class);
+		music = game.assetmanager.get(MenuScreen.RES_BACKGROUND_MUSIC, Music.class);
 		InputMultiplexer inputmultiplexer = new InputMultiplexer();
 		
 		this.btnMenu = new CustomButton(game, new Vector2(100, 100), "Main Menu", FONT_SIZE);
@@ -80,6 +82,7 @@ public final class GameOverScreen implements Screen {
 
 	@Override
 	public void show() {
+		music.play();
 		jingle.play();
 	}
 

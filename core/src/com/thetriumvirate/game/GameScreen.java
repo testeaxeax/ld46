@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -27,6 +28,7 @@ public final class GameScreen implements Screen {
 	
 	private static final String RES_BACKGROUND = "graphics/background.png";
 	private static final String RES_SKY = "graphics/sky.png";
+	private static final String RES_MUSIC = "audio/background-music.wav";
 	private static final int SHUTTER1POSX = (int)(128f * ((float)Main.WINDOW_WIDTH / 1024f));
 	private static final int SHUTTER1POSY = (int)(800f * ((float)Main.WINDOW_HEIGHT / 800f));
 	private static final int SHUTTER2POSX = (int)(416f * ((float)Main.WINDOW_WIDTH / 1024f));
@@ -56,6 +58,7 @@ public final class GameScreen implements Screen {
 	
 	// Declare resource variables below
 	// For example: private final Texture testTexture;
+	private Music music;
 	
 	private Tap tap;
 	private WateringCan wateringCan;
@@ -131,6 +134,10 @@ public final class GameScreen implements Screen {
 		this.background_texture = this.game.assetmanager.get(RES_BACKGROUND, Texture.class);
 		this.sky_texture = this.game.assetmanager.get(RES_SKY, Texture.class);
 		
+		this.music = this.game.assetmanager.get(RES_MUSIC, Music.class);
+		this.music.setLooping(true);
+		this.music.setVolume(0.05f);
+		
 		// Do everything else below
 
 		TutorialManager.load(game);
@@ -158,6 +165,7 @@ public final class GameScreen implements Screen {
 		game.assetmanager.load(GameScreen.RES_SKY, Texture.class);
 		game.assetmanager.load(GameScreen.RES_HOT_SOUND, Sound.class);
 		game.assetmanager.load(GameScreen.RES_COLD_SOUND, Sound.class);
+		game.assetmanager.load(RES_MUSIC, Music.class);
 
 		TutorialManager.prefetch(game);
 		Plant.prefetch(game);
@@ -180,6 +188,7 @@ public final class GameScreen implements Screen {
 		game.assetmanager.unload(RES_SKY);
 		game.assetmanager.unload(RES_HOT_SOUND);
 		game.assetmanager.unload(RES_COLD_SOUND);
+		game.assetmanager.unload(RES_MUSIC);
 		
 		TutorialManager.dispose(game);
 		WateringCan.dispose(game);
@@ -192,7 +201,7 @@ public final class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-
+		music.play();
 	}
 	
 	public void update(float delta) {
@@ -357,7 +366,7 @@ public final class GameScreen implements Screen {
 
 	@Override
 	public void hide() {
-
+		music.stop();
 	}
 	
 	public List<Plant> getPlants(){
