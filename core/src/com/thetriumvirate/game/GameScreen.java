@@ -259,8 +259,8 @@ public final class GameScreen implements Screen {
 		brightnessOverlayPixmap.setColor(0f, 0f, 0f, alpha);
 		brightnessOverlayPixmap.fill();
 
-    //uncomment to enable getting a game over!
-		//checkIfGameOver();
+		//uncomment to enable getting a game over!
+		checkIfGameOver();
 
 	}
 
