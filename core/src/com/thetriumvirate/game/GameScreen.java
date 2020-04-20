@@ -25,6 +25,17 @@ public final class GameScreen implements Screen {
 
 	private static final String RES_DEBUG_RECT = "graphics/debugrec.png";
 	
+	private static final String RES_BACKGROUND = "graphics/background.png";
+	private static final String RES_SKY = "graphics/sky.png";
+	private static final int SHUTTER1POSX = (int)((float)(32*4) * (float)Main.WINDOW_WIDTH / 1024f);
+	private static final int SHUTTER1POSY = (int)((float)(60*4  + Shutter.MAX_OFFSET) * (float)Main.WINDOW_HEIGHT / 800f);
+	private static final int SHUTTER2POSX = (int)((float)(174*4 - Shutter.getWidth()) * (float)Main.WINDOW_WIDTH / 1024f);
+	private static final int SHUTTER2POSY = (int)((float)(60*4  + Shutter.MAX_OFFSET) * (float)Main.WINDOW_HEIGHT / 800f);
+	private static final int SHUTTERBTN1_OFFSET_X = (int)((float)(- Shutter.getButtonWidth() * 2f) * (float)Main.WINDOW_WIDTH / 1024f);
+	private static final int SHUTTERBTN2_OFFSET_X = (int)((float)(Shutter.getWidth() + Shutter.getButtonWidth()) * (float)Main.WINDOW_WIDTH / 1024f);
+	private static final int SHUTTERBTN1_OFFSET_Y = (int)((float)(- Shutter.MAX_OFFSET) * (float)Main.WINDOW_WIDTH / 1024f);
+	private static final int SHUTTERBTN2_OFFSET_Y = (int)((float)(- Shutter.MAX_OFFSET) * (float)Main.WINDOW_WIDTH / 1024f);
+	
 	public final Texture tex_debugrect;
 	public final Pixmap brightnessOverlayPixmap;
 	
@@ -45,6 +56,10 @@ public final class GameScreen implements Screen {
 	private WateringCan wateringCan;
 	private final TemperatureController temperatureController;
 	private final List<Shutter> shutters;
+	
+	private final Texture background_texture, sky_texture;
+	
+	private Thermometer thermometer;
 	
 	private final int difficulty;
 
@@ -77,14 +92,20 @@ public final class GameScreen implements Screen {
 		
 		
 		shutters = new ArrayList<Shutter>();
-		for(int i = 0; i < 4; i++) {
+		//replaced by hardcoded shutters below to fit the background
+		/*for(int i = 0; i < 4; i++) {
 			Shutter shutter = new Shutter(this,
 					new Vector2(100 + Shutter.getWidth() * 2 * i, 400),
 					new Vector2(235 + Shutter.getWidth() * 2 * i, 300));
 			this.shutters.add(shutter);
 			inputmultiplexer.addProcessor(shutter);
-		}
-		
+		}*/
+		Shutter shutter1 = new Shutter(this, new Vector2(SHUTTER1POSX, SHUTTER1POSY), new Vector2(SHUTTER1POSX + SHUTTERBTN1_OFFSET_X, SHUTTER1POSY + SHUTTERBTN1_OFFSET_Y));
+		this.shutters.add(shutter1);
+		inputmultiplexer.addProcessor(shutter1);
+		Shutter shutter2 = new Shutter(this,  new Vector2(SHUTTER2POSX, SHUTTER2POSY),  new Vector2(SHUTTER2POSX + SHUTTERBTN2_OFFSET_X, SHUTTER2POSY + SHUTTERBTN2_OFFSET_Y));
+		this.shutters.add(shutter2);
+		inputmultiplexer.addProcessor(shutter2);
 		
 		this.plants = new ArrayList<Plant>();
 		
@@ -92,6 +113,7 @@ public final class GameScreen implements Screen {
 			this.plants.add(new Plant(this, i));
 		
 		
+		this.thermometer = new Thermometer(game, new Vector2((int)((float)(828) * (float)Main.WINDOW_WIDTH / 1024f), (int)((float)(508) * (float)Main.WINDOW_HEIGHT / 800f)));
 		
 		
 		Gdx.input.setInputProcessor(inputmultiplexer);
@@ -99,6 +121,10 @@ public final class GameScreen implements Screen {
 		// Initialize resource variables below
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
 		this.tex_debugrect = this.game.assetmanager.get(RES_DEBUG_RECT, Texture.class);
+		
+		//backgroundtextures
+		this.background_texture = this.game.assetmanager.get(RES_BACKGROUND, Texture.class);
+		this.sky_texture = this.game.assetmanager.get(RES_SKY, Texture.class);
 		
 		// Do everything else below
 
@@ -117,13 +143,16 @@ public final class GameScreen implements Screen {
 	public static void prefetch(Main game) {
 		game.assetmanager.load(GameScreen.RES_DEBUG_RECT, Texture.class);
 		game.assetmanager.load(GameScreen.RES_TEMPERATUREOVERLAY, Texture.class);
+		game.assetmanager.load(GameScreen.RES_BACKGROUND, Texture.class);
+		game.assetmanager.load(GameScreen.RES_SKY, Texture.class);
 		
 		Plant.prefetch(game);
 		Shutter.prefetch(game);
 		TemperatureController.prefetch(game);
 		Tap.prefetch(game);
 		WateringCan.prefetch(game);
-
+		Thermometer.prefetch(game);
+		
 	}
 	
 	// Unload all resources for this screen
@@ -133,12 +162,15 @@ public final class GameScreen implements Screen {
 	public void dispose() {
 		game.assetmanager.unload(RES_DEBUG_RECT);
 		game.assetmanager.unload(RES_TEMPERATUREOVERLAY);
+		game.assetmanager.unload(RES_BACKGROUND);
+		game.assetmanager.unload(RES_SKY);
 		
 		WateringCan.dispose(game);
 		Tap.dispose(game);
 		TemperatureController.dispose(game);
 		Shutter.dispose(game);
 		Plant.dispose(game);
+		Thermometer.dispose(game);
 	}
 
 	@Override
@@ -148,7 +180,9 @@ public final class GameScreen implements Screen {
 	
 	public void update(float delta) {
 		this.wateringCan.update(delta);
+		this.tap.update(delta);
 		this.temperatureController.update(delta);
+		this.thermometer.update(delta, this.temperatureController.getCurrentTemp());
 		
 		if(this.temperatureController.getCurrentTemp() > Plant.TEMP_MAX) {
 			// it's too hot for the plants
@@ -202,17 +236,28 @@ public final class GameScreen implements Screen {
 		
 		game.spritebatch.begin();
 		
+		//use correct render order: sky, then shutter, then background, then shutterbtn!
+		
+		game.spritebatch.draw(sky_texture, 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
+		
 		for(Shutter shutter : shutters) {
 			shutter.render(game.spritebatch);
 		}
 		
+		game.spritebatch.draw(background_texture, 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
+		
+		for(Shutter shutter : shutters) {
+			shutter.renderBtn(game.spritebatch);
+		}
+		
 		this.tap.render(game.spritebatch);
 		this.temperatureController.render(game.spritebatch);
+		this.thermometer.render(game.spritebatch);
 		
 		for(Plant p : this.plants)
-			p.render(game.spritebatch, delta);
+			p.render(game.spritebatch);
 		
-		this.wateringCan.render(game.spritebatch, delta);
+		this.wateringCan.render(game.spritebatch);
 		
 		// drawing the temperature overlay
 		Color batchColor = game.spritebatch.getColor();

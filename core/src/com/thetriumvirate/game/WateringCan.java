@@ -22,8 +22,8 @@ public class WateringCan extends InputAdapter{
 	//private static final String RES_CAN_EMPTY = "graphics/canempty.png";
 	//private static final String RES_CAN_FILLSTATES[] = {"graphics/canstate1.png", "graphics/canstate2.png", "graphics/canstate3.png", "graphics/canstate4.png", "graphics/canstate5.png"};
 
-	private static final int DRAW_WIDTH = 128;
-	private static final int DRAW_HEIGHT = 128;
+	private static final float DRAW_WIDTH = 128f / 1024f;
+	private static final float DRAW_HEIGHT = 128f / 800f;
 	private static final int SPRITE_WIDTH = 64;
 	private static final int SPRITE_HEIGHT = 64;
 	
@@ -36,7 +36,7 @@ public class WateringCan extends InputAdapter{
 	private TextureRegion[][] texReg_can;
 	
 	
-	private int pos_x, pos_y;
+	private float pos_x, pos_y;
 	
 	// min: 0 max: 1000 (ml?)
 	private float fillState;
@@ -48,16 +48,17 @@ public class WateringCan extends InputAdapter{
 	
 	private static final float WATERING_SPEED = 150.0f;
 
-	private static final int HEAD_SIZE = 45;
-	private static final int HEAD_OFFSET_Y = 10;
+	private static final float HEAD_WIDTH = 45f / 1024f;
+	private static final float HEAD_HEIGHT = 45f / 800f;
+	private static final float HEAD_OFFSET_Y = 10f / 800f;
 	private Rectangle canHead;
 	private boolean hasWateredThisTick = false;
 	
 	private final ParticleEffect wateringEffect;
-	private static final String RES_PEFFECT = "particleeffects/watersplash/effectcan.p";
-	private static final String RES_PEFFECT_FILES = "particleeffects/watersplash/";
-	private static final int EFFECT_OFFSET_X = 8;
-	private static final int EFFECT_OFFSET_Y = 10;
+	private static final String RES_PEFFECT = "particleeffects/effectcan.p";
+	private static final String RES_PEFFECT_FILES = "particleeffects/";
+	private static final float EFFECT_OFFSET_X = 8f / 1024f;
+	private static final float EFFECT_OFFSET_Y = 10f / 800f;
 	
 	public WateringCan(final GameScreen gameScreen, final Tap myTap) {
 		this.game = gameScreen;
@@ -73,7 +74,7 @@ public class WateringCan extends InputAdapter{
 		this.pos_x = this.tap.getDockX(DRAW_WIDTH);
 		this.pos_y = this.tap.getDockY();
 		
-		this.canHead = new Rectangle(this.pos_x, this.pos_y + HEAD_OFFSET_Y, HEAD_SIZE, HEAD_SIZE);
+		this.canHead = new Rectangle(this.pos_x, this.pos_y + HEAD_OFFSET_Y, HEAD_WIDTH, HEAD_HEIGHT);
 		
 		this.wateringEffect = new ParticleEffect();
 		this.wateringEffect.load(Gdx.files.internal(RES_PEFFECT), Gdx.files.internal(RES_PEFFECT_FILES));
@@ -96,7 +97,8 @@ public class WateringCan extends InputAdapter{
 	
 	public void update(float delta) {
 		this.canHead.setPosition(this.pos_x, this.pos_y + HEAD_OFFSET_Y);
-		this.wateringEffect.setPosition(this.pos_x + EFFECT_OFFSET_X, this.pos_y + EFFECT_OFFSET_Y);
+		this.wateringEffect.setPosition((this.pos_x + EFFECT_OFFSET_X) * Main.WINDOW_WIDTH, (this.pos_y + EFFECT_OFFSET_Y) * Main.WINDOW_HEIGHT);
+		this.wateringEffect.update(delta);
 		
 		if(this.wateringPlants && this.wateringEffect.isComplete())
 			this.wateringEffect.start();
@@ -132,7 +134,10 @@ public class WateringCan extends InputAdapter{
 	}
 	
 	public boolean checkClick(int mousex, int mousey) {
-		return mousex >= this.pos_x && mousex <= (this.pos_x + DRAW_WIDTH) && mousey >= this.pos_y && mousey <= (this.pos_y + DRAW_HEIGHT);
+		float mX = (float) mousex / Main.WINDOW_WIDTH;
+		float mY = (float) mousey / Main.WINDOW_HEIGHT;
+		
+		return mX >= this.pos_x && mX <= (this.pos_x + DRAW_WIDTH) && mY >= this.pos_y && mY <= (this.pos_y + DRAW_HEIGHT);
 	}
 	
 	@Override
@@ -171,11 +176,11 @@ public class WateringCan extends InputAdapter{
 				if(this.checkClick(screenX, screenY)) {
 					this.select(screenX, screenY);
 					return true;
-				} else if(this.tap.checkTapClick(screenX, screenY)) {
+				} else if(this.tap.checkTapClick(screenX, screenY) && this.fillState < MAX_FILL) {
 					this.tap.setWaterRunning(true);
 				}
 			} else {
-				if(this.tap.checkAllClicked(screenX, Main.WINDOW_HEIGHT - screenY)) {
+				if(this.tap.checkAllClicked(screenX,/* Main.WINDOW_HEIGHT - */screenY)) {
 					this.unselect();
 				
 					return true;
@@ -198,56 +203,12 @@ public class WateringCan extends InputAdapter{
 		return false;
 	}
 	
-	public void render(SpriteBatch sb, float delta) {
-		// TODO: add sprinkling animation
-		
-//		sb.begin();
-//		if(this.wateringPlants)
-//			sb.draw(tex_can, this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
-//		else {
-			//sb.draw(tex_can_standing, this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
-			
-		
+	public void render(SpriteBatch sb) {
 		//TODO: ReDo
-			sb.draw(this.getTextureRegion(), this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
-			
-			
-			//not necessary anymore as the fillStated is now incororated into the Textureregion texReg_can
-			/*if(this.fillState > 0.0f) {
-				float fillPercentage = this.fillState / MAX_FILL;
-				
-				int selectedTexture = 0;
-				
-				if(this.fillState == MAX_FILL)
-					selectedTexture = 4;
-				else if(fillPercentage > 0.75f)
-					selectedTexture = 3;
-				else if(fillPercentage > 0.5f)
-					selectedTexture = 2;
-				else if(fillPercentage > 0.25f)
-					selectedTexture = 1;
-				
-				
-				sb.draw(this.tex_can_fillstates[selectedTexture], this.pos_x, this.pos_y, DRAW_WIDTH, DRAW_HEIGHT);
-				
-			}*/
-
-			this.wateringEffect.draw(sb,  delta);
-//		}
-//		sb.end();
+		sb.draw(this.getTextureRegion(), this.pos_x * Main.WINDOW_WIDTH, this.pos_y * Main.WINDOW_HEIGHT, DRAW_WIDTH * Main.WINDOW_WIDTH, DRAW_HEIGHT * Main.WINDOW_HEIGHT);
 		
-//		Color c = new Color(sb.getColor());
-//		
-//		if(this.fillState <= 0.0f)
-//			sb.setColor(1.0f, 0.0f, 0.0f, 0.5f);
-//		else if(this.hasWateredThisTick)
-//			sb.setColor(0.0f, 0.0f, 1.0f, 0.5f);
-//		else
-//			sb.setColor(0.0f, 0.0f, 0.0f, 0.3f);
-//		
-//		sb.draw(this.game.tex_debugrect, this.canHead.x, this.canHead.y, this.canHead.width, this.canHead.height);
-//		
-//		sb.setColor(c);
+		this.wateringEffect.draw(sb);
+			
 		this.hasWateredThisTick = false;
 	}
 
@@ -256,8 +217,8 @@ public class WateringCan extends InputAdapter{
 		screenY = Main.WINDOW_HEIGHT - screenY;
 		
 		if(this.selected) {
-			this.pos_x = screenX - DRAW_WIDTH / 2;
-			this.pos_y = screenY - DRAW_HEIGHT / 2;
+			this.pos_x = (float) screenX / Main.WINDOW_WIDTH - DRAW_WIDTH / 2;
+			this.pos_y = (float) screenY / Main.WINDOW_HEIGHT- DRAW_HEIGHT / 2;
 			
 			return true;
 		}
@@ -270,8 +231,8 @@ public class WateringCan extends InputAdapter{
 		screenY = Main.WINDOW_HEIGHT - screenY;
 		
 		if(this.selected) {
-			this.pos_x = screenX - DRAW_WIDTH / 2;
-			this.pos_y = screenY - DRAW_HEIGHT / 2;
+			this.pos_x = (float) screenX / Main.WINDOW_WIDTH- DRAW_WIDTH / 2;
+			this.pos_y = (float) screenY / Main.WINDOW_HEIGHT - DRAW_HEIGHT / 2;
 			
 			return true;
 		}
@@ -300,8 +261,8 @@ public class WateringCan extends InputAdapter{
 		this.selected = true;
 		game.setMouseInUse(true);
 		
-		this.pos_x = screenX - DRAW_WIDTH / 2;
-		this.pos_y = screenY - DRAW_HEIGHT / 2;
+		this.pos_x = (float) screenX / Main.WINDOW_WIDTH - DRAW_WIDTH / 2;
+		this.pos_y = (float) screenY / Main.WINDOW_HEIGHT - DRAW_HEIGHT / 2;
 		takeSound.play();
 	}
 

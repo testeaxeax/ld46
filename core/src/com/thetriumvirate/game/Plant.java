@@ -18,11 +18,11 @@ public class Plant {
 	private static final String RES_PLANTSPRITES = "graphics/plant.png";
 	
 	
-	private static final int POT_POS_Y = 100;
-	private static final int POT_POS_X_OFFSET = 100;
-	private static final int POT_WIDTH = 64;
-	private static final int POT_HEIGHT = 64;
-	private static final int SLOT_WIDTH = 100;
+	private static final float POT_POS_Y = (float)(45*4) / 800f;
+	private static final float POT_POS_X_OFFSET = (float)(38*4) / 1024f;
+	private static final float POT_WIDTH = 64f / 1024f;
+	private static final float POT_HEIGHT = 64f / 800f;
+	private static final float SLOT_WIDTH = 100f / 1024f;
 	
 	//  MAX_GROWTH/GROWTH_PER_SEC is the lower bar of the levels duration in seconds
 	private static final int MAX_GROWTH = 200; 
@@ -43,6 +43,8 @@ public class Plant {
 	private static final int DECAYSTAGES = 5;
 	private static final int SPRITEWIDTH = 64;
 	private static final int SPRITEHEIGHT = 128;
+	private static final float SPRITEWIDTH_DRAW = (float) SPRITEWIDTH / 1024f;
+	private static final float SPRITEHEIGHT_DRAW = (float) SPRITEHEIGHT / 800f;
 	
 	private final GameScreen gamescreen;
 	private final Main game;
@@ -70,7 +72,8 @@ public class Plant {
 	private Rectangle boundingBox;
 	
 	private final ParticleEffect splasheffect;
-	private static final String RES_PEFFECT_SPLASH = "particleeffects/watersplash/watersplash.p";
+	private static final String RES_PEFFECT_SPLASH = "particleeffects/watersplash.p";
+	private static final String RES_PEFFECT_SPLASH_FILES = "particleeffects/";
 	
 	//posSlot: int from 0-7, or whatever fits on the screen
 	public Plant(GameScreen gamescreen, int posSlot) {
@@ -78,17 +81,18 @@ public class Plant {
 		game = gamescreen.getGame();
 		
 		pot_pos = new Vector2(POT_POS_X_OFFSET + posSlot * SLOT_WIDTH, POT_POS_Y);
-		plant_pos = new Vector2(pot_pos.x, pot_pos.y + POT_HEIGHT - 4); // -4 offset so the plant is "inside the pot" bcs the pot overlaps over the plant; 
+		plant_pos = new Vector2(pot_pos.x, pot_pos.y + POT_HEIGHT - (4f / 800f)); // -4 offset so the plant is "inside the pot" bcs the pot overlaps over the plant; 
 		
-		this.boundingBox = new Rectangle(pot_pos.x, pot_pos.y, POT_WIDTH, POT_HEIGHT + SPRITEHEIGHT);
+		// TODO: Remove the scaling once the coordinates are relative
+		this.boundingBox = new Rectangle(pot_pos.x, pot_pos.y, POT_WIDTH, POT_HEIGHT + (float) SPRITEHEIGHT / 128f);
 		
 		//init resources
-		plantpot_texture = game.assetmanager.syncGet(RES_PLANTPOT, Texture.class);
-		plantsprites_texture = game.assetmanager.syncGet(RES_PLANTSPRITES, Texture.class);
+		plantpot_texture = game.assetmanager.get(RES_PLANTPOT, Texture.class);
+		plantsprites_texture = game.assetmanager.get(RES_PLANTSPRITES, Texture.class);
 		
 		this.splasheffect = new ParticleEffect();
 		this.splasheffect.loadEmitters(Gdx.files.internal(RES_PEFFECT_SPLASH));
-		this.splasheffect.loadEmitterImages(Gdx.files.internal("particleeffects/watersplash/"));
+		this.splasheffect.loadEmitterImages(Gdx.files.internal(RES_PEFFECT_SPLASH_FILES));
 		this.splasheffect.setPosition(plant_pos.x + SPRITEWIDTH / 2, plant_pos.y);
 		
 		initPlantTextures();
@@ -100,24 +104,27 @@ public class Plant {
 		game = gamescreen.getGame();
 		
 		pot_pos = new Vector2(posX, posY);
-		plant_pos = new Vector2(posX, posY + POT_HEIGHT - 4); // -4 offset so the plant is "inside the pot" bcs the pot overlaps over the plant; 
+		plant_pos = new Vector2(posX, posY + POT_HEIGHT - (4f / 800f)); // -4 offset so the plant is "inside the pot" bcs the pot overlaps over the plant; 
 		
-		this.boundingBox = new Rectangle(pot_pos.x, pot_pos.y, POT_WIDTH, POT_HEIGHT + SPRITEHEIGHT);
+		this.boundingBox = new Rectangle(pot_pos.x, pot_pos.y, POT_WIDTH, POT_HEIGHT + SPRITEHEIGHT_DRAW);
 		
 		this.splasheffect = new ParticleEffect();
 		this.splasheffect.loadEmitters(Gdx.files.internal(RES_PEFFECT_SPLASH));
 		this.splasheffect.loadEmitterImages(Gdx.files.internal("particleeffects/watersplash/"));
-		this.splasheffect.setPosition(plant_pos.x + SPRITEWIDTH / 2, plant_pos.y);
+		this.splasheffect.setPosition((plant_pos.x + SPRITEWIDTH_DRAW / 2f) * Main.WINDOW_WIDTH, plant_pos.y * Main.WINDOW_HEIGHT);
 		
 		this.decayStage = decayStage;
 		this.growthStage = growthStage;
 		//init resources
-		plantpot_texture = game.assetmanager.syncGet(RES_PLANTPOT, Texture.class);
-		plantsprites_texture = game.assetmanager.syncGet(RES_PLANTSPRITES, Texture.class);
+		plantpot_texture = game.assetmanager.get(RES_PLANTPOT, Texture.class);
+		plantsprites_texture = game.assetmanager.get(RES_PLANTSPRITES, Texture.class);
 		initPlantTextures();
 	}
 	
 	public void update(float delta, float shutteralpha, float currentTemp) {
+		this.splasheffect.setPosition((plant_pos.x + SPRITEWIDTH_DRAW / 2f) * Main.WINDOW_WIDTH, plant_pos.y * Main.WINDOW_HEIGHT);
+		this.splasheffect.update(delta);
+		
 		// check the Temp and react to it; if it's...
 		// too high: speed up decay process and remove part of the water
 		// too low:  stop growth process
@@ -159,25 +166,16 @@ public class Plant {
 		
 	}
 	
-	public void render(SpriteBatch spritebatch, float delta) {
+	public void render(SpriteBatch spritebatch) {
 		//first render the plant
 		
 		
 		//secondly, render the pot
-		spritebatch.draw(plantpot_texture, pot_pos.x, pot_pos.y, POT_WIDTH, POT_HEIGHT);
+		spritebatch.draw(plantpot_texture, pot_pos.x * Main.WINDOW_WIDTH, pot_pos.y * Main.WINDOW_HEIGHT, POT_WIDTH * Main.WINDOW_WIDTH, POT_HEIGHT * Main.WINDOW_HEIGHT);
 		
-		spritebatch.draw(this.getTextureRegion(), plant_pos.x, plant_pos.y, SPRITEWIDTH, SPRITEHEIGHT);
+		spritebatch.draw(this.getTextureRegion(), plant_pos.x * Main.WINDOW_WIDTH, plant_pos.y * Main.WINDOW_HEIGHT, SPRITEWIDTH_DRAW * Main.WINDOW_WIDTH, SPRITEHEIGHT_DRAW * Main.WINDOW_HEIGHT);
 
-		//if(!this.splasheffect.isComplete())
-		this.splasheffect.draw(spritebatch, delta);
-		
-
-//		Color before = new Color(spritebatch.getColor());
-//		
-//		spritebatch.setColor(0.0f, 1.0f, 0.0f, 0.5f);
-//		spritebatch.draw(this.gamescreen.tex_debugrect, this.boundingBox.x, this.boundingBox.y, this.boundingBox.width, this.boundingBox.height);
-//	
-//		spritebatch.setColor(before);
+		this.splasheffect.draw(spritebatch);
 	}
 	
 	

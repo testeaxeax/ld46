@@ -16,10 +16,10 @@ public class Shutter extends InputAdapter {
 	private static final String RES_SHUTTER_CLOSING_SOUND = "audio/shutter-closing.wav";
 	private static final String RES_SHUTTER_OPENING_SOUND = "audio/shutter-opening.wav";
 	
-	private static final int MAX_OFFSET = 100;
+	public static final int MAX_OFFSET = (140*4);
 	private static final int OFFSET_SPEED_CLOSING = 300;
 	private static final int OFFSET_SPEED_OPENING = 300;
-	private static final int WIDTH = 128;
+	private static final int WIDTH = 280;
 	private static final int HEIGHT = 512;
 	private static final int BUTTON_WIDTH = 32;
 	private static final int BUTTON_HEIGHT = HEIGHT;
@@ -139,8 +139,11 @@ public class Shutter extends InputAdapter {
 	public void render(SpriteBatch spriteBatch) {
 //		spriteBatch.begin();
 		spriteBatch.draw(shutterTexture, position.x, position.y, WIDTH, HEIGHT);
-		spriteBatch.draw(this.getButtonTextureRegion(), buttonPosition.x, buttonPosition.y, BUTTON_WIDTH, BUTTON_HEIGHT);
 //		spriteBatch.end();
+	}
+	
+	public void renderBtn(SpriteBatch spriteBatch) {
+		spriteBatch.draw(this.getButtonTextureRegion(), buttonPosition.x, buttonPosition.y, BUTTON_WIDTH, BUTTON_HEIGHT);
 	}
 	
 	@Override
@@ -151,7 +154,7 @@ public class Shutter extends InputAdapter {
 		
 		final int realY = Main.WINDOW_HEIGHT - screenY;
 		
-		if(buttonPosition.x < screenX && buttonPosition.x + WIDTH > screenX) {
+		if(buttonPosition.x < screenX && buttonPosition.x + BUTTON_WIDTH > screenX) {
 			if(buttonPosition.y < realY && buttonPosition.y + HEIGHT > realY) {
 				if(state == STATE.CLOSED) {
 					state = STATE.OPENING_ACTIVE;
