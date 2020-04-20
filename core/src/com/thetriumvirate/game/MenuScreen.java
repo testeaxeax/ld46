@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public final class MenuScreen implements Screen {
@@ -25,9 +26,22 @@ public final class MenuScreen implements Screen {
 	// This is used in all screens except SplashScreen
 	private static final String RES_BACKGROUND_MUSIC = "audio/background-music.mp3";
 	
+	//all textures for the btns
+	private static final String RES_BTN_EASY = "graphics/customBtn_easy.png";
+	private static final String RES_BTN_MEDIUM = "graphics/customBtn_medium.png";
+	private static final String RES_BTN_HARD = "graphics/customBtn_hard.png";
+	private static final String RES_BTN_EXIT = "graphics/customBtn_exit.png";
+	private static final String RES_BTN_CREDITS = "graphics/customBtn_credits.png";
+	//does NOT need scaling for html!
+	private static final int BTN_SPRITE_WIDTH = 128;
+	private static final int BTN_SPRITE_HEIGHT = 64;
+	//---
+	
 	private final Main game;
 	private final OrthographicCamera cam;
 	private final CustomButton creditsBtn, easyBtn, moderateBtn, difficultBtn;
+	private final Texture creditsBtn_tex, easyBtn_tex, moderateBtn_tex, difficultBtn_tex;
+	private TextureRegion[] creditsBtn_texReg, easyBtn_texReg, moderateBtn_texReg, difficultBtn_texReg;
 	private final InputMultiplexer multiplexer;
 	
 	// Declare resource variables below
@@ -50,12 +64,37 @@ public final class MenuScreen implements Screen {
 		background = game.assetmanager.get(RES_BACKGROUND, Texture.class);
 		music = game.assetmanager.get(RES_BACKGROUND_MUSIC, Music.class);
 		music.setLooping(true);
+		music.setVolume(0.2f);
+		
+		//all btn textures
+		creditsBtn_tex = game.assetmanager.get(RES_BTN_CREDITS, Texture.class);
+		easyBtn_tex = game.assetmanager.get(RES_BTN_EASY, Texture.class);
+		moderateBtn_tex = game.assetmanager.get(RES_BTN_MEDIUM, Texture.class);
+		difficultBtn_tex = game.assetmanager.get(RES_BTN_HARD, Texture.class);
 		
 		// Do everything else below
-		creditsBtn = new CustomButton(game, new Vector2(0, 0), "Credits", FONT_SIZE);
-		easyBtn = new CustomButton(game, new Vector2(0, 0), "Easy", FONT_SIZE);
-		moderateBtn = new CustomButton(game, new Vector2(0, 0), "Moderate", FONT_SIZE);
-		difficultBtn = new CustomButton(game, new Vector2(0, 0), "Difficult", FONT_SIZE);
+		creditsBtn_texReg = new TextureRegion[2];
+		creditsBtn_texReg[0] = new TextureRegion(creditsBtn_tex, 0, 0, BTN_SPRITE_WIDTH, BTN_SPRITE_HEIGHT);
+		creditsBtn_texReg[1] = new TextureRegion(creditsBtn_tex, 0, BTN_SPRITE_HEIGHT, BTN_SPRITE_WIDTH, BTN_SPRITE_HEIGHT);
+		
+		easyBtn_texReg = new TextureRegion[2];
+		easyBtn_texReg[0] = new TextureRegion(easyBtn_tex, 0, 0, BTN_SPRITE_WIDTH, BTN_SPRITE_HEIGHT);
+		easyBtn_texReg[1] = new TextureRegion(easyBtn_tex, 0, BTN_SPRITE_HEIGHT, BTN_SPRITE_WIDTH, BTN_SPRITE_HEIGHT);
+		
+		moderateBtn_texReg = new TextureRegion[2];
+		moderateBtn_texReg[0] = new TextureRegion(moderateBtn_tex, 0, 0, BTN_SPRITE_WIDTH, BTN_SPRITE_HEIGHT);
+		moderateBtn_texReg[1] = new TextureRegion(moderateBtn_tex, 0, BTN_SPRITE_HEIGHT, BTN_SPRITE_WIDTH, BTN_SPRITE_HEIGHT);
+		
+		difficultBtn_texReg = new TextureRegion[2];
+		difficultBtn_texReg[0] = new TextureRegion(difficultBtn_tex, 0, 0, BTN_SPRITE_WIDTH, BTN_SPRITE_HEIGHT);
+		difficultBtn_texReg[1] = new TextureRegion(difficultBtn_tex, 0, BTN_SPRITE_HEIGHT, BTN_SPRITE_WIDTH, BTN_SPRITE_HEIGHT);
+		
+		
+		
+		creditsBtn = new CustomButton(game, new Vector2(0, 0), creditsBtn_texReg,  "", FONT_SIZE);
+		easyBtn = new CustomButton(game, new Vector2(0, 0), easyBtn_texReg, "", FONT_SIZE);
+		moderateBtn = new CustomButton(game, new Vector2(0, 0), moderateBtn_texReg, "", FONT_SIZE);
+		difficultBtn = new CustomButton(game, new Vector2(0, 0), difficultBtn_texReg, "", FONT_SIZE);
 		
 		// Buttons use the same Texture
 		int btnheight = creditsBtn.getHeight();
@@ -85,6 +124,13 @@ public final class MenuScreen implements Screen {
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_BACKGROUND, Texture.class);
 		game.assetmanager.load(RES_BACKGROUND_MUSIC, Music.class);
+		
+		game.assetmanager.load(RES_BTN_CREDITS, Texture.class);
+		game.assetmanager.load(RES_BTN_EASY, Texture.class);
+		game.assetmanager.load(RES_BTN_MEDIUM, Texture.class);
+		game.assetmanager.load(RES_BTN_HARD, Texture.class);
+		game.assetmanager.load(RES_BTN_EXIT, Texture.class);
+		
 	}
 	
 	// Unload all resources for this screen
@@ -94,6 +140,13 @@ public final class MenuScreen implements Screen {
 	public void dispose() {
 		game.assetmanager.unload(RES_BACKGROUND);
 		game.assetmanager.unload(RES_BACKGROUND_MUSIC);
+		
+		game.assetmanager.unload(RES_BTN_CREDITS);
+		game.assetmanager.unload(RES_BTN_EASY);
+		game.assetmanager.unload(RES_BTN_MEDIUM);
+		game.assetmanager.unload(RES_BTN_HARD);
+		game.assetmanager.unload(RES_BTN_EXIT);
+		
 		creditsBtn.dispose();
 		easyBtn.dispose();
 		moderateBtn.dispose();

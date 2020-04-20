@@ -24,8 +24,8 @@ public class Main extends Game {
 	
 	// Window ratio
 	public static final float WINDOW_RATIO = (float) WINDOW_WIDTH / (float) WINDOW_HEIGHT;
-	public static final int DEFAULT_BUTTON_WIDTH = (int) (WINDOW_WIDTH * 0.1953125f);
-	public static final int DEFAULT_BUTTON_HEIGHT = (int) (WINDOW_WIDTH * 0.09765625f);
+	public static final int DEFAULT_BUTTON_WIDTH = (int) ((128f/1024f) * WINDOW_WIDTH);
+	public static final int DEFAULT_BUTTON_HEIGHT = (int) ((64f/800f) * WINDOW_HEIGHT);
 	public static final int DEFAULT_FONTSIZE = (int) (WINDOW_WIDTH * 0.025f);
 	
 	public final FontLoader fontloader;

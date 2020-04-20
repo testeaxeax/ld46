@@ -17,7 +17,7 @@ public class Shutter extends InputAdapter {
 	private static final String RES_SHUTTER_OPENING_SOUND = "audio/shutter-opening.wav";
 	
 	public static final int MAX_OFFSET = (int)((140*4) * ((float)Main.WINDOW_HEIGHT / 800f));
-	private static final int OFFSET_SPEED_CLOSING = (int)(300f * ((float)Main.WINDOW_HEIGHT / 800f));
+	private static final int OFFSET_SPEED_CLOSING = (int)(1000f * ((float)Main.WINDOW_HEIGHT / 800f));
 	private static final int OFFSET_SPEED_OPENING = (int)(300f * ((float)Main.WINDOW_HEIGHT / 800f));
 	private static final int WIDTH = (int) (280f * ((float)Main.WINDOW_WIDTH / 1024f));
 	private static final int HEIGHT = (int) (512f * ((float)Main.WINDOW_HEIGHT / 800f));
@@ -185,7 +185,7 @@ public class Shutter extends InputAdapter {
 			timeLeft -= delta;
 			if(timeLeft <= 0) {
 				state = STATE.CLOSING;
-				shutterClosingSound.loop();
+				shutterClosingSound.play();
 			}
 		}
 	}
