@@ -169,7 +169,7 @@ public final class GameScreen implements Screen {
 		game.assetmanager.unload(RES_BACKGROUND);
 		game.assetmanager.unload(RES_SKY);
 		
-		TutorialManager.dispatch(game);
+		TutorialManager.dispose(game);
 		
 		WateringCan.dispose(game);
 		Tap.dispose(game);

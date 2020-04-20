@@ -63,7 +63,7 @@ public abstract class TutorialManager {
 		game.assetmanager.load(RES_TEX, Texture.class);
 	}
 	
-	public static void dispatch(Main game) {
+	public static void dispose(Main game) {
 		game.assetmanager.unload(RES_TEX);
 	}
 }
