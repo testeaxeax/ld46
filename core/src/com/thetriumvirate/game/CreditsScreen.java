@@ -19,7 +19,6 @@ public final class CreditsScreen implements Screen {
 	
 	private static final int CAM_WIDTH = Main.WINDOW_WIDTH;
 	private static final int CAM_HEIGHT = Main.WINDOW_HEIGHT;
-	private static final int FONT_SIZE = 10;
 	private static final String CREDITS = "Game developed for Ludum Dare 42 within 72 hours by:\n" 
 			+ "Inzenhofer Tobias\n"
 			+ "Poellinger Maximilian\n" 
@@ -64,7 +63,7 @@ public final class CreditsScreen implements Screen {
 		layout.setText(font, CREDITS, Color.BLACK, Main.WINDOW_WIDTH, Align.center, true);
 		position = new Vector2(0, (Main.WINDOW_HEIGHT / 2) + (layout.height / 2));
 		Vector2 positionReturnBtn = new Vector2(Main.WINDOW_WIDTH / 10, Main.WINDOW_HEIGHT / 10);
-		returnBtn = new CustomButton(game, positionReturnBtn, "Return", FONT_SIZE);
+		returnBtn = new CustomButton(game, positionReturnBtn, "Return", Main.DEFAULT_FONTSIZE);
 	}
 	
 	// Load all resources for this screen in prefetch !!!

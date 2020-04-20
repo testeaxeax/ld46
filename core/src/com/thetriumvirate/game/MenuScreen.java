@@ -17,7 +17,7 @@ public final class MenuScreen implements Screen {
 	
 	private static final int CAM_WIDTH = Main.WINDOW_WIDTH;
 	private static final int CAM_HEIGHT = Main.WINDOW_HEIGHT;
-	private static final int FONT_SIZE = 20;
+	private static final int FONT_SIZE = Main.DEFAULT_FONTSIZE;
 	
 	// Declare resource paths below
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
