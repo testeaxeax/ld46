@@ -17,7 +17,7 @@ public class Main extends Game {
 	public static int WINDOW_HEIGHT = 800;
 	public static int WINDOW_WIDTH = 1024;
 	
-	public static final Color DEFAULT_FONT_COLOR = Color.WHITE;
+	public static final Color DEFAULT_FONT_COLOR = Color.BLACK;
 	// DO NOT append suffix, for example "fonts/replaceme" instead of "fonts/replaceme.ttf"
 	// TODO Set default font
 	public static final String RES_DEFAULT_FONT = "fonts/OpenSans-SemiBold";
@@ -25,8 +25,8 @@ public class Main extends Game {
 	
 	// Window ratio
 	public static final float WINDOW_RATIO = (float) WINDOW_WIDTH / (float) WINDOW_HEIGHT;
-	public static final float DEFAULT_BUTTON_WIDTH = WINDOW_WIDTH * 0.1953125f;
-	public static final float DEFAULT_BUTTON_HEIGHT = WINDOW_WIDTH * 0.09765625f;
+	public static final int DEFAULT_BUTTON_WIDTH = (int) (WINDOW_WIDTH * 0.1953125f);
+	public static final int DEFAULT_BUTTON_HEIGHT = (int) (WINDOW_WIDTH * 0.09765625f);
 	public static final int DEFAULT_FONTSIZE = (int) (WINDOW_WIDTH * 0.025f);
 	
 	public final FontLoader fontloader;

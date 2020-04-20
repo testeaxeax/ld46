@@ -19,11 +19,6 @@ public class CustomButton extends InputAdapter{
 	// Sound cannot be longer than a few seconds
 	private static final String RES_BTN_CLICK_SOUND = "audio/button-click.wav";
 	
-	private static final int DEFAULT_BUTTON_FONTSIZE = 10;
-	
-	private static boolean class_assets_disposed = false;
-	private static int existing_buttons = 0;
-	
 	
 	private Main game;
 	
@@ -33,7 +28,6 @@ public class CustomButton extends InputAdapter{
 	private Sound btnClick;
 	
 	private BitmapFont font;
-	private int fontSize;
 	private GlyphLayout layout;
 	private String btn_text = "";
 	
@@ -46,16 +40,13 @@ public class CustomButton extends InputAdapter{
 		this.game = game;
 		this.pos = pos;
 		this.btn_text = btn_text;
-		this.fontSize = fontsize;
 		
 		btn_pressed_texture = game.assetmanager.get(RES_BTN_PRESSED, Texture.class);
 		btn_released_texture = game.assetmanager.get(RES_BTN_RELEASED, Texture.class);
 		btnClick = game.assetmanager.get(RES_BTN_CLICK_SOUND, Sound.class);
-		
-		// Keep hardcoded width for testing without proper texture
-		//width = btn_released_texture.getWidth();
-		width = 100;
-		height = btn_released_texture.getHeight();
+
+		width = Main.DEFAULT_BUTTON_WIDTH;
+		height = Main.DEFAULT_BUTTON_HEIGHT;
 		// Needs to be called after width and height are set
 		initBtnText(btn_text, fontsize);
 	}
@@ -72,8 +63,8 @@ public class CustomButton extends InputAdapter{
 		btn_released_texture = tex_released;
 		btnClick = game.assetmanager.get(RES_BTN_CLICK_SOUND, Sound.class);
 		
-		width = btn_released_texture.getWidth();
-		height = btn_released_texture.getHeight();
+		width = Main.DEFAULT_BUTTON_WIDTH;
+		height = Main.DEFAULT_BUTTON_HEIGHT;
 		// Needs to be called after width and height are set
 		initBtnText(btn_text, fontsize);
 	}
@@ -81,6 +72,8 @@ public class CustomButton extends InputAdapter{
 	
 	private void initBtnText(String btn_text, int fontsize) {
 		layout = new GlyphLayout();
+		// load always returns the same instance for a font
+		// and the fontsize only works for the first time
 		font = game.fontloader.load(Main.RES_DEFAULT_FONT, fontsize, true);
 		layout.setText(font, btn_text, Color.BLACK, width, Align.center, false);
 	}
@@ -94,7 +87,8 @@ public class CustomButton extends InputAdapter{
 	public void render(SpriteBatch spritebatch) {
 		spritebatch.draw(this.getTexture(), pos.x, pos.y, width, height);
 		//subtraction of 2px in y-direction when pressed to make a 3D-link effect, to make it a more realistic buttonpress
-		font.draw(spritebatch, layout, pos.x + (this.pressed ? 1 : 0), pos.y + height/2 + layout.height/2 - (this.pressed ? 2 : 0));
+		// TODO Make 3d effect relative?
+		font.draw(spritebatch, layout, pos.x + (this.pressed ? 1 : 0), pos.y + (height / 2) + (layout.height / 2) - (this.pressed ? 2 : 0));
 	}
 	
 	@Override
@@ -134,20 +128,22 @@ public class CustomButton extends InputAdapter{
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_BTN_PRESSED, Texture.class);
 		game.assetmanager.load(RES_BTN_RELEASED, Texture.class);
-		game.fontloader.load(Main.RES_DEFAULT_FONT, DEFAULT_BUTTON_FONTSIZE);
+		game.fontloader.load();
 		game.assetmanager.load(RES_BTN_CLICK_SOUND, Sound.class);
 	}
 	
 	// This dispose can't be static
 	// TODO This is complete nonsense :D
 	public void dispose() {
+		/*
 		if(!class_assets_disposed && existing_buttons == 0) {
 			game.assetmanager.unload(RES_BTN_PRESSED);
 			game.assetmanager.unload(RES_BTN_RELEASED);
 			game.assetmanager.unload(RES_BTN_CLICK_SOUND);
 			class_assets_disposed = true;
 		}
-		game.fontloader.unload(Main.RES_DEFAULT_FONT, fontSize);
+		game.fontloader.unload();
+		*/
 	}
 	
 	public Texture getTexture() {
@@ -172,6 +168,6 @@ public class CustomButton extends InputAdapter{
 	}
 	
 	public void setPosition(Vector2 pos) {
-		this.pos = pos;
+		this.pos = pos.cpy();
 	}
 }
