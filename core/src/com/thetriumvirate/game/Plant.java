@@ -71,6 +71,8 @@ public class Plant {
 	
 	private static final String RES_SOUND_DECAY = "audio/decay.wav";
 	private final Sound soundDecay;
+	private static final String RES_SOUND_MOVINGLEAVES = "audio/blatt-rascheln.wav";
+	private final Sound soundMovingLeaves;
 	
 	private final ParticleEffect splasheffect;
 	private static final String RES_PEFFECT_SPLASH = "particleeffects/watersplash.p";
@@ -96,6 +98,7 @@ public class Plant {
 		this.splasheffect.setPosition(plant_pos.x + SPRITEWIDTH / 2, plant_pos.y);
 		
 		this.soundDecay = game.assetmanager.get(RES_SOUND_DECAY, Sound.class);
+		this.soundMovingLeaves = game.assetmanager.get(RES_SOUND_MOVINGLEAVES, Sound.class);
 		
 		initPlantTextures();
 	}
@@ -121,6 +124,7 @@ public class Plant {
 		plantsprites_texture = game.assetmanager.get(RES_PLANTSPRITES, Texture.class);
 
 		this.soundDecay = game.assetmanager.get(RES_SOUND_DECAY, Sound.class);
+		this.soundMovingLeaves = game.assetmanager.get(RES_SOUND_MOVINGLEAVES, Sound.class);
 		
 		initPlantTextures();
 	}
@@ -128,6 +132,10 @@ public class Plant {
 	public void update(float delta, float shutteralpha, float currentTemp) {
 		this.splasheffect.setPosition((plant_pos.x + SPRITEWIDTH_DRAW / 2f) * Main.WINDOW_WIDTH, plant_pos.y * Main.WINDOW_HEIGHT);
 		this.splasheffect.update(delta);
+		
+		if(this.splasheffect.isComplete())
+			this.soundMovingLeaves.stop();
+			
 		
 		// check the Temp and react to it; if it's...
 		// too high: speed up decay process and remove part of the water
@@ -227,12 +235,14 @@ public class Plant {
 		game.assetmanager.load(RES_PLANTPOT, Texture.class);
 		game.assetmanager.load(RES_PLANTSPRITES, Texture.class);
 		game.assetmanager.load(RES_SOUND_DECAY, Sound.class);
+		game.assetmanager.load(RES_SOUND_MOVINGLEAVES, Sound.class);
 	}
 	
 	public static void dispose(Main game) {
 		game.assetmanager.unload(RES_PLANTPOT);
 		game.assetmanager.unload(RES_PLANTSPRITES);
 		game.assetmanager.unload(RES_SOUND_DECAY);
+		game.assetmanager.unload(RES_SOUND_MOVINGLEAVES);
 	}
 
 	//Getters
@@ -266,6 +276,8 @@ public class Plant {
 		if(this.splasheffect.isComplete()) {
 			this.splasheffect.reset(false);
 			this.splasheffect.start();
+			
+			this.soundMovingLeaves.loop();
 		}
 		
 		TutorialManager.TutState.WATERING.triggerStop();

@@ -157,7 +157,7 @@ public final class MenuScreen implements Screen {
 		difficultBtn.reset();
 		Gdx.input.setInputProcessor(this.multiplexer);
 		if(!music.isPlaying()) {
-			music.play();
+			//music.play();
 		}
 	}
 
