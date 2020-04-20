@@ -22,8 +22,8 @@ public final class MenuScreen implements Screen {
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
 	private static final String RES_BACKGROUND = "graphics/background.png";
 	private static final String RES_SKY = "graphics/sky.png";
-	// This is used in all screens except SplashScreen
-	private static final String RES_BACKGROUND_MUSIC = "audio/background-music.wav";
+	// This is used in all screens except SplashScreen and GameScreen
+	public static final String RES_BACKGROUND_MUSIC = "audio/one-menu.mp3";
 	private static final String RES_KNOB = "graphics/tempBtn.png";
 	
 	//all textures for the btns
@@ -225,13 +225,15 @@ public final class MenuScreen implements Screen {
 	
 	private void checkButtons() {
 		if(creditsBtn.getClicked()) {
-			// Music never stops
 			game.screenmanager.push(new CreditsScreen(game));
 		} else if(easyBtn.getClicked()) {
+			music.stop();
 			game.screenmanager.push(new GameScreen(game, 0));
 		} else if(moderateBtn.getClicked()) {
+			music.stop();
 			game.screenmanager.push(new GameScreen(game, 1));
 		} else if(difficultBtn.getClicked()) {
+			music.stop();
 			game.screenmanager.push(new GameScreen(game, 2));
 		} else if(exitBtn.getClicked()) {
 			Gdx.app.exit();
