@@ -12,6 +12,8 @@ public abstract class TutorialManager {
 	private static Texture tex;
 	private static TextureRegion[] tex_regions;
 	
+	private static TutState currentlyShown = null;
+	
 	public static enum TutState{
 		TEMP_LOW(0), TEMP_HIGH(1), SHUTTER(2), WATERING(3), CAN_EMPTY(4);
 		
@@ -30,16 +32,27 @@ public abstract class TutorialManager {
 		}
 		
 		public void triggerStart() {
-			if(!this.isShown && !this.hasBeenShown)
+			if(!this.isShown && !this.hasBeenShown) {
 				this.isShown = true;
+				currentlyShown = this;
+			}
 		}
 		
 		public void triggerStop() {
 			if(this.isShown) {
 				this.isShown = false;
 				this.hasBeenShown = true;
+				currentlyShown = null;
 			}
 		}
+	}
+	
+	public static boolean isShowing() {
+		return currentlyShown != null;
+	}
+	
+	public static TutState currentShowState() {
+		return currentlyShown;
 	}
 	
 	public static void render(SpriteBatch sb) {

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.thetriumvirate.game.TutorialManager.TutState;
 
 public class Plant {
 
@@ -135,24 +136,33 @@ public class Plant {
 		
 		if(this.splasheffect.isComplete())
 			this.soundMovingLeaves.stop();
+		
+		boolean currentlyInactive = TutorialManager.isShowing();
 			
 		
 		// check the Temp and react to it; if it's...
 		// too high: speed up decay process and remove part of the water
 		// too low:  stop growth process
 		if(currentTemp > TEMP_MAX) {
-			decay += delta * 80;
-			
-			this.waterlevel -= this.waterlevel * 0.25 * delta;
+			if(!currentlyInactive)
+				decay += delta * 80;
+
+			if(!currentlyInactive)
+				this.waterlevel -= this.waterlevel * 0.25 * delta;
 		} else if(currentTemp < TEMP_MIN) {
 			//debug, uncomment thereafter
-			//this.growing = false;
+			//if(!currentlyInactive)
+				//this.growing = false;
 		}
 		
+
+		if(!currentlyInactive) {
+			if(growing)growth += delta * GROWTH_PER_SEC * (1.0f - shutteralpha);
+			
+			waterlevel -= waterlossPerSec * delta;
+		}
 		// the darker it is, the slower plants grow		
-		if(growing)growth += delta * GROWTH_PER_SEC * (1.0f - shutteralpha);
 		
-		waterlevel -= waterlossPerSec * delta;
 		
 		
 		if(waterlevel <= MIN_WATERLEVEL)waterlevel = MIN_WATERLEVEL;

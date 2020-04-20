@@ -87,7 +87,10 @@ public final class GameOverScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+		Gdx.gl.glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+		
 		game.spritebatch.begin();
+		
 		
 		btnMenu.render(game.spritebatch);
 		

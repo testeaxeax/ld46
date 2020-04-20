@@ -182,11 +182,15 @@ public class Shutter extends InputAdapter {
 	
 	public void checkRandomClosing(float delta) {
 		if(state == STATE.OPEN || state == STATE.OPENING_ACTIVE || state == STATE.OPENING_INACTIVE) {
-			timeLeft -= delta;
-			if(timeLeft <= 0) {
-				state = STATE.CLOSING;
-				shutterClosingSound.play();
+			
+			if(!(TutorialManager.isShowing())) {
+				timeLeft -= delta;
+				if(timeLeft <= 0) {
+					state = STATE.CLOSING;
+					shutterClosingSound.play();
+				}
 			}
+			
 		}
 	}
 	
