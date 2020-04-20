@@ -16,12 +16,12 @@ public class Shutter extends InputAdapter {
 	private static final String RES_SHUTTER_CLOSING_SOUND = "audio/shutter-closing.wav";
 	private static final String RES_SHUTTER_OPENING_SOUND = "audio/shutter-opening.wav";
 	
-	public static final int MAX_OFFSET = (140*4);
-	private static final int OFFSET_SPEED_CLOSING = 300;
-	private static final int OFFSET_SPEED_OPENING = 300;
-	private static final int WIDTH = 280;
-	private static final int HEIGHT = 512;
-	private static final int BUTTON_WIDTH = 32;
+	public static final int MAX_OFFSET = (int)((140*4) * ((float)Main.WINDOW_HEIGHT / 800f));
+	private static final int OFFSET_SPEED_CLOSING = (int)(300f * ((float)Main.WINDOW_HEIGHT / 800f));
+	private static final int OFFSET_SPEED_OPENING = (int)(300f * ((float)Main.WINDOW_HEIGHT / 800f));
+	private static final int WIDTH = (int) (280f * ((float)Main.WINDOW_WIDTH / 1024f));
+	private static final int HEIGHT = (int) (512f * ((float)Main.WINDOW_HEIGHT / 800f));
+	private static final int BUTTON_WIDTH = (int) (32f * ((float)Main.WINDOW_WIDTH) / 1024f);
 	private static final int BUTTON_HEIGHT = HEIGHT;
 	private static final int OPENING_STEPS = 5;
 	private static final float NEXT_STAGE_OFFSET = MAX_OFFSET / OPENING_STEPS;
