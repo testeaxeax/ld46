@@ -39,7 +39,6 @@ public class TemperatureController extends InputAdapter {
 	// Resources
 //	private final Texture switch_on_texture, switch_off_texture;
 	private final BitmapFont font;
-	private static final int FONT_SIZE = 30;
 
 	// TODO float relative
 	private static final float TEXT_OFFSET_X = 60f / 1024f;
@@ -71,7 +70,7 @@ public class TemperatureController extends InputAdapter {
 		state = STATE.OFF;
 		
 		// Initialize resources
-		this.font = game.fontloader.get(Main.RES_DEFAULT_FONT, FONT_SIZE, Color.BLACK);
+		this.font = game.fontloader.get(Main.RES_DEFAULT_FONT, Main.DEFAULT_FONTSIZE, Color.BLACK);
     
 		switchSound = game.assetmanager.get(RES_SWITCH_SOUND, Sound.class);
 	
@@ -86,7 +85,7 @@ public class TemperatureController extends InputAdapter {
 	public static void prefetch(Main game) {
 		//game.assetmanager.load(RES_SWITCH_ON, Texture.class);
 		//game.assetmanager.load(RES_SWITCH_OFF, Texture.class);
-		game.fontloader.load(Main.RES_DEFAULT_FONT, FONT_SIZE, Color.BLACK);
+		game.fontloader.load(Main.RES_DEFAULT_FONT, Main.DEFAULT_FONTSIZE, Color.BLACK);
     
 		game.assetmanager.load(RES_KNOB, Texture.class);
 		game.assetmanager.load(RES_TEMPDISPLAY, Texture.class);
