@@ -27,14 +27,14 @@ public final class GameScreen implements Screen {
 	
 	private static final String RES_BACKGROUND = "graphics/background.png";
 	private static final String RES_SKY = "graphics/sky.png";
-	private static final int SHUTTER1POSX = (int)((float)(32*4) * (float)Main.WINDOW_WIDTH / 1024f);
-	private static final int SHUTTER1POSY = (int)((float)(60*4  + Shutter.MAX_OFFSET) * (float)Main.WINDOW_HEIGHT / 800f);
-	private static final int SHUTTER2POSX = (int)((float)(174*4 - Shutter.getWidth()) * (float)Main.WINDOW_WIDTH / 1024f);
-	private static final int SHUTTER2POSY = (int)((float)(60*4  + Shutter.MAX_OFFSET) * (float)Main.WINDOW_HEIGHT / 800f);
-	private static final int SHUTTERBTN1_OFFSET_X = (int)((float)(- Shutter.getButtonWidth() * 2f) * (float)Main.WINDOW_WIDTH / 1024f);
-	private static final int SHUTTERBTN2_OFFSET_X = (int)((float)(Shutter.getWidth() + Shutter.getButtonWidth()) * (float)Main.WINDOW_WIDTH / 1024f);
-	private static final int SHUTTERBTN1_OFFSET_Y = (int)((float)(- Shutter.MAX_OFFSET) * (float)Main.WINDOW_WIDTH / 1024f);
-	private static final int SHUTTERBTN2_OFFSET_Y = (int)((float)(- Shutter.MAX_OFFSET) * (float)Main.WINDOW_WIDTH / 1024f);
+	private static final int SHUTTER1POSX = (int)(128f * ((float)Main.WINDOW_WIDTH / 1024f));
+	private static final int SHUTTER1POSY = (int)(800f * ((float)Main.WINDOW_HEIGHT / 800f));
+	private static final int SHUTTER2POSX = (int)(416f * ((float)Main.WINDOW_WIDTH / 1024f));
+	private static final int SHUTTER2POSY = (int)(800f * ((float)Main.WINDOW_HEIGHT / 800f));
+	private static final int SHUTTERBTN1_OFFSET_X = (int)((-64f) * ((float)Main.WINDOW_WIDTH / 1024f));
+	private static final int SHUTTERBTN2_OFFSET_X = (int)(312f * ((float)Main.WINDOW_WIDTH / 1024f));
+	private static final int SHUTTERBTN1_OFFSET_Y = (int)((-560f) * ((float)Main.WINDOW_HEIGHT / 800f));
+	private static final int SHUTTERBTN2_OFFSET_Y = (int)((-560f) * ((float)Main.WINDOW_HEIGHT / 800f));
 	
 	public final Texture tex_debugrect;
 	public final Pixmap brightnessOverlayPixmap;

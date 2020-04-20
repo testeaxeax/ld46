@@ -13,7 +13,6 @@ public class Main extends Game {
 	
 	// Globally used constants
 	
-	// TODO Set proper height/width
 	public static int WINDOW_HEIGHT = 800;
 	public static int WINDOW_WIDTH = 1024;
 	
