@@ -18,7 +18,8 @@ public final class MenuScreen implements Screen {
 	
 	// Declare resource paths below
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
-	private static final String RES_BACKGROUND = "graphics/menu-background.png";
+	private static final String RES_BACKGROUND = "graphics/background.png";
+	private static final String RES_SKY = "graphics/sky.png";
 	// This is used in all screens except SplashScreen
 	private static final String RES_BACKGROUND_MUSIC = "audio/background-music.mp3";
 	
@@ -35,14 +36,14 @@ public final class MenuScreen implements Screen {
 	
 	private final Main game;
 	private final OrthographicCamera cam;
-	private final CustomButton creditsBtn, easyBtn, moderateBtn, difficultBtn;
-	private final Texture creditsBtn_tex, easyBtn_tex, moderateBtn_tex, difficultBtn_tex;
-	private TextureRegion[] creditsBtn_texReg, easyBtn_texReg, moderateBtn_texReg, difficultBtn_texReg;
+	private final CustomButton creditsBtn, easyBtn, moderateBtn, difficultBtn, exitBtn;
+	private final Texture creditsBtn_tex, easyBtn_tex, moderateBtn_tex, difficultBtn_tex, exitBtn_tex;
+	private TextureRegion[] creditsBtn_texReg, easyBtn_texReg, moderateBtn_texReg, difficultBtn_texReg, exitBtn_texReg;
 	private final InputMultiplexer multiplexer;
 	
 	// Declare resource variables below
 	// For example: private final Texture testTexture;
-	private final Texture background;
+	private final Texture background, sky;
 	private final Music music;
 	
 	
@@ -58,6 +59,7 @@ public final class MenuScreen implements Screen {
 		// Initialize resource variables below
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
 		background = game.assetmanager.get(RES_BACKGROUND, Texture.class);
+		sky = game.assetmanager.get(RES_SKY, Texture.class);
 		music = game.assetmanager.get(RES_BACKGROUND_MUSIC, Music.class);
 		music.setLooping(true);
 		music.setVolume(0.2f);
@@ -67,6 +69,7 @@ public final class MenuScreen implements Screen {
 		easyBtn_tex = game.assetmanager.get(RES_BTN_EASY, Texture.class);
 		moderateBtn_tex = game.assetmanager.get(RES_BTN_MEDIUM, Texture.class);
 		difficultBtn_tex = game.assetmanager.get(RES_BTN_HARD, Texture.class);
+		exitBtn_tex = game.assetmanager.get(RES_BTN_EXIT, Texture.class);
 		
 		// Do everything else below
 		creditsBtn_texReg = new TextureRegion[2];
@@ -85,30 +88,37 @@ public final class MenuScreen implements Screen {
 		difficultBtn_texReg[0] = new TextureRegion(difficultBtn_tex, 0, 0, BTN_SPRITE_WIDTH, BTN_SPRITE_HEIGHT);
 		difficultBtn_texReg[1] = new TextureRegion(difficultBtn_tex, 0, BTN_SPRITE_HEIGHT, BTN_SPRITE_WIDTH, BTN_SPRITE_HEIGHT);
 		
+		exitBtn_texReg = new TextureRegion[2];
+		exitBtn_texReg[0] = new TextureRegion(exitBtn_tex, 0, 0, BTN_SPRITE_WIDTH, BTN_SPRITE_HEIGHT);
+		exitBtn_texReg[1] = new TextureRegion(exitBtn_tex, 0, BTN_SPRITE_HEIGHT, BTN_SPRITE_WIDTH, BTN_SPRITE_HEIGHT);
+		
 		
 		
 		creditsBtn = new CustomButton(game, new Vector2(0, 0), creditsBtn_texReg,  "", FONT_SIZE);
 		easyBtn = new CustomButton(game, new Vector2(0, 0), easyBtn_texReg, "", FONT_SIZE);
 		moderateBtn = new CustomButton(game, new Vector2(0, 0), moderateBtn_texReg, "", FONT_SIZE);
 		difficultBtn = new CustomButton(game, new Vector2(0, 0), difficultBtn_texReg, "", FONT_SIZE);
+		exitBtn = new CustomButton(game, new Vector2(0, 0), exitBtn_texReg, "", FONT_SIZE);
 		
 		// Buttons use the same Texture
 		int btnheight = creditsBtn.getHeight();
 		int btnwidth = creditsBtn.getWidth();
-		int difficultyxpos = (Main.WINDOW_WIDTH / 2) - (btnwidth / 2);
-		int difficultyyposspace = btnheight / 10;
-		int difficultyyposstart = (Main.WINDOW_HEIGHT / 2) - (btnheight / 2) + btnheight + difficultyyposspace;
+		int difficultyxpos = (int) (((float)Main.WINDOW_WIDTH) * 0.85f) - (btnwidth / 2);
+		int difficultyyposspace = btnheight;
+		int difficultyyposstart = (int)(Main.WINDOW_HEIGHT * 0.6f) - (btnheight / 2) + btnheight + difficultyyposspace;
 		
-		creditsBtn.setPosition(new Vector2(0, 0));
+		creditsBtn.setPosition(new Vector2(Main.WINDOW_WIDTH - btnwidth, 0));
 		easyBtn.setPosition(new Vector2(difficultyxpos, difficultyyposstart));
 		moderateBtn.setPosition(new Vector2(difficultyxpos, difficultyyposstart - btnheight - difficultyyposspace));
 		difficultBtn.setPosition(new Vector2(difficultyxpos, difficultyyposstart - 2 * btnheight - (2 * difficultyyposspace)));
+		exitBtn.setPosition(new Vector2(0, 0));
 		multiplexer = new InputMultiplexer();
 		
 		multiplexer.addProcessor(creditsBtn);
 		multiplexer.addProcessor(difficultBtn);
 		multiplexer.addProcessor(easyBtn);
 		multiplexer.addProcessor(moderateBtn);
+		multiplexer.addProcessor(exitBtn);
 		
 		Gdx.input.setInputProcessor(multiplexer);
 	}
@@ -119,6 +129,7 @@ public final class MenuScreen implements Screen {
 	// Unload all resources in dispose !!!
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_BACKGROUND, Texture.class);
+		game.assetmanager.load(RES_SKY, Texture.class);
 		game.assetmanager.load(RES_BACKGROUND_MUSIC, Music.class);
 		
 		game.assetmanager.load(RES_BTN_CREDITS, Texture.class);
@@ -135,6 +146,7 @@ public final class MenuScreen implements Screen {
 	@Override
 	public void dispose() {
 		game.assetmanager.unload(RES_BACKGROUND);
+		game.assetmanager.unload(RES_SKY);
 		game.assetmanager.unload(RES_BACKGROUND_MUSIC);
 		
 		game.assetmanager.unload(RES_BTN_CREDITS);
@@ -147,6 +159,7 @@ public final class MenuScreen implements Screen {
 		easyBtn.dispose();
 		moderateBtn.dispose();
 		difficultBtn.dispose();
+		exitBtn.dispose();
 	}
 
 	@Override
@@ -155,6 +168,7 @@ public final class MenuScreen implements Screen {
 		easyBtn.reset();
 		moderateBtn.reset();
 		difficultBtn.reset();
+		exitBtn.reset();
 		Gdx.input.setInputProcessor(this.multiplexer);
 		if(!music.isPlaying()) {
 			music.play();
@@ -166,11 +180,13 @@ public final class MenuScreen implements Screen {
 		checkButtons();
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.spritebatch.begin();
+		game.spritebatch.draw(sky, 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
 		game.spritebatch.draw(background, 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
 		easyBtn.render(game.spritebatch);
 		creditsBtn.render(game.spritebatch);
 		moderateBtn.render(game.spritebatch);
 		difficultBtn.render(game.spritebatch);
+		exitBtn.render(game.spritebatch);
 		game.spritebatch.end();
 	}
 	
@@ -204,6 +220,8 @@ public final class MenuScreen implements Screen {
 			game.screenmanager.push(new GameScreen(game, 1));
 		} else if(difficultBtn.getClicked()) {
 			game.screenmanager.push(new GameScreen(game, 2));
+		} else if(exitBtn.getClicked()) {
+			Gdx.app.exit();
 		}
 	}
 }
