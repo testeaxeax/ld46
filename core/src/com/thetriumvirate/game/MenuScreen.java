@@ -61,7 +61,7 @@ public final class MenuScreen implements Screen {
 		int btnheight = creditsBtn.getHeight();
 		int btnwidth = creditsBtn.getWidth();
 		int difficultyxpos = (Main.WINDOW_WIDTH / 2) - (btnwidth / 2);
-		int difficultyyposspace = 10;
+		int difficultyyposspace = btnheight / 10;
 		int difficultyyposstart = (Main.WINDOW_HEIGHT / 2) - (btnheight / 2) + btnheight + difficultyyposspace;
 		
 		creditsBtn.setPosition(new Vector2(0, 0));
@@ -118,8 +118,8 @@ public final class MenuScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.spritebatch.begin();
 		game.spritebatch.draw(background, 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
-		creditsBtn.render(game.spritebatch);
 		easyBtn.render(game.spritebatch);
+		creditsBtn.render(game.spritebatch);
 		moderateBtn.render(game.spritebatch);
 		difficultBtn.render(game.spritebatch);
 		game.spritebatch.end();
