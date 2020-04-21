@@ -18,12 +18,18 @@ public final class GameOverScreen implements Screen {
 	private static final int CAM_WIDTH = Main.WINDOW_WIDTH;
 	private static final int CAM_HEIGHT = Main.WINDOW_HEIGHT;
 	private static final int FONT_SIZE = 10;
+	private static final float TEXT_WIDTH = 440f / 1024f;
+	private static final float TEXT_HEIGHT = 80f/800f;
+	
 	
 	// Declare resource paths below
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
 	private static final String RES_GAMEOVER_MUSIC = "audio/gameover.wav";
 	private static final String RES_VICTORY_MUSIC = "audio/victory.wav";
 	private static final String RES_BTN_MENU_TEXTURE = "graphics/customBtn_menu.png";
+  
+	private static final String RES_BTN_WON_TEXTURE = "graphics/youWon.png";
+	private static final String RES_BTN_LOST_TEXTURE = "graphics/youLost.png";
 	private static final String RES_BACKGROUND = "graphics/gameoverbackground.png";
 	
 	private final Main game;
@@ -37,7 +43,9 @@ public final class GameOverScreen implements Screen {
 	private CustomButton btnMenu;
 	private TextureRegion[] btn_texReg;
 	private final Texture btn_tex, tex_backGround;
-
+	
+  private Texture youWon_tex, youLost_tex;
+	
 	private boolean gameWon = false;
 	
 	private long score;
@@ -72,6 +80,10 @@ public final class GameOverScreen implements Screen {
 		this.btnMenu = new CustomButton(game, new Vector2((1024f - Main.DEFAULT_BUTTON_WIDTH - 40f) / 1024f * Main.WINDOW_WIDTH, (40f) / 800f * Main.WINDOW_HEIGHT), btn_texReg, "", FONT_SIZE);
 		inputmultiplexer.addProcessor(btnMenu);
 		
+		
+		this.youLost_tex = game.assetmanager.get(RES_BTN_LOST_TEXTURE, Texture.class);
+		this.youWon_tex = game.assetmanager.get(RES_BTN_WON_TEXTURE, Texture.class);
+		
 		Gdx.input.setInputProcessor(inputmultiplexer);
 		// Do everything else below
 		this.gameWon = gameWon;
@@ -88,6 +100,8 @@ public final class GameOverScreen implements Screen {
 		game.assetmanager.load(RES_GAMEOVER_MUSIC, Sound.class);
 		game.assetmanager.load(RES_VICTORY_MUSIC, Sound.class);
 		game.assetmanager.load(RES_BTN_MENU_TEXTURE, Texture.class);
+		game.assetmanager.load(RES_BTN_WON_TEXTURE, Texture.class);
+		game.assetmanager.load(RES_BTN_LOST_TEXTURE, Texture.class);
 		game.assetmanager.load(RES_BACKGROUND, Texture.class);
 		
 		CustomButton.prefetch(game);
@@ -101,6 +115,8 @@ public final class GameOverScreen implements Screen {
 		game.assetmanager.unload(RES_GAMEOVER_MUSIC);
 		game.assetmanager.unload(RES_VICTORY_MUSIC);
 		game.assetmanager.unload(RES_BTN_MENU_TEXTURE);
+		game.assetmanager.unload(RES_BTN_WON_TEXTURE);
+		game.assetmanager.unload(RES_BTN_LOST_TEXTURE);
 		game.assetmanager.unload(RES_BACKGROUND);
 	}
 
@@ -126,7 +142,9 @@ public final class GameOverScreen implements Screen {
 		
 		game.spritebatch.begin();
 		
-		game.spritebatch.draw(this.tex_backGround, 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
+    game.spritebatch.draw(this.tex_backGround, 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
+		game.spritebatch.draw(gameWon ? youWon_tex : youLost_tex, (Main.WINDOW_WIDTH / 2f) - (TEXT_WIDTH * Main.WINDOW_WIDTH)/2, Main.WINDOW_HEIGHT / 8f * 5f, TEXT_WIDTH * Main.WINDOW_WIDTH, TEXT_HEIGHT * Main.WINDOW_HEIGHT);
+
 		
 		btnMenu.render(game.spritebatch);
 		
