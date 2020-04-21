@@ -94,15 +94,15 @@ public final class SplashScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		checkprogress();
-		String text = "Progress: " + (int) (game.assetmanager.getProgress() * 100) + '%';
-		layout.setText(font, text);
+//		String text = "Progress: " + (int) (game.assetmanager.getProgress() * 100) + '%';
+//		layout.setText(font, text);
 		// Position for text
 		final Vector2 pos = new Vector2((CAM_WIDTH / 2) - (layout.width / 2), (CAM_HEIGHT / 4) - (layout.height / 2));
 		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		game.spritebatch.begin();
 		//game.spritebatch.draw(splashImage, 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
-		font.draw(game.spritebatch, layout, pos.x, pos.y);
+//		font.draw(game.spritebatch, layout, pos.x, pos.y);
 		
 		if(this.animDelta > 0.3f) {
 			this.animDelta -= 0.3f;
@@ -137,6 +137,7 @@ public final class SplashScreen implements Screen {
 			// TODO Replace ScreenTemplate with actual game/menu screen
 			//game.screenmanager.set(new GameScreen(game, 0), false);
 			//game.screenmanager.push(new CreditsScreen(game));
+
 			game.screenmanager.set(new MenuScreen(game), false);
 			//game.screenmanager.push(new GameOverScreen(game, false));
 		}
