@@ -3,6 +3,7 @@ package com.thetriumvirate.game.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.thetriumvirate.game.Main;
+import com.badlogic.gdx.Files;
 
 public class DesktopLauncher {
 	public static void main(String[] arg) {
@@ -13,8 +14,8 @@ public class DesktopLauncher {
 		// TODO Set title
 		config.title = "Game";
 		// TODO Create icons
-		//config.addIcon("graphics/icon32.png", Files.FileType.Internal);
-		//config.addIcon("graphics/icon16.png", Files.FileType.Internal);
+		config.addIcon("graphics/icon32.png", Files.FileType.Internal);
+		config.addIcon("graphics/icon16.png", Files.FileType.Internal);
 		new LwjglApplication(new Main(new DesktopFontLoader()), config);
 	}
 }
