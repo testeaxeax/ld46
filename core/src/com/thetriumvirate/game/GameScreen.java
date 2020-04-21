@@ -23,8 +23,6 @@ public final class GameScreen implements Screen {
 	
 	// Declare resource paths below
 	// For example: private static final String RES_SOMETHING = "somewhere/something";
-
-	private static final String RES_DEBUG_RECT = "graphics/debugrec.png";
 	
 	private static final String RES_BACKGROUND = "graphics/background.png";
 	private static final String RES_SKY = "graphics/sky.png";
@@ -38,7 +36,6 @@ public final class GameScreen implements Screen {
 	private static final int SHUTTERBTN1_OFFSET_Y = (int)((-560f) * ((float)Main.WINDOW_HEIGHT / 800f));
 	private static final int SHUTTERBTN2_OFFSET_Y = (int)((-560f) * ((float)Main.WINDOW_HEIGHT / 800f));
 	
-	public final Texture tex_debugrect;
 	public final Pixmap brightnessOverlayPixmap;
 	
 	private enum TemperatureOverlayStatus {NONE, COLD, HOT};
@@ -128,7 +125,6 @@ public final class GameScreen implements Screen {
 		
 		// Initialize resource variables below
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
-		this.tex_debugrect = this.game.assetmanager.get(RES_DEBUG_RECT, Texture.class);
 		
 		//backgroundtextures
 		this.background_texture = this.game.assetmanager.get(RES_BACKGROUND, Texture.class);
@@ -159,7 +155,6 @@ public final class GameScreen implements Screen {
 	// or			game.fontloader.load(RES_SOMETHING_FONT);
 	// Unload all resources in dispose !!!
 	public static void prefetch(Main game) {
-		game.assetmanager.load(GameScreen.RES_DEBUG_RECT, Texture.class);
 		game.assetmanager.load(GameScreen.RES_TEMPERATUREOVERLAY, Texture.class);
 		game.assetmanager.load(GameScreen.RES_BACKGROUND, Texture.class);
 		game.assetmanager.load(GameScreen.RES_SKY, Texture.class);
@@ -182,7 +177,6 @@ public final class GameScreen implements Screen {
 	// For fonts: game.fontmanager.unload(RES_SOMETHING_FONT);
 	@Override
 	public void dispose() {
-		game.assetmanager.unload(RES_DEBUG_RECT);
 		game.assetmanager.unload(RES_TEMPERATUREOVERLAY);
 		game.assetmanager.unload(RES_BACKGROUND);
 		game.assetmanager.unload(RES_SKY);
