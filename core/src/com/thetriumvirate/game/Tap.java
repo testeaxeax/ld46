@@ -143,6 +143,10 @@ public class Tap extends InputAdapter {
 		//game.assetmanager.unload(RES_TAPRUNNING);
 	}
 
+	public void stopSounds() {
+		this.tapWaterRunningSound.stop();
+	}
+	
 	public boolean isWaterRunning() {
 		return this.waterRunning;
 	}
