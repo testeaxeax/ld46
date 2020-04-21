@@ -25,8 +25,10 @@ public final class GameOverScreen implements Screen {
 	private static final String RES_GAMEOVER_MUSIC = "audio/gameover.wav";
 	private static final String RES_VICTORY_MUSIC = "audio/victory.wav";
 	private static final String RES_BTN_MENU_TEXTURE = "graphics/customBtn_menu.png";
+  
 	private static final String RES_BTN_WON_TEXTURE = "graphics/youWon.png";
 	private static final String RES_BTN_LOST_TEXTURE = "graphics/youLost.png";
+	private static final String RES_BACKGROUND = "graphics/gameoverbackground.png";
 	
 	private final Main game;
 	private final OrthographicCamera cam;
@@ -38,7 +40,7 @@ public final class GameOverScreen implements Screen {
 
 	private CustomButton btnMenu;
 	private TextureRegion[] btn_texReg;
-	private Texture btn_tex;
+	private final Texture btn_tex, tex_backGround;
 	
 	private Texture youWon_tex, youLost_tex;
 	
@@ -59,14 +61,18 @@ public final class GameOverScreen implements Screen {
 		// For example: testTexture = game.assetmanager.get(RES_SOMETEXTURE, Texture.class);
 		jingle = game.assetmanager.get(gameWon ? RES_VICTORY_MUSIC : RES_GAMEOVER_MUSIC, Sound.class);
 		music = game.assetmanager.get(MenuScreen.RES_BACKGROUND_MUSIC, Music.class);
+		this.music.setVolume(0.5f);
+		
 		InputMultiplexer inputmultiplexer = new InputMultiplexer();
+		
+		this.tex_backGround = game.assetmanager.get(RES_BACKGROUND, Texture.class);
 		
 		btn_tex = game.assetmanager.get(RES_BTN_MENU_TEXTURE, Texture.class);
 		btn_texReg = new TextureRegion[2];
 		btn_texReg[0] = new TextureRegion(btn_tex, 0, 0, Main.DEFAULT_BUTTON_WIDTH, Main.DEFAULT_BUTTON_HEIGHT);
 		btn_texReg[1] = new TextureRegion(btn_tex, 0, Main.DEFAULT_BUTTON_HEIGHT, Main.DEFAULT_BUTTON_WIDTH, Main.DEFAULT_BUTTON_HEIGHT);
 		
-		this.btnMenu = new CustomButton(game, new Vector2(100, 100), btn_texReg, "", FONT_SIZE);
+		this.btnMenu = new CustomButton(game, new Vector2((1024f - Main.DEFAULT_BUTTON_WIDTH - 40f) / 1024f * Main.WINDOW_WIDTH, (40f) / 800f * Main.WINDOW_HEIGHT), btn_texReg, "", FONT_SIZE);
 		inputmultiplexer.addProcessor(btnMenu);
 		
 		
@@ -91,6 +97,7 @@ public final class GameOverScreen implements Screen {
 		game.assetmanager.load(RES_BTN_MENU_TEXTURE, Texture.class);
 		game.assetmanager.load(RES_BTN_WON_TEXTURE, Texture.class);
 		game.assetmanager.load(RES_BTN_LOST_TEXTURE, Texture.class);
+		game.assetmanager.load(RES_BACKGROUND, Texture.class);
 		
 		CustomButton.prefetch(game);
 	}
@@ -105,6 +112,7 @@ public final class GameOverScreen implements Screen {
 		game.assetmanager.unload(RES_BTN_MENU_TEXTURE);
 		game.assetmanager.unload(RES_BTN_WON_TEXTURE);
 		game.assetmanager.unload(RES_BTN_LOST_TEXTURE);
+		game.assetmanager.unload(RES_BACKGROUND);
 	}
 
 	@Override
@@ -115,13 +123,24 @@ public final class GameOverScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		
+		// update part
+		if(this.btnMenu.getClicked()) {
+			this.game.screenmanager.pop();
+		}
+		
+		// render part
+		
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		Gdx.gl.glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 		
 		game.spritebatch.begin();
 		
+    game.spritebatch.draw(this.tex_backGround, 0, 0, Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
 		game.spritebatch.draw(gameWon ? youWon_tex : youLost_tex, (Main.WINDOW_WIDTH / 2f) - (TEXT_WIDTH * Main.WINDOW_WIDTH)/2, Main.WINDOW_HEIGHT / 8f * 5f, TEXT_WIDTH * Main.WINDOW_WIDTH, TEXT_HEIGHT * Main.WINDOW_HEIGHT);
+
+		
 		btnMenu.render(game.spritebatch);
 		
 		game.spritebatch.end();
