@@ -47,9 +47,9 @@ public class WateringCan extends InputAdapter{
 	private float fillState;
 	
 	// max fill
-	private static final float MAX_FILL = 1000.0f;
+	private static float MAX_FILL = 1000.0f;
 	// ein Refill dauert 1000 / 100 = 10 Sekunden
-	private static final float REFILL_SPEED = 300.0f;
+	private static float REFILL_SPEED = 300.0f;
 	
 	private static final float WATERING_SPEED = 150.0f;
 
@@ -65,13 +65,18 @@ public class WateringCan extends InputAdapter{
 	private static final float EFFECT_OFFSET_X = 8f / 1024f;
 	private static final float EFFECT_OFFSET_Y = 10f / 800f;
 	
-	public WateringCan(final GameScreen gameScreen, final Tap myTap) {
+	public WateringCan(final GameScreen gameScreen, final Tap myTap, int difficulty) {
 		this.game = gameScreen;
 		this.tap = myTap;
 		
 		this.selected = false;
 		this.canTilted = false;
 		this.wateringPlants = false;
+		
+		// manage difficulty
+		MAX_FILL = MAX_FILL * (3 - difficulty);
+		REFILL_SPEED = REFILL_SPEED * (difficulty + 1);
+		
 		
 		// start with full can
 		this.fillState = MAX_FILL;

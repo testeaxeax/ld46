@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.thetriumvirate.game.TutorialManager.TutState;
 
 public class Plant {
 
@@ -79,9 +78,12 @@ public class Plant {
 	private static final String RES_PEFFECT_SPLASH = "particleeffects/watersplash.p";
 	private static final String RES_PEFFECT_SPLASH_FILES = "particleeffects/";
 	
+	private final int difficulty;
+	
 	//posSlot: int from 0-7, or whatever fits on the screen
-	public Plant(GameScreen gamescreen, int posSlot) {
+	public Plant(GameScreen gamescreen, int posSlot, int difficulty) {
 		game = gamescreen.getGame();
+		this.difficulty = difficulty;
 		
 		pot_pos = new Vector2(POT_POS_X_OFFSET + posSlot * SLOT_WIDTH, POT_POS_Y);
 		plant_pos = new Vector2(pot_pos.x, pot_pos.y + POT_HEIGHT - (4f / 800f)); // -4 offset so the plant is "inside the pot" bcs the pot overlaps over the plant; 
@@ -107,6 +109,7 @@ public class Plant {
 	//Constructor for Plants to be used in Menuscrenn or Gameoverscreen. These plants are not intended to receive any update() calls
 	public Plant(GameScreen gamescreen, int posX, int posY, int growthStage, int decayStage) {
 		game = gamescreen.getGame();
+		this.difficulty = 0;
 		
 		pot_pos = new Vector2(posX, posY);
 		plant_pos = new Vector2(posX, posY + POT_HEIGHT - (4f / 800f)); // -4 offset so the plant is "inside the pot" bcs the pot overlaps over the plant; 
@@ -145,21 +148,22 @@ public class Plant {
 		// too low:  stop growth process
 		if(currentTemp > TEMP_MAX) {
 			if(!currentlyInactive)
-				decay += delta * 80;
+				decay += delta * 80 * (1.0f - 0.25f * this.difficulty);
 
 			if(!currentlyInactive)
-				this.waterlevel -= this.waterlevel * 0.25 * delta;
+				this.waterlevel -= this.waterlevel * 0.25 * delta * (1.0f - 0.15f * this.difficulty);
 		} else if(currentTemp < TEMP_MIN) {
 			//debug, uncomment thereafter
-			//if(!currentlyInactive)
-				//this.growing = false;
+			if(!currentlyInactive)
+				this.growing = false;
 		}
 		
 
 		if(!currentlyInactive) {
-			if(growing)growth += delta * GROWTH_PER_SEC * (1.0f - shutteralpha);
+			if(growing)
+				growth += delta * GROWTH_PER_SEC * (1.0f - shutteralpha) * (1.0f + 0.15f * this.difficulty);
 			
-			waterlevel -= waterlossPerSec * delta;
+			waterlevel -= waterlossPerSec * delta * (1.0f - 0.1f * this.difficulty);
 		}
 		// the darker it is, the slower plants grow		
 		
@@ -168,10 +172,10 @@ public class Plant {
 		if(waterlevel <= MIN_WATERLEVEL)waterlevel = MIN_WATERLEVEL;
 		
 		// let the plants decay faster if there's not enough light available
-		decay = MAX_DECAY - waterlevel - 2 * shutteralpha * waterlevel;
+		decay = MAX_DECAY - waterlevel - 2 * shutteralpha * waterlevel * (1.0f - 0.15f * this.difficulty);
 		
 		// stop growth completely if its too dark
-		if(waterlevel <= SUFFICIENT_WATERLEVEL || shutteralpha > 0.85f) {
+		if(waterlevel <= SUFFICIENT_WATERLEVEL || shutteralpha > 0.85f * (1.0f + 0.1f * this.difficulty)) {
 			growing = false;
 		}else {
 			growing = true;
@@ -279,7 +283,7 @@ public class Plant {
 	
 	//Add an absolute amount of water
 	public void addWater(float waterAmount) {
-		this.waterlevel += waterAmount;
+		this.waterlevel += waterAmount * (1.0f + this.difficulty * 0.15f);
 		if(this.waterlevel >= MAX_WATERLEVEL) waterlevel = MAX_WATERLEVEL;
 		
 		// this assumes that the plant is being watered by the watering can
