@@ -110,7 +110,7 @@ public final class GameOverScreen implements Screen {
 		
 		// update part
 		if(this.btnMenu.getClicked()) {
-			this.game.screenmanager.push(new MenuScreen(game));
+			this.game.screenmanager.pop();
 		}
 		
 		// render part
