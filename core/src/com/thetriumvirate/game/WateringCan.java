@@ -104,9 +104,17 @@ public class WateringCan extends InputAdapter{
 	}
 	
 	public void update(float delta) {
+		// check if can has to be yoinked back bc of another tut starting
+		
 		this.canHead.setPosition(this.pos_x, this.pos_y + HEAD_OFFSET_Y);
 		this.wateringEffect.setPosition((this.pos_x + EFFECT_OFFSET_X) * Main.WINDOW_WIDTH, (this.pos_y + EFFECT_OFFSET_Y) * Main.WINDOW_HEIGHT);
 		this.wateringEffect.update(delta);
+
+
+		if(this.selected && TutorialManager.isShowing() && TutorialManager.currentShowState() != TutState.CAN_EMPTY && TutorialManager.currentShowState() != TutState.WATERING) {
+			this.wateringPlants = false;
+			this.unselect();
+		}
 		
 		if(this.wateringPlants && this.wateringEffect.isComplete())
 			this.wateringEffect.start();
