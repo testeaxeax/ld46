@@ -118,6 +118,7 @@ public class WateringCan extends InputAdapter{
 
 		if(this.selected && TutorialManager.isShowing() && TutorialManager.currentShowState() != TutState.CAN_EMPTY && TutorialManager.currentShowState() != TutState.WATERING) {
 			this.wateringPlants = false;
+			this.canTilted = false;
 			this.unselect();
 		}
 		
