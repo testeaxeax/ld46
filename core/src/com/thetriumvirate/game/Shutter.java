@@ -54,10 +54,15 @@ public class Shutter extends InputAdapter {
 	
 	enum STATE {OPEN, CLOSED, CLOSING, OPENING_ACTIVE, OPENING_INACTIVE};
 	
-	public Shutter(GameScreen gameScreen, Vector2 startPosition, Vector2 buttonPosition) {
+	private final int difficulty;
+	
+	public Shutter(GameScreen gameScreen, Vector2 startPosition, Vector2 buttonPosition, int difficulty) {
 		this.gameScreen = gameScreen;
 		game = gameScreen.getGame();
 		state = STATE.OPEN;
+		
+		this.difficulty = difficulty;
+		
 		resetRandomClosing();
 		this.position = startPosition.cpy();
 		this.startPosition = startPosition.cpy();
@@ -177,7 +182,7 @@ public class Shutter extends InputAdapter {
 	}
 	
 	public void resetRandomClosing() {
-		timeLeft = Main.RAND.nextInt(MAX_RAND_CLOSE + 1 - MIN_RAND_CLOSE) + MIN_RAND_CLOSE;
+		timeLeft = (Main.RAND.nextInt(MAX_RAND_CLOSE + 1 - MIN_RAND_CLOSE) + MIN_RAND_CLOSE) * (1.0f + 0.15f * this.difficulty);
 	}
 	
 	public void checkRandomClosing(float delta) {

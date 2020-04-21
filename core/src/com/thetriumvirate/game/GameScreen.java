@@ -92,10 +92,10 @@ public final class GameScreen implements Screen {
 		this.tap = new Tap(game);
 		inputmultiplexer.addProcessor(this.tap);
 		
-		this.wateringCan = new WateringCan(this, this.tap);
+		this.wateringCan = new WateringCan(this, this.tap, difficulty);
 		inputmultiplexer.addProcessor(this.wateringCan);
 		
-		this.temperatureController = new TemperatureController(this, 1);
+		this.temperatureController = new TemperatureController(this, difficulty);
 		inputmultiplexer.addProcessor(this.temperatureController);
 		
 		
@@ -108,17 +108,17 @@ public final class GameScreen implements Screen {
 			this.shutters.add(shutter);
 			inputmultiplexer.addProcessor(shutter);
 		}*/
-		Shutter shutter1 = new Shutter(this, new Vector2(SHUTTER1POSX, SHUTTER1POSY), new Vector2(SHUTTER1POSX + SHUTTERBTN1_OFFSET_X, SHUTTER1POSY + SHUTTERBTN1_OFFSET_Y));
+		Shutter shutter1 = new Shutter(this, new Vector2(SHUTTER1POSX, SHUTTER1POSY), new Vector2(SHUTTER1POSX + SHUTTERBTN1_OFFSET_X, SHUTTER1POSY + SHUTTERBTN1_OFFSET_Y), difficulty);
 		this.shutters.add(shutter1);
 		inputmultiplexer.addProcessor(shutter1);
-		Shutter shutter2 = new Shutter(this,  new Vector2(SHUTTER2POSX, SHUTTER2POSY),  new Vector2(SHUTTER2POSX + SHUTTERBTN2_OFFSET_X, SHUTTER2POSY + SHUTTERBTN2_OFFSET_Y));
+		Shutter shutter2 = new Shutter(this,  new Vector2(SHUTTER2POSX, SHUTTER2POSY),  new Vector2(SHUTTER2POSX + SHUTTERBTN2_OFFSET_X, SHUTTER2POSY + SHUTTERBTN2_OFFSET_Y), difficulty);
 		this.shutters.add(shutter2);
 		inputmultiplexer.addProcessor(shutter2);
 		
 		this.plants = new ArrayList<Plant>();
 		
 		for(int i = 0; i < 3; i++)
-			this.plants.add(new Plant(this, i));
+			this.plants.add(new Plant(this, i, difficulty));
 		
 		
 		this.thermometer = new Thermometer(game, new Vector2((int)((float)(828) * (float)Main.WINDOW_WIDTH / 1024f), (int)((float)(508) * (float)Main.WINDOW_HEIGHT / 800f)));
