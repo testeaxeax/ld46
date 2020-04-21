@@ -361,6 +361,13 @@ public final class GameScreen implements Screen {
 	@Override
 	public void hide() {
 		music.stop();
+		hot_sound.stop();
+		cold_sound.stop();
+		this.wateringCan.stopSounds();
+		this.tap.stopSounds();
+		for(Plant p : plants) {
+			p.stopSounds();
+		}
 	}
 	
 	public List<Plant> getPlants(){

@@ -310,6 +310,10 @@ public class WateringCan extends InputAdapter{
 		return this.selected;
 	}
 	
+	public void stopSounds() {
+		wateringMusic.stop();
+	}
+	
 	public static void prefetch(Main game) {
 		game.assetmanager.load(RES_CAN, Texture.class);
 		game.assetmanager.load(RES_TAKE_SOUND, Sound.class);

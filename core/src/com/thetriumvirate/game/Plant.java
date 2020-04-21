@@ -297,6 +297,9 @@ public class Plant {
 		TutorialManager.TutState.WATERING.triggerStop();
 	}
 
+	public void stopSounds() {
+		soundMovingLeaves.stop();
+	}
 
 	public Rectangle getBoundingBox() {
 		return this.boundingBox;

@@ -228,13 +228,13 @@ public final class MenuScreen implements Screen {
 			game.screenmanager.push(new CreditsScreen(game));
 		} else if(easyBtn.getClicked()) {
 			music.stop();
-			game.screenmanager.push(new GameScreen(game, 0));
+			game.screenmanager.push(new GameScreen(game, 2));
 		} else if(moderateBtn.getClicked()) {
 			music.stop();
 			game.screenmanager.push(new GameScreen(game, 1));
 		} else if(difficultBtn.getClicked()) {
 			music.stop();
-			game.screenmanager.push(new GameScreen(game, 2));
+			game.screenmanager.push(new GameScreen(game, 0));
 		} else if(exitBtn.getClicked()) {
 			Gdx.app.exit();
 		}
