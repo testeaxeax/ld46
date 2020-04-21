@@ -18,7 +18,12 @@ public final class CreditsScreen implements Screen {
 	private static final String CREDITS = "Game developed for Ludum Dare 42 within 72 hours by:\n" 
 			+ "Inzenhofer Tobias\n"
 			+ "Poellinger Maximilian\n" 
-			+ "Brunner Moritz\n\n\n" 
+			+ "Brunner Moritz\n\n"
+			+ "Music/SFX: Jan Fischer (Monterry)\n" + 
+			"\n" + 
+			"Tracks used:\n" + 
+			"One - Monterry\n" + 
+			"GrowOrDie-Soundtrack - Monterry\n\n" 
 			+ "This game was made with:\n" 
 			+ "libGDX";
 	
