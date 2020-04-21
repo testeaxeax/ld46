@@ -140,7 +140,7 @@ public final class SplashScreen implements Screen {
 			// TODO Replace ScreenTemplate with actual game/menu screen
 			//game.screenmanager.set(new GameScreen(game, 0), false);
 			//game.screenmanager.push(new CreditsScreen(game));
-			game.screenmanager.push(new MenuScreen(game));
+			game.screenmanager.set(new MenuScreen(game), false);
 			//game.screenmanager.push(new GameOverScreen(game, false));
 		}
 	}
