@@ -8,6 +8,8 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -35,13 +37,16 @@ public final class GameOverScreen implements Screen {
 	private CustomButton btnMenu;
 	private TextureRegion[] btn_texReg;
 	private final Texture btn_tex, tex_backGround;
-	
-	
+
 	private boolean gameWon = false;
 	
+	private long score;
 	
-	public GameOverScreen(Main game, boolean gameWon) {
+	public GameOverScreen(Main game, boolean gameWon, long timeStarted) {
 		// Initialize essentials
+		
+		this.score = System.currentTimeMillis() - timeStarted;
+		
 		this.game = game;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);

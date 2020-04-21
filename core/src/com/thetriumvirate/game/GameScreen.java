@@ -71,12 +71,18 @@ public final class GameScreen implements Screen {
 	private final List<Plant> plants;
 	
 	private boolean mouseInUse;
+	
+	// time survived in ms
+	private long score;
 
 	
 	public GameScreen(Main game, int difficulty) {
 		// Initialize essentials
 		this.game = game;
 		this.difficulty = difficulty;
+		
+		this.score = System.currentTimeMillis();
+		
 		mouseInUse = false;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, CAM_WIDTH, CAM_HEIGHT);
@@ -196,6 +202,8 @@ public final class GameScreen implements Screen {
 	@Override
 	public void show() {
 		music.play();
+		
+		this.score = System.currentTimeMillis();
 	}
 	
 	public void update(float delta) {
@@ -325,7 +333,7 @@ public final class GameScreen implements Screen {
 		
 		for(Plant p :this.plants) {
 			if(p.isDecayed()) {
-				game.screenmanager.set(new GameOverScreen(game, false), true);//game lost; keeping assets for replay
+				game.screenmanager.set(new GameOverScreen(game, false, this.score));//game lost; keeping assets for replay
 				break;
 			}
 		}
@@ -338,7 +346,7 @@ public final class GameScreen implements Screen {
 			}
 		}
 		if(allBlossom) {
-			game.screenmanager.set(new GameOverScreen(game, true), true);//game is won; keeping assets for replay
+			game.screenmanager.set(new GameOverScreen(game, true, this.score), true);//game is won; keeping assets for replay
 		}
 		
 	}
