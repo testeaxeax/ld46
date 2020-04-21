@@ -19,12 +19,10 @@ public final class SplashScreen implements Screen {
 	// SplashScreen will be displayed for at least 5 seconds
 	private static final int MIN_SHOWTIME = 10000;
 	// Resource paths
-	private static final String RES_SPLASH = "graphics/splash-test.png";
 	private static final String RES_LOAD_MUSIC = "audio/splash-music.mp3";
 
 	private final Main game;
 	private final OrthographicCamera cam;
-	private final Texture splashImage;
 	private final Music loadMusic;
 	private final BitmapFont font;
 	// Used to center the text
@@ -67,7 +65,6 @@ public final class SplashScreen implements Screen {
 		// Unload them in dispose !!!
 		// These resources need be loaded synchronously
 		font = game.fontloader.load(true);
-		splashImage = game.assetmanager.syncGet(RES_SPLASH, Texture.class);
 		
 		this.plantStages = game.assetmanager.syncGet(RES_PLANTSTAGES, Texture.class);
 		this.plantStagesReg = TextureRegion.split(this.plantStages, SPRITEWIDTH, SPRITEHEIGHT);
@@ -169,7 +166,6 @@ public final class SplashScreen implements Screen {
 	@Override
 	public void dispose() {
 		game.fontloader.unload();
-		game.assetmanager.unload(RES_SPLASH);
 		game.assetmanager.unload(RES_LOAD_MUSIC);
 		game.assetmanager.unload(RES_PLANTSTAGES);
 		game.assetmanager.unload(RES_PLANTPOT);
